@@ -43,6 +43,7 @@ export default function CVReviewStep({
 
     return (
         <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
+            <div className="flex flex-col gap-4 w-full lg:w-auto">
             <div className="layered-card-outer">
                 <div className="layered-card-middle">
                     <div className="flex flex-row items-center gap-2">
@@ -63,67 +64,14 @@ export default function CVReviewStep({
                                 onMouseEnter={() => setShowTooltip(true)}
                                 onMouseLeave={() => setShowTooltip(false)}
                             >
-                                <CustomDropdown
-                                    onSelectSetting={setScreeningSetting}
-                                    screeningSetting={screeningSetting}
-                                    settingList={screeningSettingList}
-                                />
-                                {showTooltip && (
-                                    <div
-                                        className="absolute z-50 bg-[#181D27] text-white text-sm p-3 rounded-lg shadow-lg"
-                                        style={{
-                                            width: "320px",
-                                            maxWidth: "90vw",
-                                            top: "100%",
-                                            marginTop: "8px",
-                                            left: 0
-                                        }}
-                                    >
-                                        These prompts remain hidden from candidates and the public job portal. Additionally, only Admins and the Job Owner can view the secret prompt.
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* //! Require Video Interview */}
-                        <div className="border-t border-[#E9EAEB] mt-4 pt-4">
-                            <h1 className="text-lg font-bold text-[#181D27]">Require Video on Interview</h1>
-                            <p className="text-[#6B7280] text-md !font-medium">Require candidates to keep their camera on. Recordings will appear on their analysis page</p>
-
-                            <div className="flex items-center justify-between gap-3 mt-2">
-                                <label className="flex items-center gap-2 cursor-pointer">
-
-                                    <span className="text-md text-gray-900 flex items-center gap-1.5">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            stroke="currentColor"
-                                            className="w-6 h-6 text-gray-400"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"
-                                            />
-                                        </svg>
-                                        Require Video Interview
-                                    </span>
-                                </label>
-                                <div>
-                                    <label className="switch ">
-                                        <input
-                                            type="checkbox"
-                                            checked={requireVideo}
-                                            onChange={() => setRequireVideo(!requireVideo)}
-                                        />
-                                        <span className="slider round "></span>
-                                    </label>
-                                    <span className="text-[#181D27] font-medium textmd pl-2">
-                                        {requireVideo ? "Yes" : "No"}
-                                    </span>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    <CustomDropdown
+                                        onSelectSetting={setScreeningSetting}
+                                        screeningSetting={screeningSetting}
+                                        settingList={screeningSettingList}
+                                    />
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -248,16 +196,19 @@ export default function CVReviewStep({
                             />
                         </div>
 
-                        {/* Pre-Screening Questions Section */}
-                        {preScreeningQuestions !== undefined && setPreScreeningQuestions && (
-                            <PreScreeningQuestions
-                                questions={preScreeningQuestions}
-                                setQuestions={setPreScreeningQuestions}
-                            />
-                        )}
-
                     </div>
                 </div>
+            </div>
+
+            {/* Pre-Screening Questions Section */}
+            {preScreeningQuestions !== undefined && setPreScreeningQuestions && (
+                <div className="layered-card-outer">
+                    <PreScreeningQuestions
+                        questions={preScreeningQuestions}
+                        setQuestions={setPreScreeningQuestions}
+                    />
+                </div>
+            )}
             </div>
             <div className="w-full lg:w-[40%] lg:sticky top-0">
                 <div className="layered-card-outer">

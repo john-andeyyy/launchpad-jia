@@ -265,13 +265,13 @@ export default function CareerForm({
     }, [formType, orgID, user]);
 
     // Save draft to API - uses PUT for update, POST for create
-    const saveDraft = async () => {
+    const saveDraft = async (stepOverride?: number) => {
         if (formType === "add" && user && orgID) {
             try {
                 const draftData = {
                     orgID,
                     userEmail: user.email,
-                    currentStep,
+                    currentStep: stepOverride !== undefined ? stepOverride : currentStep,
                     jobTitle,
                     description,
                     workSetup,
@@ -397,9 +397,9 @@ export default function CareerForm({
             // CV Review & Pre-screening - no required fields, just settings
         } else if (step === 3) {
             // AI Interview Setup
-            const hasQuestions = questions.some((q) => q.questions.length > 0);
-            if (!hasQuestions) {
-                errors.push("At least one interview question is required");
+            const totalQuestions = questions.reduce((acc, group) => acc + group.questions.length, 0);
+            if (totalQuestions < 5) {
+                errors.push("Please add at least 5 interview questions");
             }
         }
 
@@ -409,7 +409,7 @@ export default function CareerForm({
     const goToStep = (step: number) => {
         if (step < 1 || step > STEPS.length) return;
 
-        // Validate current step before moving
+        // Validate current step before moving forward
         if (step > currentStep) {
             setShowValidation(true);
             const validation = validateStep(currentStep);
@@ -429,10 +429,18 @@ export default function CareerForm({
             }
         }
 
+        // Save current step before navigating
+        const previousStep = currentStep;
         setCurrentStep(step);
         setTeamAccessErrors([]);
         setFieldErrors({});
         setShowValidation(false);
+
+        // Immediately save draft when step changes (especially important when going backwards)
+        if (formType === "add" && user && orgID && step !== previousStep) {
+            // Save draft with the new step value immediately
+            saveDraft(step);
+        }
     };
 
     const goToNextStep = () => {
@@ -753,6 +761,12 @@ export default function CareerForm({
                         setQuestions={setQuestions}
                         jobTitle={jobTitle}
                         description={description}
+                        requireVideo={requireVideo}
+                        setRequireVideo={setRequireVideo}
+                        screeningSetting={screeningSetting}
+                        setScreeningSetting={setScreeningSetting}
+                        secretPrompt={secretPrompt}
+                        setSecretPrompt={setSecretPrompt}
                     />
                 );
             case 4: // Review Career
