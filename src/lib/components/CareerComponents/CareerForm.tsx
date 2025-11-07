@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InterviewQuestionGeneratorV2 from "./InterviewQuestionGeneratorV2";
 import RichTextEditor from "@/lib/components/CareerComponents/RichTextEditor";
 import CustomDropdown from "@/lib/components/CareerComponents/CustomDropdown";
@@ -151,6 +151,8 @@ export default function CareerForm({
         return [];
     });
     const [teamAccessErrors, setTeamAccessErrors] = useState<string[]>([]);
+    const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
+    const [showValidation, setShowValidation] = useState(false);
 
     // Initialize teamMembers with current user when user is available
     useEffect(() => {
@@ -265,21 +267,44 @@ export default function CareerForm({
 
     const validateStep = (
         step: number
-    ): { isValid: boolean; errors: string[] } => {
+    ): { isValid: boolean; errors: string[]; fieldErrors: Record<string, boolean> } => {
         const errors: string[] = [];
+        const fieldErrors: Record<string, boolean> = {};
 
         if (step === 1) {
             // Career Details & Team Access
-            if (!jobTitle?.trim()) errors.push("Job title is required");
-            if (!description?.trim()) errors.push("Job description is required");
-            if (!employmentType) errors.push("Employment type is required");
-            if (!workSetup) errors.push("Work arrangement is required");
-            if (!province) errors.push("State/Province is required");
-            if (!city) errors.push("City is required");
-            if (!minimumSalary || minimumSalary === "0")
+            if (!jobTitle?.trim()) {
+                errors.push("Job title is required");
+                fieldErrors.jobTitle = true;
+            }
+            if (!description?.trim()) {
+                errors.push("Job description is required");
+                fieldErrors.description = true;
+            }
+            if (!employmentType) {
+                errors.push("Employment type is required");
+                fieldErrors.employmentType = true;
+            }
+            if (!workSetup) {
+                errors.push("Work arrangement is required");
+                fieldErrors.workSetup = true;
+            }
+            if (!province) {
+                errors.push("State/Province is required");
+                fieldErrors.province = true;
+            }
+            if (!city) {
+                errors.push("City is required");
+                fieldErrors.city = true;
+            }
+            if (!minimumSalary || minimumSalary === "0") {
                 errors.push("Minimum salary is required");
-            if (!maximumSalary || maximumSalary === "0")
+                fieldErrors.minimumSalary = true;
+            }
+            if (!maximumSalary || maximumSalary === "0") {
                 errors.push("Maximum salary is required");
+                fieldErrors.maximumSalary = true;
+            }
 
             // Validate team access
             const hasJobOwner = teamMembers.some((m) => m.role === "Job Owner");
@@ -298,7 +323,7 @@ export default function CareerForm({
             }
         }
 
-        return { isValid: errors.length === 0, errors };
+        return { isValid: errors.length === 0, errors, fieldErrors };
     };
 
     const goToStep = (step: number) => {
@@ -306,8 +331,10 @@ export default function CareerForm({
 
         // Validate current step before moving
         if (step > currentStep) {
+            setShowValidation(true);
             const validation = validateStep(currentStep);
             if (!validation.isValid) {
+                setFieldErrors(validation.fieldErrors);
                 if (currentStep === 1) {
                     setTeamAccessErrors(
                         validation.errors.filter((e) => e.includes("job owner"))
@@ -324,6 +351,8 @@ export default function CareerForm({
 
         setCurrentStep(step);
         setTeamAccessErrors([]);
+        setFieldErrors({});
+        setShowValidation(false);
     };
 
     const goToNextStep = () => {
@@ -442,14 +471,23 @@ export default function CareerForm({
         }
 
         // Validate all steps before saving
+        setShowValidation(true);
         const validation = validateStep(currentStep);
         if (!validation.isValid) {
+            setFieldErrors(validation.fieldErrors);
+            if (currentStep === 1) {
+                setTeamAccessErrors(
+                    validation.errors.filter((e) => e.includes("job owner"))
+                );
+            }
             errorToast(
                 validation.errors[0] || "Please complete all required fields",
                 2000
             );
             return;
         }
+        setFieldErrors({});
+        setShowValidation(false);
 
         if (!savingCareerRef.current) {
             setIsSavingCareer(true);
@@ -602,6 +640,8 @@ export default function CareerForm({
                         teamMembers={teamMembers}
                         setTeamMembers={setTeamMembers}
                         teamAccessErrors={teamAccessErrors}
+                        fieldErrors={showValidation ? fieldErrors : {}}
+                        setFieldErrors={setFieldErrors}
                     />
                 );
             case 2: // CV Review & Pre-screening
@@ -655,7 +695,9 @@ export default function CareerForm({
                             <div className="flex flex-row items-center gap-2.5">
                                 <button
                                     disabled={isSavingCareer}
-                                    className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4 py-2 rounded-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4
+                                    px-5 py-3 !text-lg font-bold !rounded-full
+                                    py-2 rounded-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                                     onClick={() => {
                                         saveDraft();
                                         confirmSaveCareer("inactive");
@@ -665,7 +707,9 @@ export default function CareerForm({
                                 </button>
                                 <button
                                     disabled={isSavingCareer || currentStep === STEPS.length}
-                                    className={`w-fit px-4 py-2 rounded-full whitespace-nowrap border border-[#E9EAEB] disabled:cursor-not-allowed disabled:opacity-50 ${isSavingCareer || currentStep === STEPS.length
+                                    className={`w-fit px-5 py-3 !text-lg font-bold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
+                                        disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer 
+                                        ${isSavingCareer || currentStep === STEPS.length
                                         ? "bg-[#D5D7DA] text-white"
                                         : "bg-black text-white"
                                         }`}
@@ -680,56 +724,91 @@ export default function CareerForm({
                         </div>
 
                         {/* //! Progress Indicator */}
-                        <div className="mb-5 w-full">
-                            <div className="flex items-center justify-between relative">
-                                {STEPS.map((step, index) => {
-                                    const isActive = currentStep === step.id;
-                                    const isCompleted = currentStep > step.id;
-                                    const isClickable = currentStep >= step.id || isCompleted;
+                        <div className="mb-5 w-full border-b pb-2 sm:pb-3">
+                            <div className="w-full py-1 sm:py-1.5 pr-20">
+                                <div className="flex items-center w-full">
+                                    {STEPS.map((step, index) => {
+                                        const isActive = currentStep === step.id;
+                                        const isCompleted = currentStep > step.id;
+                                        const isFuture = currentStep < step.id;
+                                        const isClickable = !isFuture;
+                                        const isLast = index === STEPS.length - 1;
+                                        const hasErrors = step.id === 1 && showValidation && Object.keys(fieldErrors).length > 0;
 
-                                    return (
-                                        <div
-                                            key={step.id}
-                                            className="flex items-center flex-1 relative"
-                                        >
-                                            <div className="flex flex-col items-center flex-1 z-[2]">
-                                                <div
-                                                    onClick={() => isClickable && goToStep(step.id)}
-                                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-semibold transition-all ${isActive
-                                                        ? "bg-[#181D27] text-white border-[3px] border-[#181D27]"
-                                                        : isCompleted
-                                                            ? "bg-[#039855] text-white"
-                                                            : "bg-[#E5E7EB] text-[#6B7280]"
-                                                        } ${isClickable ? "cursor-pointer" : "cursor-default"}`}
-                                                >
-                                                    {isCompleted ? (
-                                                        <i className="la la-check text-xl"></i>
-                                                    ) : (
-                                                        step.id
-                                                    )}
+                                        return (
+                                            <React.Fragment key={step.id}>
+                                                {/* Circle + Label (stacked) */}
+                                                <div className="flex flex-col items-center relative flex-shrink-0">
+                                                    {/* Circle */}
+                                                    <div
+                                                        onClick={() => isClickable && goToStep(step.id)}
+                                                        className={`relative w-10 h-10 sm:w-12 sm:h-12 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-colors border-2 z-10 ${
+                                                            isActive
+                                                                ? hasErrors
+                                                                    ? "bg-white border-[#DC2626] shadow-lg"
+                                                                    : "bg-white border-[#181D27] shadow-lg"
+                                                                : isCompleted
+                                                                    ? "bg-[#039855] text-white border-white"
+                                                                    : "bg-white border-[#D5D7DA]"
+                                                        } ${isClickable
+                                                            ? "cursor-pointer hover:scale-110 hover:shadow-md"
+                                                            : isFuture
+                                                                ? "cursor-not-allowed"
+                                                                : "cursor-default"
+                                                        }`}
+                                                    >
+                                                        {isCompleted ? (
+                                                            <i className="la la-check text-xl text-white"></i>
+                                                        ) : isActive && hasErrors ? (
+                                                            <i className="la la-exclamation-circle text-[#DC2626] text-xl"></i>
+                                                        ) : isActive ? (
+                                                            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full bg-[#181D27]"></div>
+                                                        ) : (
+                                                            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full bg-[#D5D7DA]"></div>
+                                                        )}
+                                                    </div>
+
+                                                    <span
+                                                        onClick={() => isClickable && goToStep(step.id)}
+                                                        className={`mt-2 text-lg sm:text-sm md:text-base text-center
+                                                            whitespace-nowrap leading-tight transition-colors ${isActive
+                                                                ? "font-semibold text-[#181D27]"
+                                                                : "text-[#6B7280]"
+                                                            } ${isClickable
+                                                                ? "cursor-pointer hover:text-[#181D27]"
+                                                                : isFuture
+                                                                    ? "cursor-not-allowed"
+                                                                    : "cursor-default"
+                                                            }`}
+                                                    >
+                                                        {step.name}
+                                                    </span>
                                                 </div>
-                                                <span
-                                                    className={`mt-2 text-xs text-center max-w-[120px] ${isActive
-                                                        ? "font-semibold text-[#181D27]"
-                                                        : "font-normal text-[#6B7280]"
-                                                        }`}
-                                                >
-                                                    {step.name}
-                                                </span>
-                                            </div>
-                                            {index < STEPS.length - 1 && (
-                                                <div
-                                                    className={`absolute top-5 left-[20%] right-[20%] h-0.5 z-[1] ${currentStep > step.id
-                                                        ? "bg-[#039855]"
-                                                        : "bg-[#E5E7EB]"
-                                                        }`}
-                                                ></div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
+
+                                                {/* LINE (between steps only) - directly connected to circle */}
+                                                {!isLast && (
+                                                    <div className="flex-1 relative h-[3px] sm:h-[4px] md:h-[5px] -ml-[20px] -mr-[20px]">
+                                                        {/* Background line */}
+                                                        <div className="absolute inset-0 bg-[#E5E7EB] rounded-full" />
+
+                                                        {/* Progress line */}
+                                                        {index < currentStep - 1 && (
+                                                            <div
+                                                                className="absolute inset-0 rounded-full"
+                                                                style={{
+                                                                    background: 'linear-gradient(90deg, #9FCAED 0%, #CEB6DA 34%, #EBACC9 67%, #FCCEC0 100%)'
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </React.Fragment>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
+
 
                         {/* Step Content */}
                         <div className="mt-4">{renderStepContent()}</div>

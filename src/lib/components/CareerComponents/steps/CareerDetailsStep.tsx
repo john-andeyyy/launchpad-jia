@@ -4,6 +4,7 @@ import RichTextEditor from "@/lib/components/CareerComponents/RichTextEditor";
 import CustomDropdown from "@/lib/components/CareerComponents/CustomDropdown";
 import TeamAccess, { TeamMember } from "../TeamAccess";
 import philippineCitiesAndProvinces from "../../../../../public/philippines-locations.json";
+import { useEffect } from "react";
 
 const employmentTypeOptions = [{ name: "Full-Time" }, { name: "Part-Time" }];
 
@@ -43,6 +44,8 @@ interface CareerDetailsStepProps {
     teamMembers: TeamMember[];
     setTeamMembers: (members: TeamMember[]) => void;
     teamAccessErrors: string[];
+    fieldErrors: Record<string, boolean>;
+    setFieldErrors: (errors: Record<string, boolean>) => void;
 }
 
 export default function CareerDetailsStep({
@@ -75,6 +78,8 @@ export default function CareerDetailsStep({
     teamMembers,
     setTeamMembers,
     teamAccessErrors,
+    fieldErrors,
+    setFieldErrors,
 }: CareerDetailsStepProps) {
     const handleProvinceChange = (selectedProvince: string) => {
         setProvince(selectedProvince);
@@ -86,11 +91,105 @@ export default function CareerDetailsStep({
             setCityList(cities);
             // Clear city when province changes
             setCity("");
+            // Clear province error if it exists
+            if (fieldErrors.province) {
+                setFieldErrors({ ...fieldErrors, province: false });
+            }
         } else {
             setCityList([]);
             setCity("");
         }
     };
+
+    // Fix text size and list styling for RichTextEditor
+    useEffect(() => {
+        const styleId = 'rich-text-editor-custom-styles';
+        let style = document.getElementById(styleId) as HTMLStyleElement;
+        
+        if (!style) {
+            style = document.createElement('style');
+            style.id = styleId;
+            style.textContent = `
+                .rich-text-editor-wrapper [contenteditable="true"] {
+                    font-size: 20px !important;
+                    line-height: 1.7 !important;
+                    color: #181D27 !important;
+                }
+                .rich-text-editor-wrapper [contenteditable="true"] * {
+                    color: #181D27 !important;
+                }
+                .rich-text-editor-wrapper ul,
+                .rich-text-editor-wrapper ol {
+                    margin-left: 24px !important;
+                    margin-top: 8px !important;
+                    margin-bottom: 8px !important;
+                    padding-left: 24px !important;
+                    list-style-position: outside !important;
+                    color: #181D27 !important;
+                }
+                .rich-text-editor-wrapper ul {
+                    list-style-type: disc !important;
+                }
+                .rich-text-editor-wrapper ul::marker,
+                .rich-text-editor-wrapper ul li::marker {
+                    color: #181D27 !important;
+                }
+                .rich-text-editor-wrapper ol {
+                    list-style-type: decimal !important;
+                }
+                .rich-text-editor-wrapper ol::marker,
+                .rich-text-editor-wrapper ol li::marker {
+                    color: #181D27 !important;
+                }
+                .rich-text-editor-wrapper li {
+                    margin-bottom: 4px !important;
+                    display: list-item !important;
+                    list-style-position: outside !important;
+                    color: #181D27 !important;
+                }
+                .rich-text-editor-wrapper li::marker {
+                    color: #181D27 !important;
+                    font-weight: normal !important;
+                }
+                /* Ensure buttons don't lose focus from editor */
+                .rich-text-editor-wrapper button[type="button"] {
+                    user-select: none;
+                    -webkit-user-select: none;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Fix list buttons by ensuring editor stays focused
+        const wrapper = document.querySelector('.rich-text-editor-wrapper');
+        if (wrapper) {
+            // Intercept execCommand to ensure editor is focused before it runs
+            const originalExecCommand = document.execCommand.bind(document);
+            let execCommandOverride: ((commandId: string, showUI?: boolean, value?: string) => boolean) | null = null;
+            
+            execCommandOverride = (commandId: string, showUI?: boolean, value?: string) => {
+                // If it's a list command, ensure editor is focused
+                if (commandId === 'insertOrderedList' || commandId === 'insertUnorderedList') {
+                    const editor = document.querySelector('.rich-text-editor-wrapper [contenteditable="true"]') as HTMLElement;
+                    if (editor && document.activeElement !== editor && !editor.contains(document.activeElement)) {
+                        editor.focus();
+                    }
+                }
+                return originalExecCommand(commandId, showUI, value);
+            };
+            
+            // Override execCommand
+            (document as any).execCommand = execCommandOverride;
+            
+            return () => {
+                // Restore original execCommand
+                if (execCommandOverride) {
+                    (document as any).execCommand = originalExecCommand;
+                }
+                // Don't remove style as it might be used by other instances
+            };
+        }
+    }, []);
 
     return (
         <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
@@ -110,17 +209,27 @@ export default function CareerDetailsStep({
                                 Basic Information
                             </span>
                             <span>Job Title</span>
-                            <input
-                                value={jobTitle}
-                                className="form-control !h-15 text-lg"
-                                placeholder="Enter job title"
-                                onChange={(e) => setJobTitle(e.target.value || "")}
-                            />
+                            <div className="relative">
+                                <input
+                                    value={jobTitle}
+                                    className={`form-control !h-15 text-lg ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
+                                    placeholder="Enter job title"
+                                    onChange={(e) => {
+                                        setJobTitle(e.target.value || "");
+                                        if (fieldErrors.jobTitle) {
+                                            setFieldErrors({ ...fieldErrors, jobTitle: false });
+                                        }
+                                    }}
+                                />
+                            </div>
+                            {fieldErrors.jobTitle && (
+                                <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                            )}
 
                             {/* //! Additional Information */}
-                            <div className="">
-                                <div className="layered-card-content !border-none    ">
-                                    <span className="text-base text-[#181D27] font-bold text-lg">
+                            <div className="pt-2 md:pt-0">
+                                <div className="!border-none pt-2 md:pt-0 space-y-2 md:space-y-4  ">
+                                    <span className="text-base text-[#181D27] font-bold text-lg ">
                                         Work Setting
                                     </span>
                                     {/* //! Work Setting */}
@@ -128,20 +237,38 @@ export default function CareerDetailsStep({
                                         <div>
                                             <label>Employment Type</label>
                                             <CustomDropdown
-                                                onSelectSetting={setEmploymentType}
+                                                onSelectSetting={(value) => {
+                                                    setEmploymentType(value);
+                                                    if (fieldErrors.employmentType) {
+                                                        setFieldErrors({ ...fieldErrors, employmentType: false });
+                                                    }
+                                                }}
                                                 screeningSetting={employmentType}
                                                 settingList={employmentTypeOptions}
                                                 placeholder="Select Employment Type"
+                                                hasError={fieldErrors.employmentType}
                                             />
+                                            {fieldErrors.employmentType && (
+                                                <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                            )}
                                         </div>
                                         <div>
                                             <label>Work Setup Arrangement</label>
                                             <CustomDropdown
-                                                onSelectSetting={setWorkSetup}
+                                                onSelectSetting={(value) => {
+                                                    setWorkSetup(value);
+                                                    if (fieldErrors.workSetup) {
+                                                        setFieldErrors({ ...fieldErrors, workSetup: false });
+                                                    }
+                                                }}
                                                 screeningSetting={workSetup}
                                                 settingList={workSetupOptions}
                                                 placeholder="Select Work Setup"
+                                                hasError={fieldErrors.workSetup}
                                             />
+                                            {fieldErrors.workSetup && (
+                                                <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                            )}
                                         </div>
                                     </div>
                                     {/* //! Location */}
@@ -166,17 +293,30 @@ export default function CareerDetailsStep({
                                                     screeningSetting={province}
                                                     settingList={provinceList}
                                                     placeholder="Select State / Province"
+                                                    hasError={fieldErrors.province}
                                                 />
+                                                {fieldErrors.province && (
+                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                )}
                                             </div>
                                             <div className="text-lg">
                                                 <label >City</label>
                                                 <CustomDropdown
-                                                    onSelectSetting={setCity}
+                                                    onSelectSetting={(value) => {
+                                                        setCity(value);
+                                                        if (fieldErrors.city) {
+                                                            setFieldErrors({ ...fieldErrors, city: false });
+                                                        }
+                                                    }}
                                                     screeningSetting={city}
                                                     settingList={cityList}
                                                     placeholder="Select City"
                                                     disabled={!province || cityList.length === 0}
+                                                    hasError={fieldErrors.city}
                                                 />
+                                                {fieldErrors.city && (
+                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -204,40 +344,56 @@ export default function CareerDetailsStep({
                                             <div className="flex flex-col gap-2">
                                                 <span>Minimum Salary</span>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none">
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none z-10">
                                                         ₱
                                                     </span>
                                                     <input
                                                         type="number"
-                                                        className="form-control pl-5 pr-20 !h-15 text-lg"
+                                                        className={`form-control pl-5 pr-20 !h-15 text-lg ${fieldErrors.minimumSalary ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
                                                         value={minimumSalary}
-                                                        onChange={(e) => setMinimumSalary(e.target.value || "")}
+                                                        onChange={(e) => {
+                                                            setMinimumSalary(e.target.value || "");
+                                                            if (fieldErrors.minimumSalary) {
+                                                                setFieldErrors({ ...fieldErrors, minimumSalary: false });
+                                                            }
+                                                        }}
                                                     />
-                                                    <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[#6c757d] text-sm pointer-events-none">
+                                                    <span className={`absolute right-5 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.minimumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
                                                         PHP
                                                     </span>
                                                 </div>
+                                                {fieldErrors.minimumSalary && (
+                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                )}
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <span>Maximum Salary</span>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none">
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none z-10">
                                                         ₱
                                                     </span>
                                                     <input
                                                         type="number"
-                                                        className="form-control pl-5 pr-20 !h-15 text-lg"
+                                                        className={`form-control pl-5 pr-20 !h-15 text-lg ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
                                                         value={maximumSalary}
-                                                        onChange={(e) => setMaximumSalary(e.target.value || "")}
+                                                        onChange={(e) => {
+                                                            setMaximumSalary(e.target.value || "");
+                                                            if (fieldErrors.maximumSalary) {
+                                                                setFieldErrors({ ...fieldErrors, maximumSalary: false });
+                                                            }
+                                                        }}
                                                     />
-                                                    <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[#6c757d] text-sm pointer-events-none">
+                                                    <span className={`absolute right-5 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
                                                         PHP
                                                     </span>
                                                 </div>
+                                                {fieldErrors.maximumSalary && (
+                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -249,16 +405,27 @@ export default function CareerDetailsStep({
                 </div>
 
                 <div className="layered-card-outer">
-                    <div className="layered-card-middle">
+                    <div className="layered-card-middle text-2xl">
                         <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
                             2. Job Description
                         </span>
                         <div className="flex flex-row items-center gap-2">
 
-
-                            <div className="layered-card-content border-none">
-                                <span className="text-base text-[#181D27] font-bold text-lg">Description</span>
-                                <RichTextEditor setText={setDescription} text={description} />
+                            <div className="layered-card-content border-none rich-text-editor-wrapper">
+                                {/* <span className="text-base text-[#181D27] font-bold text-lg">Description</span> */}
+                                <RichTextEditor 
+                                    setText={(text) => {
+                                        setDescription(text);
+                                        if (fieldErrors.description) {
+                                            setFieldErrors({ ...fieldErrors, description: false });
+                                        }
+                                    }} 
+                                    text={description}
+                                    hasError={fieldErrors.description}
+                                />
+                                {fieldErrors.description && (
+                                    <span className="text-[#DC2626] text-sm mt-1 block">This is a required field.</span>
+                                )}
                             </div>
                         </div>
                     </div>

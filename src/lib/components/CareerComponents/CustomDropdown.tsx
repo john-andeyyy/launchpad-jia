@@ -2,15 +2,19 @@
 import { useState } from "react";
 
 export default function CustomDropdown(props) {
-    const { onSelectSetting, screeningSetting, settingList, placeholder } = props;
+    const { onSelectSetting, screeningSetting, settingList, placeholder, disabled, hasError } = props;
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-        <div className="dropdown w-100">
+        <div className="dropdown w-100 relative">
           <button
-            disabled={settingList.length === 0}
+            disabled={disabled !== undefined ? disabled : settingList.length === 0}
             className="dropdown-btn fade-in-bottom"
-            style={{ width: "100%", textTransform: "capitalize" }}
+            style={{ 
+                width: "100%", 
+                textTransform: "capitalize",
+                border: hasError ? "2px solid #DC2626" : "1px solid #ddd"
+            }}
             type="button"
             onClick={() => setDropdownOpen((v) => !v)}
           >
@@ -24,7 +28,7 @@ export default function CustomDropdown(props) {
               ></i>{" "}
               {screeningSetting?.replace("_", " ") || placeholder}
             </span>
-            <i className="la la-angle-down ml-10"></i>
+            
           </button>
           <div
             className={`dropdown-menu w-100 mt-1 org-dropdown-anim${
