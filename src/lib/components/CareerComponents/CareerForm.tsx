@@ -803,7 +803,16 @@ export default function CareerForm({
                         minimumSalary={minimumSalary}
                         maximumSalary={maximumSalary}
                         salaryNegotiable={salaryNegotiable}
-                        teamMembersCount={teamMembers.length}
+                        teamMembers={teamMembers}
+                        description={description}
+                        cvScreeningSetting={screeningSetting}
+                        cvSecretPrompt={cvSecretPrompt}
+                        preScreeningQuestions={preScreeningQuestions}
+                        aiInterviewScreeningSetting={screeningSetting}
+                        requireVideo={requireVideo}
+                        aiInterviewSecretPrompt={aiInterviewSecretPrompt}
+                        questions={questions}
+                        onEditStep={goToStep}
                     />
                 );
             default:
@@ -836,19 +845,25 @@ export default function CareerForm({
                                     Save as Unpublished
                                 </button>
                                 <button
-                                    disabled={isSavingCareer || currentStep === STEPS.length}
+                                    disabled={isSavingCareer}
                                     className={`w-fit p-2 px-4 !text-sm font-bold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
                                         disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer 
-                                        ${isSavingCareer || currentStep === STEPS.length
+                                        ${isSavingCareer
                                         ? "bg-[#D5D7DA] text-white"
                                         : "bg-black text-white"
                                         }`}
                                     onClick={() => {
                                         saveDraft();
-                                        goToNextStep();
+                                        if (currentStep === STEPS.length) {
+                                            // On Review Career step, publish the career
+                                            confirmSaveCareer("active");
+                                        } else {
+                                            // On other steps, continue to next step
+                                            goToNextStep();
+                                        }
                                     }}
                                 >
-                                    Save and Continue →
+                                    {currentStep === STEPS.length ? "Publish" : "Save and Continue →"}
                                 </button>
                             </div>
                         </div>

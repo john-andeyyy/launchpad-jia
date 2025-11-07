@@ -14,10 +14,8 @@ function prepareDraftData(data: any) {
         screeningSetting: data.screeningSetting || "Good Fit and above",
         employmentType: data.employmentType || "",
         requireVideo: data.requireVideo !== undefined ? data.requireVideo : true,
-        // Separate secret prompts for CV Review and AI Interview
         cvSecretPrompt: data.cvSecretPrompt || "",
         aiInterviewSecretPrompt: data.aiInterviewSecretPrompt || "",
-        // Keep old secretPrompt for backwards compatibility during migration
         secretPrompt: data.secretPrompt || data.cvSecretPrompt || "",
         preScreeningQuestions: data.preScreeningQuestions || [],
         salaryNegotiable: data.salaryNegotiable !== undefined ? data.salaryNegotiable : true,
