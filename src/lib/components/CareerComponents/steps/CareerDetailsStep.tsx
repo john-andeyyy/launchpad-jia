@@ -105,7 +105,7 @@ export default function CareerDetailsStep({
     useEffect(() => {
         const styleId = 'rich-text-editor-custom-styles';
         let style = document.getElementById(styleId) as HTMLStyleElement;
-        
+
         if (!style) {
             style = document.createElement('style');
             style.id = styleId;
@@ -166,7 +166,7 @@ export default function CareerDetailsStep({
             // Intercept execCommand to ensure editor is focused before it runs
             const originalExecCommand = document.execCommand.bind(document);
             let execCommandOverride: ((commandId: string, showUI?: boolean, value?: string) => boolean) | null = null;
-            
+
             execCommandOverride = (commandId: string, showUI?: boolean, value?: string) => {
                 // If it's a list command, ensure editor is focused
                 if (commandId === 'insertOrderedList' || commandId === 'insertUnorderedList') {
@@ -177,10 +177,10 @@ export default function CareerDetailsStep({
                 }
                 return originalExecCommand(commandId, showUI, value);
             };
-            
+
             // Override execCommand
             (document as any).execCommand = execCommandOverride;
-            
+
             return () => {
                 // Restore original execCommand
                 if (execCommandOverride) {
@@ -235,40 +235,46 @@ export default function CareerDetailsStep({
                                     {/* //! Work Setting */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-lg">
                                         <div>
+                                            {/* //! Employment Type */}
                                             <label>Employment Type</label>
-                                            <CustomDropdown
-                                                onSelectSetting={(value) => {
-                                                    setEmploymentType(value);
-                                                    if (fieldErrors.employmentType) {
-                                                        setFieldErrors({ ...fieldErrors, employmentType: false });
-                                                    }
-                                                }}
-                                                screeningSetting={employmentType}
-                                                settingList={employmentTypeOptions}
-                                                placeholder="Select Employment Type"
-                                                hasError={fieldErrors.employmentType}
-                                            />
-                                            {fieldErrors.employmentType && (
-                                                <span className="text-[#DC2626] text-sm">This is a required field.</span>
-                                            )}
+                                            <div className=" !text-black">
+                                                <CustomDropdown
+                                                    onSelectSetting={(value) => {
+                                                        setEmploymentType(value);
+                                                        if (fieldErrors.employmentType) {
+                                                            setFieldErrors({ ...fieldErrors, employmentType: false });
+                                                        }
+                                                    }}
+                                                    screeningSetting={employmentType}
+                                                    settingList={employmentTypeOptions}
+                                                    placeholder="Select Employment Type"
+                                                    hasError={fieldErrors.employmentType}
+                                                />
+                                                {fieldErrors.employmentType && (
+                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                )}
+                                            </div>
                                         </div>
                                         <div>
+                                            {/* //! Work Setup Arrangement */}
                                             <label>Work Setup Arrangement</label>
-                                            <CustomDropdown
-                                                onSelectSetting={(value) => {
-                                                    setWorkSetup(value);
-                                                    if (fieldErrors.workSetup) {
-                                                        setFieldErrors({ ...fieldErrors, workSetup: false });
-                                                    }
-                                                }}
-                                                screeningSetting={workSetup}
-                                                settingList={workSetupOptions}
-                                                placeholder="Select Work Setup"
-                                                hasError={fieldErrors.workSetup}
-                                            />
-                                            {fieldErrors.workSetup && (
-                                                <span className="text-[#DC2626] text-sm">This is a required field.</span>
-                                            )}
+                                            <div className=" !text-black">
+                                                <CustomDropdown
+                                                    onSelectSetting={(value) => {
+                                                        setWorkSetup(value);
+                                                        if (fieldErrors.workSetup) {
+                                                            setFieldErrors({ ...fieldErrors, workSetup: false });
+                                                        }
+                                                    }}
+                                                    screeningSetting={workSetup}
+                                                    settingList={workSetupOptions}
+                                                    placeholder="Select Work Setup"
+                                                    hasError={fieldErrors.workSetup}
+                                                />
+                                                {fieldErrors.workSetup && (
+                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     {/* //! Location */}
@@ -279,44 +285,50 @@ export default function CareerDetailsStep({
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-lg">
                                             <div>
                                                 <label>Country</label>
-                                                <CustomDropdown
-                                                    onSelectSetting={setCountry}
-                                                    screeningSetting={country}
-                                                    settingList={countryList}
-                                                    placeholder="Select Country"
-                                                />
+                                                <div className=" !text-black">
+                                                    <CustomDropdown
+                                                        onSelectSetting={setCountry}
+                                                        screeningSetting={country}
+                                                        settingList={countryList}
+                                                        placeholder="Select Country"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="text-lg">
                                                 <label >State / Province</label>
-                                                <CustomDropdown
-                                                    onSelectSetting={handleProvinceChange}
-                                                    screeningSetting={province}
-                                                    settingList={provinceList}
-                                                    placeholder="Select State / Province"
-                                                    hasError={fieldErrors.province}
-                                                />
-                                                {fieldErrors.province && (
-                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
-                                                )}
+                                                <div className=" !text-black">
+                                                    <CustomDropdown
+                                                        onSelectSetting={handleProvinceChange}
+                                                        screeningSetting={province}
+                                                        settingList={provinceList}
+                                                        placeholder="Select State / Province"
+                                                        hasError={fieldErrors.province}
+                                                    />
+                                                    {fieldErrors.province && (
+                                                        <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div className="text-lg">
                                                 <label >City</label>
-                                                <CustomDropdown
-                                                    onSelectSetting={(value) => {
-                                                        setCity(value);
-                                                        if (fieldErrors.city) {
-                                                            setFieldErrors({ ...fieldErrors, city: false });
-                                                        }
-                                                    }}
-                                                    screeningSetting={city}
-                                                    settingList={cityList}
-                                                    placeholder="Select City"
-                                                    disabled={!province || cityList.length === 0}
-                                                    hasError={fieldErrors.city}
-                                                />
-                                                {fieldErrors.city && (
-                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
-                                                )}
+                                                <div className=" !text-black">
+                                                    <CustomDropdown
+                                                        onSelectSetting={(value) => {
+                                                            setCity(value);
+                                                            if (fieldErrors.city) {
+                                                                setFieldErrors({ ...fieldErrors, city: false });
+                                                            }
+                                                        }}
+                                                        screeningSetting={city}
+                                                        settingList={cityList}
+                                                        placeholder="Select City"
+                                                        disabled={!province || cityList.length === 0}
+                                                        hasError={fieldErrors.city}
+                                                    />
+                                                    {fieldErrors.city && (
+                                                        <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -413,13 +425,13 @@ export default function CareerDetailsStep({
 
                             <div className="layered-card-content border-none rich-text-editor-wrapper">
                                 {/* <span className="text-base text-[#181D27] font-bold text-lg">Description</span> */}
-                                <RichTextEditor 
+                                <RichTextEditor
                                     setText={(text) => {
                                         setDescription(text);
                                         if (fieldErrors.description) {
                                             setFieldErrors({ ...fieldErrors, description: false });
                                         }
-                                    }} 
+                                    }}
                                     text={description}
                                     hasError={fieldErrors.description}
                                 />

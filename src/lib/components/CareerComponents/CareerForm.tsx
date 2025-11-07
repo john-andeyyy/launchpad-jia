@@ -158,13 +158,9 @@ export default function CareerForm({
     useEffect(() => {
         if (user && teamMembers.length === 0 && !career?.teamMembers) {
             // Check if we're loading from draft - if so, don't override
-            if (formType === "add" && typeof window !== "undefined") {
-                const draftKey = `career-draft-${orgID}`;
-                const savedDraft = localStorage.getItem(draftKey);
-                if (savedDraft) {
-                    // Draft will be loaded in the next useEffect, skip initialization
-                    return;
-                }
+            // Draft will be loaded in the next useEffect, skip initialization here
+            if (formType === "add") {
+                return;
             }
             setTeamMembers([
                 {
@@ -177,77 +173,147 @@ export default function CareerForm({
         }
     }, [user, career, formType, orgID]);
 
-    // Load draft from localStorage on mount (only for new careers)
+    // Track if draft exists to determine whether to use POST or PUT
+    const [hasExistingDraft, setHasExistingDraft] = useState(false);
+
+    // Load draft from API on mount (only for new careers)
     useEffect(() => {
-        if (formType === "add" && typeof window !== "undefined") {
-            const draftKey = `career-draft-${orgID}`;
-            const savedDraft = localStorage.getItem(draftKey);
-            if (savedDraft) {
+        const loadDraft = async () => {
+            if (formType === "add" && user && orgID) {
                 try {
-                    const draft = JSON.parse(savedDraft);
-                    if (draft.currentStep) setCurrentStep(draft.currentStep);
-                    if (draft.jobTitle) setJobTitle(draft.jobTitle);
-                    if (draft.description) setDescription(draft.description);
-                    if (draft.workSetup) setWorkSetup(draft.workSetup);
-                    if (draft.workSetupRemarks)
-                        setWorkSetupRemarks(draft.workSetupRemarks);
-                    if (draft.screeningSetting)
-                        setScreeningSetting(draft.screeningSetting);
-                    if (draft.employmentType) setEmploymentType(draft.employmentType);
-                    if (draft.requireVideo !== undefined)
-                        setRequireVideo(draft.requireVideo);
-                    if (draft.salaryNegotiable !== undefined)
-                        setSalaryNegotiable(draft.salaryNegotiable);
-                    if (draft.minimumSalary) setMinimumSalary(draft.minimumSalary);
-                    if (draft.maximumSalary) setMaximumSalary(draft.maximumSalary);
-                    if (draft.questions) setQuestions(draft.questions);
-                    if (draft.country) setCountry(draft.country);
-                    if (draft.province) setProvince(draft.province);
-                    if (draft.city) setCity(draft.city);
-                    if (draft.teamMembers) setTeamMembers(draft.teamMembers);
+                    const response = await axios.post("/api/get-career-draft", {
+                        orgID,
+                        userEmail: user.email,
+                    });
+                    if (response.data && response.data.draft) {
+                        const draft = response.data.draft;
+                        setHasExistingDraft(true); // Mark that draft exists
+                        if (draft.currentStep) setCurrentStep(draft.currentStep);
+                        if (draft.jobTitle) setJobTitle(draft.jobTitle);
+                        if (draft.description) setDescription(draft.description);
+                        if (draft.workSetup) setWorkSetup(draft.workSetup);
+                        if (draft.workSetupRemarks)
+                            setWorkSetupRemarks(draft.workSetupRemarks);
+                        if (draft.screeningSetting)
+                            setScreeningSetting(draft.screeningSetting);
+                        if (draft.employmentType) setEmploymentType(draft.employmentType);
+                        if (draft.requireVideo !== undefined)
+                            setRequireVideo(draft.requireVideo);
+                        if (draft.salaryNegotiable !== undefined)
+                            setSalaryNegotiable(draft.salaryNegotiable);
+                        if (draft.minimumSalary) setMinimumSalary(draft.minimumSalary);
+                        if (draft.maximumSalary) setMaximumSalary(draft.maximumSalary);
+                        if (draft.questions) setQuestions(draft.questions);
+                        if (draft.country) setCountry(draft.country);
+                        if (draft.province) setProvince(draft.province);
+                        if (draft.city) setCity(draft.city);
+                        if (draft.teamMembers && draft.teamMembers.length > 0) {
+                            setTeamMembers(draft.teamMembers);
+                        } else if (user) {
+                            // Initialize with current user if no team members in draft
+                            setTeamMembers([
+                                {
+                                    email: user.email,
+                                    name: user.name,
+                                    image: user.image,
+                                    role: "Job Owner" as TeamMemberRole,
+                                },
+                            ]);
+                        }
+                    } else {
+                        setHasExistingDraft(false);
+                        if (user) {
+                            // No draft found, initialize with current user
+                            setTeamMembers([
+                                {
+                                    email: user.email,
+                                    name: user.name,
+                                    image: user.image,
+                                    role: "Job Owner" as TeamMemberRole,
+                                },
+                            ]);
+                        }
+                    }
                 } catch (error) {
                     console.error("Error loading draft:", error);
+                    setHasExistingDraft(false);
+                    // Initialize with current user on error
+                    if (user) {
+                        setTeamMembers([
+                            {
+                                email: user.email,
+                                name: user.name,
+                                image: user.image,
+                                role: "Job Owner" as TeamMemberRole,
+                            },
+                        ]);
+                    }
                 }
             }
-        }
-    }, [formType, orgID]);
+        };
+        loadDraft();
+    }, [formType, orgID, user]);
 
-    // Save draft to localStorage
-    const saveDraft = () => {
-        if (formType === "add" && typeof window !== "undefined") {
-            const draftKey = `career-draft-${orgID}`;
-            const draft = {
-                currentStep,
-                jobTitle,
-                description,
-                workSetup,
-                workSetupRemarks,
-                screeningSetting,
-                employmentType,
-                requireVideo,
-                salaryNegotiable,
-                minimumSalary,
-                maximumSalary,
-                questions,
-                country,
-                province,
-                city,
-                teamMembers,
-                savedAt: Date.now(),
-            };
-            localStorage.setItem(draftKey, JSON.stringify(draft));
+    // Save draft to API - uses PUT for update, POST for create
+    const saveDraft = async () => {
+        if (formType === "add" && user && orgID) {
+            try {
+                const draftData = {
+                    orgID,
+                    userEmail: user.email,
+                    currentStep,
+                    jobTitle,
+                    description,
+                    workSetup,
+                    workSetupRemarks,
+                    screeningSetting,
+                    employmentType,
+                    requireVideo,
+                    salaryNegotiable,
+                    minimumSalary,
+                    maximumSalary,
+                    questions,
+                    country,
+                    province,
+                    city,
+                    teamMembers,
+                };
+
+                // If draft exists, use PUT to update; otherwise use POST to create
+                if (hasExistingDraft) {
+                    await axios.put("/api/save-career-draft", draftData);
+                } else {
+                    try {
+                        await axios.post("/api/save-career-draft", draftData);
+                        setHasExistingDraft(true); // Mark that draft now exists
+                    } catch (error: any) {
+                        // If POST fails with 409 (conflict), try PUT instead
+                        if (error.response?.status === 409) {
+                            await axios.put("/api/save-career-draft", draftData);
+                            setHasExistingDraft(true);
+                        } else {
+                            throw error;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error saving draft:", error);
+            }
         }
     };
 
     // Auto-save draft when form data changes
     useEffect(() => {
-        if (formType === "add") {
+        if (formType === "add" && user && orgID) {
             const timeoutId = setTimeout(() => {
                 saveDraft();
             }, 1000); // Debounce auto-save
             return () => clearTimeout(timeoutId);
         }
     }, [
+        formType,
+        user,
+        orgID,
         jobTitle,
         description,
         workSetup,
@@ -528,9 +594,15 @@ export default function CareerForm({
                 const response = await axios.post("/api/add-career", careerData);
                 if (response.status === 200) {
                     // Clear draft after successful save
-                    if (formType === "add" && typeof window !== "undefined") {
-                        const draftKey = `career-draft-${orgID}`;
-                        localStorage.removeItem(draftKey);
+                    if (formType === "add" && user && orgID) {
+                        try {
+                            await axios.delete(
+                                `/api/get-career-draft?orgID=${orgID}&userEmail=${encodeURIComponent(user.email)}`
+                            );
+                            setHasExistingDraft(false); // Reset draft status
+                        } catch (error) {
+                            console.error("Error clearing draft:", error);
+                        }
                     }
                     candidateActionToast(
                         <div
