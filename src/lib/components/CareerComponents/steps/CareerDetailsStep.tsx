@@ -111,7 +111,7 @@ export default function CareerDetailsStep({
             style.id = styleId;
             style.textContent = `
                 .rich-text-editor-wrapper [contenteditable="true"] {
-                    font-size: 20px !important;
+                    font-size: 14px !important;
                     line-height: 1.7 !important;
                     color: #181D27 !important;
                 }
@@ -193,7 +193,7 @@ export default function CareerDetailsStep({
 
     return (
         <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
-            <div className="w-full lg:w-[70%] flex flex-col gap-4">
+            <div className="w-full lg:w-[75%] flex flex-col gap-4">
                 {/* Basic Information */}
 
                 <div className="layered-card-outer">
@@ -212,7 +212,7 @@ export default function CareerDetailsStep({
                             <div className="relative">
                                 <input
                                     value={jobTitle}
-                                    className={`form-control !h-15 text-lg ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
+                                    className={`form-control  text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
                                     placeholder="Enter job title"
                                     onChange={(e) => {
                                         setJobTitle(e.target.value || "");
@@ -233,7 +233,7 @@ export default function CareerDetailsStep({
                                         Work Setting
                                     </span>
                                     {/* //! Work Setting */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-lg">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                         <div>
                                             {/* //! Employment Type */}
                                             <label>Employment Type</label>
@@ -282,7 +282,7 @@ export default function CareerDetailsStep({
                                         <span className="text-base text-[#181D27] font-bold text-lg ">
                                             Location
                                         </span>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-lg">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                             <div>
                                                 <label>Country</label>
                                                 <div className=" !text-black">
@@ -294,7 +294,7 @@ export default function CareerDetailsStep({
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="text-lg">
+                                            <div>
                                                 <label >State / Province</label>
                                                 <div className=" !text-black">
                                                     <CustomDropdown
@@ -309,7 +309,7 @@ export default function CareerDetailsStep({
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="text-lg">
+                                            <div>
                                                 <label >City</label>
                                                 <div className=" !text-black">
                                                     <CustomDropdown
@@ -356,12 +356,13 @@ export default function CareerDetailsStep({
                                             <div className="flex flex-col gap-2">
                                                 <span>Minimum Salary</span>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none z-10">
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 
+                                                    text-[#6c757d] text-base pointer-events-none z-10">
                                                         ₱
                                                     </span>
                                                     <input
                                                         type="number"
-                                                        className={`form-control pl-5 pr-20 !h-15 text-lg ${fieldErrors.minimumSalary ? "!border-[#DC2626]" : ""}`}
+                                                        className={`form-control pl-5 pr-20  text-base ${fieldErrors.minimumSalary ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
                                                         value={minimumSalary}
@@ -388,7 +389,7 @@ export default function CareerDetailsStep({
                                                     </span>
                                                     <input
                                                         type="number"
-                                                        className={`form-control pl-5 pr-20 !h-15 text-lg ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : ""}`}
+                                                        className={`form-control pl-5 pr-20  text-base ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
                                                         value={maximumSalary}
@@ -417,7 +418,7 @@ export default function CareerDetailsStep({
                 </div>
 
                 <div className="layered-card-outer">
-                    <div className="layered-card-middle text-2xl">
+                    <div className="layered-card-middle">
                         <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
                             2. Job Description
                         </span>

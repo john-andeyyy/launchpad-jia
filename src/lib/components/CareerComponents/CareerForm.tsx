@@ -92,6 +92,12 @@ export default function CareerForm({
     const [requireVideo, setRequireVideo] = useState(
         career?.requireVideo || true
     );
+    const [secretPrompt, setSecretPrompt] = useState(
+        career?.secretPrompt || ""
+    );
+    const [preScreeningQuestions, setPreScreeningQuestions] = useState(
+        career?.preScreeningQuestions || []
+    );
     const [salaryNegotiable, setSalaryNegotiable] = useState(
         career?.salaryNegotiable || true
     );
@@ -199,6 +205,10 @@ export default function CareerForm({
                         if (draft.employmentType) setEmploymentType(draft.employmentType);
                         if (draft.requireVideo !== undefined)
                             setRequireVideo(draft.requireVideo);
+                        if (draft.secretPrompt !== undefined)
+                            setSecretPrompt(draft.secretPrompt || "");
+                        if (draft.preScreeningQuestions !== undefined)
+                            setPreScreeningQuestions(draft.preScreeningQuestions || []);
                         if (draft.salaryNegotiable !== undefined)
                             setSalaryNegotiable(draft.salaryNegotiable);
                         if (draft.minimumSalary) setMinimumSalary(draft.minimumSalary);
@@ -269,6 +279,8 @@ export default function CareerForm({
                     screeningSetting,
                     employmentType,
                     requireVideo,
+                    secretPrompt,
+                    preScreeningQuestions,
                     salaryNegotiable,
                     minimumSalary,
                     maximumSalary,
@@ -320,6 +332,8 @@ export default function CareerForm({
         screeningSetting,
         employmentType,
         requireVideo,
+        secretPrompt,
+        preScreeningQuestions,
         salaryNegotiable,
         minimumSalary,
         maximumSalary,
@@ -468,6 +482,8 @@ export default function CareerForm({
             updatedAt: Date.now(),
             screeningSetting,
             requireVideo,
+            secretPrompt,
+            preScreeningQuestions,
             salaryNegotiable,
             minimumSalary: isNaN(Number(minimumSalary))
                 ? null
@@ -574,6 +590,7 @@ export default function CareerForm({
                 screeningSetting,
                 orgID,
                 requireVideo,
+                secretPrompt,
                 salaryNegotiable,
                 minimumSalary: isNaN(Number(minimumSalary))
                     ? null
@@ -723,6 +740,10 @@ export default function CareerForm({
                         setScreeningSetting={setScreeningSetting}
                         requireVideo={requireVideo}
                         setRequireVideo={setRequireVideo}
+                        secretPrompt={secretPrompt}
+                        setSecretPrompt={setSecretPrompt}
+                        preScreeningQuestions={preScreeningQuestions}
+                        setPreScreeningQuestions={setPreScreeningQuestions}
                     />
                 );
             case 3: // AI Interview Setup
@@ -755,12 +776,13 @@ export default function CareerForm({
     };
 
     return (
-        <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 max-h-[calc(100vh-150px)] overflow-auto flex flex-col bg-white">
+        <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 max-h-[calc(100vh-100px)] !pt-0
+        flex flex-col">
 
             <div className="">
                 {formType === "add" ? (
                     <>
-                        <div className="mb-[35px] flex flex-row justify-between items-center w-full">
+                        <div className=" flex flex-row justify-between items-center w-full">
                             <h1 className="text-2xl font-medium text-[#111827]">
                                 Add new career
                             </h1>
@@ -768,7 +790,7 @@ export default function CareerForm({
                                 <button
                                     disabled={isSavingCareer}
                                     className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4
-                                    px-5 py-3 !text-lg font-bold !rounded-full
+                                    p-2 px-4 !text-sm font-bold !rounded-full
                                     py-2 rounded-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                                     onClick={() => {
                                         saveDraft();
@@ -779,7 +801,7 @@ export default function CareerForm({
                                 </button>
                                 <button
                                     disabled={isSavingCareer || currentStep === STEPS.length}
-                                    className={`w-fit px-5 py-3 !text-lg font-bold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
+                                    className={`w-fit p-2 px-4 !text-sm font-bold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
                                         disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer 
                                         ${isSavingCareer || currentStep === STEPS.length
                                         ? "bg-[#D5D7DA] text-white"
@@ -796,8 +818,8 @@ export default function CareerForm({
                         </div>
 
                         {/* //! Progress Indicator */}
-                        <div className="mb-5 w-full border-b pb-2 sm:pb-3">
-                            <div className="w-full py-1 sm:py-1.5 pr-20">
+                        <div className="w-full border-b pb-2 sm:pb-3">
+                            <div className="w-full py-1 sm:py-1.5">
                                 <div className="flex items-center w-full">
                                     {STEPS.map((step, index) => {
                                         const isActive = currentStep === step.id;
@@ -814,7 +836,7 @@ export default function CareerForm({
                                                     {/* Circle */}
                                                     <div
                                                         onClick={() => isClickable && goToStep(step.id)}
-                                                        className={`relative w-10 h-10 sm:w-12 sm:h-12 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-colors border-2 z-10 ${
+                                                        className={`relative w-5 h-5 rounded-full flex items-center justify-center transition-colors border-2 z-10 ${
                                                             isActive
                                                                 ? hasErrors
                                                                     ? "bg-white border-[#DC2626] shadow-lg"
@@ -830,19 +852,19 @@ export default function CareerForm({
                                                         }`}
                                                     >
                                                         {isCompleted ? (
-                                                            <i className="la la-check text-xl text-white"></i>
+                                                            <i className="la la-check text-base text-white"></i>
                                                         ) : isActive && hasErrors ? (
-                                                            <i className="la la-exclamation-circle text-[#DC2626] text-xl"></i>
+                                                            <i className="la la-exclamation-circle text-[#DC2626] text-base"></i>
                                                         ) : isActive ? (
-                                                            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full bg-[#181D27]"></div>
+                                                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full bg-[#181D27]"></div>
                                                         ) : (
-                                                            <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full bg-[#D5D7DA]"></div>
+                                                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full bg-[#D5D7DA]"></div>
                                                         )}
                                                     </div>
 
                                                     <span
                                                         onClick={() => isClickable && goToStep(step.id)}
-                                                        className={`mt-2 text-lg sm:text-sm md:text-base text-center
+                                                        className={`mt-2 text-sm sm:text-xs md:text-sm text-center
                                                             whitespace-nowrap leading-tight transition-colors ${isActive
                                                                 ? "font-semibold text-[#181D27]"
                                                                 : "text-[#6B7280]"
@@ -859,7 +881,7 @@ export default function CareerForm({
 
                                                 {/* LINE (between steps only) - directly connected to circle */}
                                                 {!isLast && (
-                                                    <div className="flex-1 relative h-[3px] sm:h-[4px] md:h-[5px] -ml-[20px] -mr-[20px]">
+                                                    <div className="flex-1 relative h-[3px] sm:h-[4px] md:h-[5px] -ml-[16px] -mr-[16px]">
                                                         {/* Background line */}
                                                         <div className="absolute inset-0 bg-[#E5E7EB] rounded-full" />
 
@@ -885,20 +907,6 @@ export default function CareerForm({
                         {/* Step Content */}
                         <div className="mt-4">{renderStepContent()}</div>
 
-                        {/* Navigation Buttons
-                        <div className="mt-8 flex justify-between items-center w-full">
-                            <button
-                                disabled={currentStep === 1 || isSavingCareer}
-                                onClick={goToPreviousStep}
-                                className={`px-5 py-2.5 border rounded-lg flex items-center gap-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 ${currentStep === 1
-                                        ? "bg-[#F3F4F6] text-[#9CA3AF] border-[#D5D7DA]"
-                                        : "bg-white text-[#181D27] border-[#D5D7DA]"
-                                    }`}
-                            >
-                                <i className="la la-arrow-left"></i>
-                                Previous
-                            </button>
-                        </div> */}
                     </>
                 ) : (
                     <div className="mb-[35px] flex flex-row justify-between items-center w-full">
@@ -940,7 +948,7 @@ export default function CareerForm({
                     </div>
                 )}
                 {formType !== "add" && (
-                    <div className="flex flex-row justify-between w-full gap-4 items-start mt-4">
+                    <div className="flex flex-row justify-between w-full gap-4 items-start mt-4 ">
                         <div className="w-[60%] flex flex-col gap-2">
                             <div className="layered-card-outer">
                                 <div className="layered-card-middle">
@@ -998,10 +1006,25 @@ export default function CareerForm({
                                             settingList={screeningSettingList}
                                         />
                                         <span>
-                                            This settings allows Jia to automatically endorse candidates
-                                            who meet the chosen criteria.
+                                            Jia automatically endorses candidates who meet the chosen criteria.
                                         </span>
-                                        <div className="flex flex-row justify-between gap-2">
+                                        <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#E9EAEB]">
+                                            <div className="flex flex-row items-center gap-2">
+                                                <i className="la la-magic text-[#7C3AED] text-xl"></i>
+                                                <span className="font-medium">CV Secret Prompt (optional)</span>
+                                            </div>
+                                            <p className="text-[#6B7280] text-sm">
+                                                Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
+                                            </p>
+                                            <textarea
+                                                className="form-control"
+                                                rows={4}
+                                                placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
+                                                value={secretPrompt}
+                                                onChange={(e) => setSecretPrompt(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex flex-row justify-between gap-2 mt-4 pt-4 border-t border-[#E9EAEB]">
                                             <div className="flex flex-row gap-2">
                                                 <i className="la la-video text-[#414651] text-xl"></i>
                                                 <span>Require Video Interview</span>

@@ -14,6 +14,8 @@ function prepareDraftData(data: any) {
         screeningSetting: data.screeningSetting || "Good Fit and above",
         employmentType: data.employmentType || "",
         requireVideo: data.requireVideo !== undefined ? data.requireVideo : true,
+        secretPrompt: data.secretPrompt || "",
+        preScreeningQuestions: data.preScreeningQuestions || [],
         salaryNegotiable: data.salaryNegotiable !== undefined ? data.salaryNegotiable : true,
         minimumSalary: data.minimumSalary || "",
         maximumSalary: data.maximumSalary || "",

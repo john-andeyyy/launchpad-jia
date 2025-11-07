@@ -110,9 +110,9 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                 <div className="layered-card-middle">
                     <div className="flex flex-row items-center gap-2">
                         <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
-                            <i className="la la-users text-white text-xl"></i>
+                            <i className="la la-users text-white text-lg"></i>
                         </div>
-                        <span className="text-base text-[#181D27] font-bold">3. Team Access</span>
+                        {/* <span className="text-base text-[#181D27] font-bold">3. Team Access</span> */}
                     </div>
                     <div className="layered-card-content">
                         <p className="text-[#6B7280] text-sm">Loading user information...</p>
@@ -142,8 +142,8 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                 <div className="layered-card-content">
                     <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                         <div className="flex-1">
-                            <span className="text-lg font-semibold text-[#181D27] block mb-1">Add more members</span>
-                            <p className="text-lg text-[#6B7280] m-0">You can add other members to collaborate on this career.</p>
+                            <span className="text-base font-semibold text-[#181D27] block mb-1">Add more members</span>
+                            <p className="text-base text-[#6B7280] m-0">You can add other members to collaborate on this career.</p>
                         </div>
                         <div className="relative w-full md:w-auto" ref={dropdownRef}>
                             <button
@@ -154,8 +154,8 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                         shadow-sm hover:shadow-md transition-shadow"
                             >
                                 <div className="flex items-center gap-2">
-                                    <i className="la la-user text-lg text-gray-500"></i>
-                                    <span className="text-lg">Add member</span>
+                                    <i className="la la-user text-base text-gray-500"></i>
+                                    <span className="text-base">Add member</span>
                                 </div>
 
                                 <i className="la la-chevron-down text-sm text-gray-500"></i>
@@ -170,7 +170,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                             placeholder="Search member"
                                             value={memberSearch}
                                             onChange={(e) => setMemberSearch(e.target.value)}
-                                            className="w-full px-3 py-2 border border-[#D5D7DA] rounded-md text-lg"
+                                            className="w-full px-3 py-2 border border-[#D5D7DA] rounded-md text-base"
                                         />
                                     </div>
                                     <div className="max-h-[500px] overflow-y-auto">
@@ -199,8 +199,8 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                                         )}
                                                     </div>
                                                     <div className="flex flex-row gap-1 justify-between w-full">
-                                                        <div className="text-lg font-medium text-[#181D27]">{member.name}</div>
-                                                        <div className="text-md text-[#6B7280]">{member.email}</div>
+                                                        <div className="text-base font-medium text-[#181D27]">{member.name}</div>
+                                                        <div className="text-sm text-[#6B7280]">{member.email}</div>
                                                     </div>
                                                 </div>
                                             ))
@@ -213,7 +213,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
 
                     {errors.length > 0 && (
                         <div className="p-3 bg-[#FEF2F2] border border-[#FECACA] rounded-lg mb-4 flex items-center gap-2">
-                            <i className="la la-exclamation-circle text-[#DC2626] text-xl"></i>
+                            <i className="la la-exclamation-circle text-[#DC2626] text-lg"></i>
                             <div>
                                 {errors.map((error, idx) => (
                                     <div key={idx} className="text-[#DC2626] text-sm">{error}</div>
@@ -241,10 +241,10 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0 w-full md:w-auto">
-                                    <div className="text-lg font-medium text-[#181D27]">
+                                    <div className="text-base font-medium text-[#181D27]">
                                         {member.name} {member.email === user.email && "(You)"}
                                     </div>
-                                    <div className="text-lg text-[#6B7280] truncate">{member.email}</div>
+                                    <div className="text-sm text-[#6B7280] truncate">{member.email}</div>
                                 </div>
                                 <div
                                     className="relative w-full md:w-auto"
@@ -261,7 +261,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                         text-[#181D27] bg-white cursor-pointer w-full md:min-w-[300px] text-left flex items-center justify-between
                                         shadow-sm hover:shadow-md transition-shadow"
                                     >
-                                        <span className="font-medium text-lg">{member.role}</span>
+                                        <span className="font-medium text-base">{member.role}</span>
                                         <i className="la la-chevron-down text-sm text-[#6B7280]"></i>
                                     </button>
                                     {openRoleDropdown === member.email && (
@@ -280,12 +280,12 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                                     <div className="flex items-start justify-between gap-3">
                                                         <div className="flex-1">
                                                             <div className="flex items-center justify-between gap-2 mb-1">
-                                                                <span className={`text-lg font-medium text-[#181D27] ${member.role === role ? 'font-bold' : ''
+                                                                <span className={`text-base font-medium text-[#181D27] ${member.role === role ? 'font-bold' : ''
                                                                     }`}>
                                                                     {role}
                                                                 </span>
                                                                 {member.role === role && (
-                                                                    <i className="la la-check text-xl" style={{
+                                                                    <i className="la la-check text-lg" style={{
                                                                         background: "linear-gradient(180deg, #9FCAED 0%, #CEB6DA 33%, #EBACC9 66%, #FCCEC0 100%)",
                                                                         WebkitBackgroundClip: "text",
                                                                         WebkitTextFillColor: "transparent",
@@ -294,7 +294,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                                                     }}></i>
                                                                 )}
                                                             </div>
-                                                            <p className="text-md text-[#6B7280] m-0">{roleDescriptions[role]}</p>
+                                                            <p className="text-sm text-[#6B7280] m-0">{roleDescriptions[role]}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -308,7 +308,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                     className="h-15 w-15 flex items-center justify-center !rounded-full !border border-gray-300 
                                     bg-white hover:bg-gray-100 transition cursor-pointer"
                                 >
-                                    <i className="la la-trash !text-3xl text-gray-600"></i>
+                                    <i className="la la-trash text-xl text-gray-600"></i>
                                 </button>
 
 
@@ -316,7 +316,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                         ))}
                     </div>
 
-                    <div className="mt-4 text-lg text-[#6B7280] italic">
+                    <div className="mt-4 text-sm text-[#6B7280] italic">
                         *Admins can view all careers regardless of specific access settings.
                     </div>
                 </div>
