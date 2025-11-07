@@ -88,8 +88,43 @@ export default function CVReviewStep({
                         {/* //! Require Video Interview */}
                         <div className="border-t border-[#E9EAEB] mt-4 pt-4">
                             <h1 className="text-lg font-bold text-[#181D27]">Require Video on Interview</h1>
-                            <p>Secret Prompts give you extra control over Jia's evaluation style,
-                                complementing her accurate assessment of requirements from the job description.</p>
+                            <p className="text-[#6B7280] text-md !font-medium">Require candidates to keep their camera on. Recordings will appear on their analysis page</p>
+
+                            <div className="flex items-center justify-between gap-3 mt-2">
+                                <label className="flex items-center gap-2 cursor-pointer">
+
+                                    <span className="text-md text-gray-900 flex items-center gap-1.5">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth="1.5"
+                                            stroke="currentColor"
+                                            className="w-6 h-6 text-gray-400"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"
+                                            />
+                                        </svg>
+                                        Require Video Interview
+                                    </span>
+                                </label>
+                                <div>
+                                    <label className="switch ">
+                                        <input
+                                            type="checkbox"
+                                            checked={requireVideo}
+                                            onChange={() => setRequireVideo(!requireVideo)}
+                                        />
+                                        <span className="slider round "></span>
+                                    </label>
+                                    <span className="text-[#181D27] font-medium textmd pl-2">
+                                        {requireVideo ? "Yes" : "No"}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         {/* //! CV Secret Prompt (optional) Section */}
@@ -117,100 +152,100 @@ export default function CVReviewStep({
                                     )}
                                 </div>
                             </div>
-                            <p className="text-[#6B7280] text-sm">
+                            <p className="text-[#6B7280] text-md !font-medium">
                                 Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
                             </p>
-                            
-                                <textarea
-                                    ref={textareaRef}
-                                    className="!h-30 !text-base !p-2 !mt-2  w-full border border-[#E9EAEB] rounded-lg p-2 mt-2 focus:outline-none focus:ring-0 focus:border-[#7C3AED] 
+
+                            <textarea
+                                ref={textareaRef}
+                                className="!h-30 !text-base !p-2 !mt-2  w-full border border-[#E9EAEB] rounded-lg p-2 mt-2 focus:outline-none focus:ring-0 focus:border-[#7C3AED] 
                                 text-base font-medium text-[#181D27] placeholder:text-[#6B7280] placeholder:font-medium"
-                                    rows={4}
-                                    placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
-                                    value={secretPrompt}
-                                    onChange={(e) => {
-                                        const newValue = e.target.value;
-                                        const prevValue = prevValueRef.current;
-                                        const cursorPos = e.target.selectionStart;
-                                        
-                                        // Detect if user is deleting (value decreased in length)
-                                        const isDeleting = newValue.length < prevValue.length;
-                                        
-                                        if (isDeleting) {
-                                            // Allow deletion - just update the value as is, no bullet processing
+                                rows={4}
+                                placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
+                                value={secretPrompt}
+                                onChange={(e) => {
+                                    const newValue = e.target.value;
+                                    const prevValue = prevValueRef.current;
+                                    const cursorPos = e.target.selectionStart;
+
+                                    // Detect if user is deleting (value decreased in length)
+                                    const isDeleting = newValue.length < prevValue.length;
+
+                                    if (isDeleting) {
+                                        // Allow deletion - just update the value as is, no bullet processing
+                                        if (setSecretPrompt) {
+                                            setSecretPrompt(newValue);
+                                        }
+                                        prevValueRef.current = newValue;
+                                        return;
+                                    }
+
+                                    // Only add bullets when typing (not deleting)
+                                    const lines = newValue.split("\n");
+                                    const withBullets = lines.map((line) => {
+                                        // Skip empty lines - allow them to stay empty
+                                        if (line.trim() === "") return line;
+                                        // If line already has bullet, keep it
+                                        if (line.startsWith("• ")) return line;
+                                        // Add bullet to non-empty lines that don't have one
+                                        return `• ${line}`;
+                                    });
+
+                                    const processedValue = withBullets.join("\n");
+
+                                    // Calculate cursor adjustment
+                                    const linesBeforeCursor = newValue.substring(0, cursorPos).split("\n");
+                                    const currentLineIndex = linesBeforeCursor.length - 1;
+                                    const currentLine = linesBeforeCursor[currentLineIndex] || "";
+
+                                    const linesBeforeCursorProcessed = processedValue.substring(0, cursorPos).split("\n");
+                                    const processedCurrentLine = linesBeforeCursorProcessed[currentLineIndex] || "";
+                                    const lineLengthDiff = processedCurrentLine.length - currentLine.length;
+
+                                    if (setSecretPrompt) {
+                                        setSecretPrompt(processedValue);
+                                        // Adjust cursor position if bullet was added
+                                        if (lineLengthDiff > 0) {
+                                            setTimeout(() => {
+                                                if (textareaRef.current) {
+                                                    const newCursorPos = Math.min(
+                                                        cursorPos + lineLengthDiff,
+                                                        processedValue.length
+                                                    );
+                                                    textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
+                                                }
+                                            }, 0);
+                                        }
+                                    }
+
+                                    prevValueRef.current = processedValue;
+                                }}
+                                onKeyDown={(e) => {
+                                    // Handle backspace to delete bullet if cursor is right after "• "
+                                    if (e.key === "Backspace" && textareaRef.current) {
+                                        const cursorPos = textareaRef.current.selectionStart;
+                                        const value = textareaRef.current.value;
+
+                                        // Check if cursor is right after "• " (position 2, 3, etc. after newline)
+                                        if (cursorPos >= 2 && value.substring(cursorPos - 2, cursorPos) === "• ") {
+                                            e.preventDefault();
+                                            const before = value.substring(0, cursorPos - 2);
+                                            const after = value.substring(cursorPos);
+                                            const newValue = before + after;
                                             if (setSecretPrompt) {
                                                 setSecretPrompt(newValue);
                                             }
                                             prevValueRef.current = newValue;
-                                            return;
-                                        }
-                                        
-                                        // Only add bullets when typing (not deleting)
-                                        const lines = newValue.split("\n");
-                                        const withBullets = lines.map((line) => {
-                                            // Skip empty lines - allow them to stay empty
-                                            if (line.trim() === "") return line;
-                                            // If line already has bullet, keep it
-                                            if (line.startsWith("• ")) return line;
-                                            // Add bullet to non-empty lines that don't have one
-                                            return `• ${line}`;
-                                        });
-                                        
-                                        const processedValue = withBullets.join("\n");
-                                        
-                                        // Calculate cursor adjustment
-                                        const linesBeforeCursor = newValue.substring(0, cursorPos).split("\n");
-                                        const currentLineIndex = linesBeforeCursor.length - 1;
-                                        const currentLine = linesBeforeCursor[currentLineIndex] || "";
-                                        
-                                        const linesBeforeCursorProcessed = processedValue.substring(0, cursorPos).split("\n");
-                                        const processedCurrentLine = linesBeforeCursorProcessed[currentLineIndex] || "";
-                                        const lineLengthDiff = processedCurrentLine.length - currentLine.length;
-                                        
-                                        if (setSecretPrompt) {
-                                            setSecretPrompt(processedValue);
-                                            // Adjust cursor position if bullet was added
-                                            if (lineLengthDiff > 0) {
-                                                setTimeout(() => {
-                                                    if (textareaRef.current) {
-                                                        const newCursorPos = Math.min(
-                                                            cursorPos + lineLengthDiff,
-                                                            processedValue.length
-                                                        );
-                                                        textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
-                                                    }
-                                                }, 0);
-                                            }
-                                        }
-                                        
-                                        prevValueRef.current = processedValue;
-                                    }}
-                                    onKeyDown={(e) => {
-                                        // Handle backspace to delete bullet if cursor is right after "• "
-                                        if (e.key === "Backspace" && textareaRef.current) {
-                                            const cursorPos = textareaRef.current.selectionStart;
-                                            const value = textareaRef.current.value;
-                                            
-                                            // Check if cursor is right after "• " (position 2, 3, etc. after newline)
-                                            if (cursorPos >= 2 && value.substring(cursorPos - 2, cursorPos) === "• ") {
-                                                e.preventDefault();
-                                                const before = value.substring(0, cursorPos - 2);
-                                                const after = value.substring(cursorPos);
-                                                const newValue = before + after;
-                                                if (setSecretPrompt) {
-                                                    setSecretPrompt(newValue);
+                                            setTimeout(() => {
+                                                if (textareaRef.current) {
+                                                    textareaRef.current.setSelectionRange(cursorPos - 2, cursorPos - 2);
                                                 }
-                                                prevValueRef.current = newValue;
-                                                setTimeout(() => {
-                                                    if (textareaRef.current) {
-                                                        textareaRef.current.setSelectionRange(cursorPos - 2, cursorPos - 2);
-                                                    }
-                                                }, 0);
-                                            }
+                                            }, 0);
                                         }
-                                    }}
-                                    onFocus={() => setShowTooltip(false)}
-                                />
+                                    }
+                                }}
+                                onFocus={() => setShowTooltip(false)}
+                            />
                         </div>
 
                         {/* Pre-Screening Questions Section */}
