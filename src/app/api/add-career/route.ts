@@ -15,6 +15,8 @@ export async function POST(request: Request) {
       orgID,
       requireVideo,
       secretPrompt,
+      cvSecretPrompt,
+      aiInterviewSecretPrompt,
       preScreeningQuestions,
       location,
       workSetup,
@@ -97,7 +99,10 @@ export async function POST(request: Request) {
       screeningSetting,
       orgID,
       requireVideo,
-      secretPrompt: secretPrompt || "",
+      // Use new separate prompts if provided, otherwise fall back to old secretPrompt for backwards compatibility
+      cvSecretPrompt: cvSecretPrompt || secretPrompt || "",
+      aiInterviewSecretPrompt: aiInterviewSecretPrompt || secretPrompt || "",
+      secretPrompt: secretPrompt || cvSecretPrompt || "", // Keep for backwards compatibility
       preScreeningQuestions: preScreeningQuestions || [],
       lastActivityAt: new Date(),
       salaryNegotiable,

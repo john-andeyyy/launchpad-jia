@@ -76,7 +76,7 @@ export default function CareerForm({
     setShowEditModal?: (show: boolean) => void;
 }) {
     const { user, orgID } = useAppContext();
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(career?.currentStep || 1);
     const [jobTitle, setJobTitle] = useState(career?.jobTitle || "");
     const [description, setDescription] = useState(career?.description || "");
     const [workSetup, setWorkSetup] = useState(career?.workSetup || "");
@@ -92,8 +92,12 @@ export default function CareerForm({
     const [requireVideo, setRequireVideo] = useState(
         career?.requireVideo || true
     );
-    const [secretPrompt, setSecretPrompt] = useState(
-        career?.secretPrompt || ""
+    // Separate secret prompts for CV Review and AI Interview
+    const [cvSecretPrompt, setCvSecretPrompt] = useState(
+        career?.cvSecretPrompt || career?.secretPrompt || ""
+    );
+    const [aiInterviewSecretPrompt, setAiInterviewSecretPrompt] = useState(
+        career?.aiInterviewSecretPrompt || career?.secretPrompt || ""
     );
     const [preScreeningQuestions, setPreScreeningQuestions] = useState(
         career?.preScreeningQuestions || []
@@ -194,7 +198,10 @@ export default function CareerForm({
                     if (response.data && response.data.draft) {
                         const draft = response.data.draft;
                         setHasExistingDraft(true); // Mark that draft exists
-                        if (draft.currentStep) setCurrentStep(draft.currentStep);
+                        // Load currentStep from draft - this preserves the step on refresh
+                        if (draft.currentStep) {
+                            setCurrentStep(draft.currentStep);
+                        }
                         if (draft.jobTitle) setJobTitle(draft.jobTitle);
                         if (draft.description) setDescription(draft.description);
                         if (draft.workSetup) setWorkSetup(draft.workSetup);
@@ -205,8 +212,19 @@ export default function CareerForm({
                         if (draft.employmentType) setEmploymentType(draft.employmentType);
                         if (draft.requireVideo !== undefined)
                             setRequireVideo(draft.requireVideo);
-                        if (draft.secretPrompt !== undefined)
-                            setSecretPrompt(draft.secretPrompt || "");
+                        // Load separate secret prompts, with fallback to old secretPrompt for backwards compatibility
+                        if (draft.cvSecretPrompt !== undefined) {
+                            setCvSecretPrompt(draft.cvSecretPrompt || "");
+                        } else if (draft.secretPrompt !== undefined) {
+                            // Backwards compatibility: if only old secretPrompt exists, use it for both
+                            setCvSecretPrompt(draft.secretPrompt || "");
+                        }
+                        if (draft.aiInterviewSecretPrompt !== undefined) {
+                            setAiInterviewSecretPrompt(draft.aiInterviewSecretPrompt || "");
+                        } else if (draft.secretPrompt !== undefined) {
+                            // Backwards compatibility: if only old secretPrompt exists, use it for both
+                            setAiInterviewSecretPrompt(draft.secretPrompt || "");
+                        }
                         if (draft.preScreeningQuestions !== undefined)
                             setPreScreeningQuestions(draft.preScreeningQuestions || []);
                         if (draft.salaryNegotiable !== undefined)
@@ -279,7 +297,8 @@ export default function CareerForm({
                     screeningSetting,
                     employmentType,
                     requireVideo,
-                    secretPrompt,
+                    cvSecretPrompt,
+                    aiInterviewSecretPrompt,
                     preScreeningQuestions,
                     salaryNegotiable,
                     minimumSalary,
@@ -332,7 +351,8 @@ export default function CareerForm({
         screeningSetting,
         employmentType,
         requireVideo,
-        secretPrompt,
+        cvSecretPrompt,
+        aiInterviewSecretPrompt,
         preScreeningQuestions,
         salaryNegotiable,
         minimumSalary,
@@ -490,7 +510,8 @@ export default function CareerForm({
             updatedAt: Date.now(),
             screeningSetting,
             requireVideo,
-            secretPrompt,
+            cvSecretPrompt,
+            aiInterviewSecretPrompt,
             preScreeningQuestions,
             salaryNegotiable,
             minimumSalary: isNaN(Number(minimumSalary))
@@ -598,7 +619,8 @@ export default function CareerForm({
                 screeningSetting,
                 orgID,
                 requireVideo,
-                secretPrompt,
+                cvSecretPrompt,
+                aiInterviewSecretPrompt,
                 salaryNegotiable,
                 minimumSalary: isNaN(Number(minimumSalary))
                     ? null
@@ -748,8 +770,8 @@ export default function CareerForm({
                         setScreeningSetting={setScreeningSetting}
                         requireVideo={requireVideo}
                         setRequireVideo={setRequireVideo}
-                        secretPrompt={secretPrompt}
-                        setSecretPrompt={setSecretPrompt}
+                        secretPrompt={cvSecretPrompt}
+                        setSecretPrompt={setCvSecretPrompt}
                         preScreeningQuestions={preScreeningQuestions}
                         setPreScreeningQuestions={setPreScreeningQuestions}
                     />
@@ -765,8 +787,8 @@ export default function CareerForm({
                         setRequireVideo={setRequireVideo}
                         screeningSetting={screeningSetting}
                         setScreeningSetting={setScreeningSetting}
-                        secretPrompt={secretPrompt}
-                        setSecretPrompt={setSecretPrompt}
+                        secretPrompt={aiInterviewSecretPrompt}
+                        setSecretPrompt={setAiInterviewSecretPrompt}
                     />
                 );
             case 4: // Review Career
@@ -1034,8 +1056,8 @@ export default function CareerForm({
                                                 className="form-control"
                                                 rows={4}
                                                 placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
-                                                value={secretPrompt}
-                                                onChange={(e) => setSecretPrompt(e.target.value)}
+                                                value={cvSecretPrompt}
+                                                onChange={(e) => setCvSecretPrompt(e.target.value)}
                                             />
                                         </div>
                                         <div className="flex flex-row justify-between gap-2 mt-4 pt-4 border-t border-[#E9EAEB]">
