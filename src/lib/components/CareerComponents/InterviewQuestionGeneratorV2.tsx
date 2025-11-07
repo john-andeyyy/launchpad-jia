@@ -341,7 +341,7 @@ export default function (props) {
   }, []);
 
   return (
-    <div className="layered-card-outer">
+    <div className="layered-card-outer-career">
       <div className="layered-card-middle">
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8 }}
@@ -366,15 +366,15 @@ export default function (props) {
         </div>
         <div className="layered-card-content">
           {questions.reduce((acc, group) => acc + group.questions.length, 0) < 5 && (
-            <div style={{ 
-              display: "flex", 
-              alignItems: "center", 
-              gap: 8, 
-              padding: "12px 16px", 
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "12px 16px",
               // backgroundColor: "#FEF2F2", 
               // border: "1px solid #FECACA", 
-              borderRadius: "8px", 
-              marginBottom: "16px" 
+              borderRadius: "8px",
+              marginBottom: "16px"
             }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -553,7 +553,7 @@ export default function (props) {
                             setQuestionModalQuestion(question);
                           }}
                         >
-                          <i className="la la-pencil-alt"></i>
+                          <i className="la la-pencil-alt pr-2"></i>
                           <span>Edit</span>
                         </button>
 
@@ -614,8 +614,10 @@ export default function (props) {
                           # of Questions to Ask:
                         </p>
                         <input
+                          className="p-2 border border-gray-300 rounded-md !pr-0"
                           type="number"
                           id="questionCount"
+                          disabled={true}
                           value={
                             group.questionCountToAsk !== null
                               ? group.questionCountToAsk
@@ -623,10 +625,7 @@ export default function (props) {
                           }
                           max={group.questions.length}
                           min={0}
-                          style={{
-                            maxWidth: "40px",
-                            maxHeight: "40px",
-                          }}
+
                           onChange={(e) => {
                             let value = parseInt(e.target.value);
 

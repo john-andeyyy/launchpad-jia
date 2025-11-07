@@ -55,9 +55,9 @@ export default function ReviewCareerStep({
 }: ReviewCareerStepProps) {
     const { user } = useAppContext();
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-        careerDetails: false,
+        careerDetails: true,
         cvReview: true,
-        aiInterview: false,
+        aiInterview: true,
     });
 
     const toggleSection = (section: string) => {
@@ -329,16 +329,18 @@ export default function ReviewCareerStep({
                         label="AI Interview Screening"
                         value={getScreeningSettingDisplay(aiInterviewScreeningSetting)}
                     />
-                    <div className="flex flex-row items-center justify-between gap-2 ">
+                    <div className="flex flex-row items-center justify-between gap-2 border-y pt-3 border-gray-300 pb-3">
                         <p className="!font-semibold text-gray-800 !mb-0">Require Video Interview</p>
-                        <span className="text-md font-bold text-gray-800">
+                        <span className="text-md font-bold text-gray-800x-2">
                             {requireVideo ? "Yes" : "No"}
+                            {requireVideo ? <i className="la la-check text-green-500 bg-green-100 rounded-full p-1 text-3xl border border-green-500 mx-2 "
+                            style={{ fontSize: "16px" }}></i> : <i className="la la-times text-red-500 bg-red-100 rounded-full p-1 text-3xl border border-red-500 mx-2 "
+                            style={{ fontSize: "16px" }}></i>}
                         </span>
                     </div>
 
-                    {aiInterviewSecretPrompt && (
-                        <div>
-                            <div className="flex flex-row items-center gap-2 mb-2 pl-2">
+                        <div className="border-b border-gray-300 pb-3">
+                            <div className="flex flex-row items-center gap-2 mb-2">
                                 <i className="la la-magic text-[#7C3AED] text-lg"></i>
                                 <span className="text-sm font-semibold text-gray-800">AI Interview Secret Prompt</span>
                             </div>
@@ -347,7 +349,7 @@ export default function ReviewCareerStep({
                                     const cleanLine = line.replace(/^•\s*/, '').trim();
                                     if (!cleanLine) return null;
                                     return (
-                                        <div key={idx} className="flex flex-row items-start gap-2 mb-1 text-gray-500">
+                                        <div key={idx} className="flex flex-row items-start gap-2 mb-1 text-lg text-gray-500">
                                             <span className="text-[#181D27] ">•</span>
                                             <span className="flex-1">{cleanLine}</span>
                                         </div>
@@ -355,7 +357,7 @@ export default function ReviewCareerStep({
                                 })}
                             </div>
                         </div>
-                    )}
+                    
 
                     {questions.length > 0 && (
                         <div>

@@ -160,7 +160,7 @@ export default function CareerDetailsStep({
             document.head.appendChild(style);
         }
 
-        // Fix list buttons by ensuring editor stays focused
+       
         const wrapper = document.querySelector('.rich-text-editor-wrapper');
         if (wrapper) {
             // Intercept execCommand to ensure editor is focused before it runs
@@ -186,7 +186,7 @@ export default function CareerDetailsStep({
                 if (execCommandOverride) {
                     (document as any).execCommand = originalExecCommand;
                 }
-                // Don't remove style as it might be used by other instances
+              
             };
         }
     }, []);
@@ -196,7 +196,7 @@ export default function CareerDetailsStep({
             <div className="w-full lg:w-[75%] flex flex-col gap-4">
                 {/* Basic Information */}
 
-                <div className="layered-card-outer">
+                <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
                         <div className="flex flex-row items-center gap-2">
 
@@ -208,11 +208,12 @@ export default function CareerDetailsStep({
                             <span className="text-base text-[#181D27] font-bold text-lg">
                                 Basic Information
                             </span>
+                            {/* //!Job Title */}
                             <span>Job Title</span>
                             <div className="relative">
                                 <input
                                     value={jobTitle}
-                                    className={`form-control  text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
+                                    className={`form-control !pl-[10%] text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
                                     placeholder="Enter job title"
                                     onChange={(e) => {
                                         setJobTitle(e.target.value || "");
@@ -221,6 +222,9 @@ export default function CareerDetailsStep({
                                         }
                                     }}
                                 />
+                                {fieldErrors.jobTitle && (
+                                    <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2"></i>
+                                )}
                             </div>
                             {fieldErrors.jobTitle && (
                                 <span className="text-[#DC2626] text-sm">This is a required field.</span>
@@ -345,10 +349,24 @@ export default function CareerDetailsStep({
                                                     <input
                                                         type="checkbox"
                                                         checked={salaryNegotiable}
-                                                        onChange={() => setSalaryNegotiable(!salaryNegotiable)}
+                                                        onChange={() => {
+                                                            const newNegotiable = !salaryNegotiable;
+                                                            setSalaryNegotiable(newNegotiable);
+                                                            if (newNegotiable) {
+                                                                // When negotiable is true, set minimum to "0" and clear maximum
+                                                                setMinimumSalary("0");
+                                                                setMaximumSalary("");
+                                                                // Clear maximum salary error
+                                                                if (fieldErrors.maximumSalary) {
+                                                                    setFieldErrors({ ...fieldErrors, maximumSalary: false });
+                                                                }
+                                                            }
+                                                        }}
                                                     />
                                                     <span className="slider round"></span>
+
                                                 </label>
+
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -362,24 +380,31 @@ export default function CareerDetailsStep({
                                                     </span>
                                                     <input
                                                         type="number"
-                                                        className={`form-control pl-5 pr-20  text-base ${fieldErrors.minimumSalary ? "!border-[#DC2626]" : ""}`}
+                                                        className={`form-control pl-5 pr-20  text-base ${(fieldErrors.minimumSalary) ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
-                                                        value={minimumSalary}
+                                                        value={ minimumSalary}
                                                         onChange={(e) => {
-                                                            setMinimumSalary(e.target.value || "");
-                                                            if (fieldErrors.minimumSalary) {
-                                                                setFieldErrors({ ...fieldErrors, minimumSalary: false });
+                                                            if (!salaryNegotiable) {
+                                                                setMinimumSalary(e.target.value || "");
+                                                                if (fieldErrors.minimumSalary) {
+                                                                    setFieldErrors({ ...fieldErrors, minimumSalary: false });
+                                                                }
                                                             }
                                                         }}
+                                                        disabled={salaryNegotiable}
                                                     />
-                                                    <span className={`absolute right-5 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.minimumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
+                                                    <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
                                                         PHP
                                                     </span>
+                                                    {(fieldErrors.minimumSalary && !salaryNegotiable) && (
+                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2 -translate-x-3/2"></i>
+                                                    )}
                                                 </div>
-                                                {fieldErrors.minimumSalary && (
+                                                {(fieldErrors.minimumSalary && !salaryNegotiable) && (
                                                     <span className="text-[#DC2626] text-sm">This is a required field.</span>
                                                 )}
+
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <span>Maximum Salary</span>
@@ -393,6 +418,7 @@ export default function CareerDetailsStep({
                                                         placeholder="0"
                                                         min={0}
                                                         value={maximumSalary}
+                                                        disabled={salaryNegotiable}
                                                         onChange={(e) => {
                                                             setMaximumSalary(e.target.value || "");
                                                             if (fieldErrors.maximumSalary) {
@@ -400,11 +426,15 @@ export default function CareerDetailsStep({
                                                             }
                                                         }}
                                                     />
-                                                    <span className={`absolute right-5 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
+                                                    <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
                                                         PHP
                                                     </span>
+                                                    {(fieldErrors.maximumSalary && !salaryNegotiable) && (
+                                                    <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2 -translate-x-3/2"></i>
+                                                )}
                                                 </div>
-                                                {fieldErrors.maximumSalary && (
+                                                
+                                                {fieldErrors.maximumSalary && !salaryNegotiable && (
                                                     <span className="text-[#DC2626] text-sm">This is a required field.</span>
                                                 )}
                                             </div>
@@ -417,7 +447,7 @@ export default function CareerDetailsStep({
                     </div>
                 </div>
 
-                <div className="layered-card-outer">
+                <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
                         <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
                             2. Job Description
@@ -426,16 +456,18 @@ export default function CareerDetailsStep({
 
                             <div className="layered-card-content border-none rich-text-editor-wrapper">
                                 {/* <span className="text-base text-[#181D27] font-bold text-lg">Description</span> */}
-                                <RichTextEditor
-                                    setText={(text) => {
-                                        setDescription(text);
-                                        if (fieldErrors.description) {
-                                            setFieldErrors({ ...fieldErrors, description: false });
-                                        }
-                                    }}
-                                    text={description}
-                                    hasError={fieldErrors.description}
-                                />
+                                <div className="">
+                                    <RichTextEditor
+                                        setText={(text) => {
+                                            setDescription(text);
+                                            if (fieldErrors.description) {
+                                                setFieldErrors({ ...fieldErrors, description: false });
+                                            }
+                                        }}
+                                        text={description}
+                                        hasError={fieldErrors.description}
+                                    />
+                                </div>
                                 {fieldErrors.description && (
                                     <span className="text-[#DC2626] text-sm mt-1 block">This is a required field.</span>
                                 )}
@@ -453,22 +485,29 @@ export default function CareerDetailsStep({
             </div>
 
             <div className="w-full lg:w-[30%] lg:sticky top-0">
-                <div className="layered-card-outer">
+                <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-5 pt-2" >
-                            Tips
-                        </span>
+                        <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
+                            <img 
+                                src="/icons/lightbulb.svg" 
+                                alt="lightbulb" 
+                                style={{ width: "20px", height: "20px" }}
+                            />
+                            <span className="text-base text-[#181D27] font-bold text-lg">
+                                Tips
+                            </span>
+                        </div>
                         <div className="layered-card-content flex flex-col gap-4">
                             <span>
-                                <span className="font-bold"> Use clear, standard job titles</span> for better
+                                <span className="font-bold text-black"> Use clear, standard job titles</span> for better
                                 searchability (e.g., "Software Engineer" instead of "Code Ninja" or "Tech Rockstar").
                             </span>
                             <span>
-                                <span className="font-bold"> Avoid abbreviations</span> or internal role codes that applicants may not understand
+                                <span className="font-bold text-black"> Avoid abbreviations</span> or internal role codes that applicants may not understand
                                 (e.g., use "QA Engineer" instead of "QE II" or "QA-TL").
                             </span>
                             <span>
-                                <span className="font-bold"> Keep it concise</span> — job titles should be no more than a few words
+                                <span className="font-bold text-black"> Keep it concise</span> — job titles should be no more than a few words
                                 (2–4 max), avoiding fluff or marketing terms.
                             </span>
                         </div>

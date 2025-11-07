@@ -106,7 +106,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
     // Ensure current user is in the list (only if user is available)
     if (!user) {
         return (
-            <div className="layered-card-outer">
+            <div className="layered-card-outer-career">
                 <div className="layered-card-middle">
                     <div className="flex flex-row items-center gap-2">
                         <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
@@ -134,7 +134,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
         : [currentUserMember, ...teamMembers];
 
     return (
-        <div className="layered-card-outer">
+        <div className="layered-card-outer-career">
             <div className="layered-card-middle">
                 <div className="flex flex-row items-center gap-2">
                     <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">3. Team Access</span>
@@ -149,15 +149,14 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                             <button
                                 type="button"
                                 onClick={() => setShowMemberDropdown(!showMemberDropdown)}
-                                className="px-4 py-3 border border-[#D5D7DA] rounded-lg text-base
+                                className="px-4 py-2 border border-[#D5D7DA] rounded-lg text-base
                                         text-[#181D27] bg-white cursor-pointer w-full md:min-w-[300px] text-left flex items-center justify-between
                                         shadow-sm hover:shadow-md transition-shadow"
                             >
                                 <div className="flex items-center gap-2">
-                                    <i className="la la-user text-base text-gray-500"></i>
+                                    <i className="la la-user text-base text-gray-500 !text-2xl"></i>
                                     <span className="text-base">Add member</span>
                                 </div>
-
                                 <i className="la la-chevron-down text-sm text-gray-500"></i>
                             </button>
 
@@ -305,13 +304,11 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                 <button
                                     type="button"
                                     onClick={() => removeMember(member.email)}
-                                    className="h-15 w-15 flex items-center justify-center !rounded-full !border border-gray-300 
+                                    className="h-10 w-10 flex items-center justify-center !rounded-full !border border-gray-300 
                                     bg-white hover:bg-gray-100 transition cursor-pointer"
                                 >
-                                    <i className="la la-trash text-xl text-gray-600"></i>
+                                    <i className="la la-trash text-xl text-gray-600 !text-gray-300"></i>
                                 </button>
-
-
                             </div>
                         ))}
                     </div>

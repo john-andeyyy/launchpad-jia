@@ -20,7 +20,7 @@ export default function ReviewSection({
     children,
 }: ReviewSectionProps) {
     return (
-        <div className="layered-card-outer">
+        <div className="layered-card-outer-career">
             <div className="layered-card-middle">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center gap-2">
@@ -39,10 +39,11 @@ export default function ReviewSection({
                         {onEdit && (
                             <button
                                 onClick={onEdit}
-                                className="w-8 h-8 flex items-center justify-center hover:bg-[#F3F4F6] rounded-full transition-colors"
+                                className="w-8 h-8 flex items-center justify-center hover:bg-[#F3F4F6] rounded-full transition-colors
+                                border !border-gray-500 !rounded-full"
                                 title="Edit"
                             >
-                                <i className="la la-pen text-[#6B7280] text-base"></i>
+                                <i className="la la-pen text-[#6B7280] text-base !text-2xl"></i>
                             </button>
                         )}
                         

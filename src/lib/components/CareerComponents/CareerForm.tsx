@@ -397,13 +397,23 @@ export default function CareerForm({
                 errors.push("City is required");
                 fieldErrors.city = true;
             }
-            if (!minimumSalary || minimumSalary === "0") {
-                errors.push("Minimum salary is required");
-                fieldErrors.minimumSalary = true;
-            }
-            if (!maximumSalary || maximumSalary === "0") {
-                errors.push("Maximum salary is required");
-                fieldErrors.maximumSalary = true;
+            if (salaryNegotiable) {
+                // When negotiable, minimum salary must be "0" and maximum is not required
+                if (!minimumSalary || minimumSalary !== "0") {
+                    errors.push("Minimum salary is required");
+                    fieldErrors.minimumSalary = true;
+                }
+                // Maximum salary is not required when negotiable
+            } else {
+                // When not negotiable, both are required
+                if (!minimumSalary || minimumSalary === "0") {
+                    errors.push("Minimum salary is required");
+                    fieldErrors.minimumSalary = true;
+                }
+                if (!maximumSalary || maximumSalary === "0") {
+                    errors.push("Maximum salary is required");
+                    fieldErrors.maximumSalary = true;
+                }
             }
 
             // Validate team access
@@ -829,9 +839,16 @@ export default function CareerForm({
                     <>
                         <div className=" flex flex-row justify-between items-center w-full">
                             <h1 className="text-2xl font-medium text-[#111827]">
-                                Add new career
+                                {jobTitle ? (
+                                    <>
+                                        <span className="text-[#6B7280] font-normal">[Draft] </span>
+                                        <span className="font-medium">{jobTitle}</span>
+                                    </>
+                                ) : (
+                                    "Add new career"
+                                )}
                             </h1>
-                            <div className="flex flex-row items-center gap-2.5">
+                            <div className="flex flex-row items-center gap-2.5 pb-4">
                                 <button
                                     disabled={isSavingCareer}
                                     className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4
@@ -847,7 +864,7 @@ export default function CareerForm({
                                 <button
                                     disabled={isSavingCareer}
                                     className={`w-fit p-2 px-4 !text-sm font-bold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
-                                        disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer 
+                                        disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer flex flex-row items-center gap-2
                                         ${isSavingCareer
                                         ? "bg-[#D5D7DA] text-white"
                                         : "bg-black text-white"
@@ -863,6 +880,7 @@ export default function CareerForm({
                                         }
                                     }}
                                 >
+                                    <span className="las la-check-circle text-white text-xl ml-2"></span>
                                     {currentStep === STEPS.length ? "Publish" : "Save and Continue →"}
                                 </button>
                             </div>
@@ -887,13 +905,13 @@ export default function CareerForm({
                                                     {/* Circle */}
                                                     <div
                                                         onClick={() => isClickable && goToStep(step.id)}
-                                                        className={`relative w-5 h-5 rounded-full flex items-center justify-center transition-colors border-2 z-10 ${
+                                                        className={`relative w-6 h-6 rounded-full flex items-center justify-center transition-colors z-10 ${
                                                             isActive
                                                                 ? hasErrors
-                                                                    ? "bg-white border-[#DC2626] shadow-lg"
+                                                                    ? "bg-white border-none shadow-lg"
                                                                     : "bg-white border-[#181D27] shadow-lg"
                                                                 : isCompleted
-                                                                    ? "bg-[#039855] text-white border-white"
+                                                                    ? "bg-black text-white border-white"
                                                                     : "bg-white border-[#D5D7DA]"
                                                         } ${isClickable
                                                             ? "cursor-pointer hover:scale-110 hover:shadow-md"
@@ -903,13 +921,13 @@ export default function CareerForm({
                                                         }`}
                                                     >
                                                         {isCompleted ? (
-                                                            <i className="la la-check text-base text-white"></i>
+                                                            <i className="la la-check text-base text-white !p-5 !text-1xl"></i>
                                                         ) : isActive && hasErrors ? (
-                                                            <i className="la la-exclamation-circle text-[#DC2626] text-base"></i>
+                                                            <i className="las la-exclamation-triangle text-[#DC2626] text-2xl"></i>
                                                         ) : isActive ? (
-                                                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full bg-[#181D27]"></div>
+                                                            <div className="las la-dot-circle text-black text-3xl"></div>
                                                         ) : (
-                                                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full bg-[#D5D7DA]"></div>
+                                                            <i className="las la-dot-circle text-[#D5D7DA] text-3xl"></i>
                                                         )}
                                                     </div>
 

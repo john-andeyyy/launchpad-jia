@@ -44,7 +44,7 @@ export default function CVReviewStep({
     return (
         <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
             <div className="flex flex-col gap-4 w-full lg:w-auto">
-            <div className="layered-card-outer">
+            <div className="layered-card-outer-career">
                 <div className="layered-card-middle">
                     <div className="flex flex-row items-center gap-2">
                         <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">1. CV Review Settings</span>
@@ -64,7 +64,7 @@ export default function CVReviewStep({
                                 onMouseEnter={() => setShowTooltip(true)}
                                 onMouseLeave={() => setShowTooltip(false)}
                             >
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                     <CustomDropdown
                                         onSelectSetting={setScreeningSetting}
                                         screeningSetting={screeningSetting}
@@ -85,7 +85,7 @@ export default function CVReviewStep({
                                     onMouseEnter={() => setShowHelpTooltip(true)}
                                     onMouseLeave={() => setShowHelpTooltip(false)}
                                 >
-                                    <i className="la la-question-circle text-[#6B7280] text-base ml-1 cursor-help"></i>
+                                    <i className="la la-question-circle text-[#6B7280] text-base ml-1  !text-2xl cursor-help"></i>
                                     {showHelpTooltip && (
                                         <div
                                             className="absolute z-50 bg-[#181D27] text-white text-sm p-3 rounded-lg shadow-lg mt-2 left-0"
@@ -100,14 +100,15 @@ export default function CVReviewStep({
                                     )}
                                 </div>
                             </div>
-                            <p className="text-[#6B7280] text-md !font-medium">
+                            <p className="text-[#6B7280] text-md !font-medium pr-5">
                                 Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
                             </p>
 
                             <textarea
                                 ref={textareaRef}
-                                className="!h-30 !text-base !p-2 !mt-2  w-full border border-[#E9EAEB] rounded-lg p-2 mt-2 focus:outline-none focus:ring-0 focus:border-[#7C3AED] 
-                                text-base font-medium text-[#181D27] placeholder:text-[#6B7280] placeholder:font-medium"
+                                className="!h-30 !text-base !p-2 !mt-2  w-full border border-[#E9EAEB] rounded-lg !px-10 mt-2
+                                focus:outline-none focus:ring-0 focus:border-[#7C3AED] 
+                                text-base font-medium text-[#181D27] placeholder:text-[#6B7280] placeholder:font-medium "
                                 rows={4}
                                 placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
                                 value={secretPrompt}
@@ -202,7 +203,7 @@ export default function CVReviewStep({
 
             {/* Pre-Screening Questions Section */}
             {preScreeningQuestions !== undefined && setPreScreeningQuestions && (
-                <div className="layered-card-outer">
+                <div className="layered-card-outer-career">
                     <PreScreeningQuestions
                         questions={preScreeningQuestions}
                         setQuestions={setPreScreeningQuestions}
@@ -211,22 +212,29 @@ export default function CVReviewStep({
             )}
             </div>
             <div className="w-full lg:w-[40%] lg:sticky top-0">
-                <div className="layered-card-outer">
+                <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-5 pt-2" >
-                            Tips
-                        </span>
+                    <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
+                            <img 
+                                src="/icons/lightbulb.svg" 
+                                alt="lightbulb" 
+                                style={{ width: "20px", height: "20px" }}
+                            />
+                            <span className="text-base text-[#181D27] font-bold text-lg">
+                                Tips
+                            </span>
+                        </div>
                         <div className="layered-card-content flex flex-col gap-4">
                             <span>
-                                <span className="font-bold"> Use clear, standard job titles</span> for better
+                                <span className="font-bold text-black"> Use clear, standard job titles</span> for better
                                 searchability (e.g., "Software Engineer" instead of "Code Ninja" or "Tech Rockstar").
                             </span>
                             <span>
-                                <span className="font-bold"> Avoid abbreviations</span> or internal role codes that applicants may not understand
+                                <span className="font-bold text-black"> Avoid abbreviations</span> or internal role codes that applicants may not understand
                                 (e.g., use "QA Engineer" instead of "QE II" or "QA-TL").
                             </span>
                             <span>
-                                <span className="font-bold"> Keep it concise</span> — job titles should be no more than a few words
+                                <span className="font-bold text-black"> Keep it concise</span> — job titles should be no more than a few words
                                 (2–4 max), avoiding fluff or marketing terms.
                             </span>
                         </div>

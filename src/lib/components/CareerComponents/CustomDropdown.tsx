@@ -13,7 +13,10 @@ export default function CustomDropdown(props) {
             style={{ 
                 width: "100%", 
                 textTransform: "capitalize",
-                border: hasError ? "2px solid #DC2626" : "1px solid #ddd"
+                border: hasError ? "2px solid #DC2626" : "1px solid #ddd",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
             }}
             type="button"
             onClick={() => setDropdownOpen((v) => !v)}
@@ -28,7 +31,15 @@ export default function CustomDropdown(props) {
               ></i>{" "}
               {screeningSetting?.replace("_", " ") || placeholder}
             </span>
-            
+            <img 
+              src="/icons/chevron.svg" 
+              alt="chevron" 
+              style={{ 
+                width: "16px", 
+                height: "16px",
+                opacity: disabled !== undefined && disabled ? 0.5 : 1
+              }} 
+            />
           </button>
           <div
             className={`dropdown-menu w-100 mt-1 org-dropdown-anim${

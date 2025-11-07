@@ -39,7 +39,7 @@ export default function AIInterviewStep({
     return (
         <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
             <div>
-                <div className="layered-card-outer mb-4">
+                <div className="layered-card-outer-career mb-4">
                     <div className="layered-card-middle">
                         <div className="layered-card-content">
                             {/* //! AI Interview Screening */}
@@ -53,7 +53,7 @@ export default function AIInterviewStep({
                                     Jia automatically endorses candidates who meet the chosen criteria.
                                 </span>
                                 <div
-                                    className="grid grid-cols-4 md:grid-cols-3 gap-2">
+                                    className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                     <CustomDropdown
                                         onSelectSetting={setScreeningSetting}
                                         screeningSetting={screeningSetting}
@@ -107,14 +107,13 @@ export default function AIInterviewStep({
                                 <div className="space-y-2 border-t border-gray-200 pt-2 mt-2">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-semibold text-gray-900 text-lg sm:text-base flex items-center gap-1">
-                                            <span>AI Interview Secret Prompt</span>
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
                                                 strokeWidth="1.5"
                                                 stroke="currentColor"
-                                                className="w-4 h-4 text-gray-400"
+                                                className="w-7 h-7 text-gray-400 text-[#7C3AED]"
                                             >
                                                 <path
                                                     strokeLinecap="round"
@@ -122,6 +121,8 @@ export default function AIInterviewStep({
                                                     d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"
                                                 />
                                             </svg>
+                                            <span>AI Interview Secret Prompt</span>
+
                                         </h3>
                                         <span className="text-lg sm:text-sm text-gray-500">(optional)</span>
                                         <div className="relative">
@@ -220,11 +221,18 @@ export default function AIInterviewStep({
 
             </div>
             <div className="w-full lg:w-[40%] lg:sticky top-0">
-                <div className="layered-card-outer">
+                <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-5 pt-2" >
-                            Tips
-                        </span>
+                        <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
+                            <img
+                                src="/icons/lightbulb.svg"
+                                alt="lightbulb"
+                                style={{ width: "20px", height: "20px" }}
+                            />
+                            <span className="text-base text-[#181D27] font-bold text-lg">
+                                Tips
+                            </span>
+                        </div>
                         <div className="layered-card-content flex flex-col gap-4">
                             <span>
                                 <span className="font-bold text-black">Add a Secret Prompt</span> to fine-tune how Jia scores and evaluates the interview responses.

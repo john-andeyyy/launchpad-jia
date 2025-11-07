@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { guid } from "@/lib/Utils";
 
 export type QuestionType = "short-answer" | "long-answer" | "dropdown" | "checkboxes" | "range" | "text";
@@ -58,11 +58,11 @@ const SUGGESTED_QUESTIONS = [
 ] as const;
 
 const QUESTION_TYPES: { value: QuestionType; label: string; icon?: string }[] = [
-    { value: "short-answer", label: "Short Answer" },
-    { value: "long-answer", label: "Long Answer" },
-    { value: "dropdown", label: "Dropdown" },
-    { value: "checkboxes", label: "Checkboxes" },
-    { value: "range", label: "Range" },
+    { value: "short-answer", label: "Short Answer", icon: "las la-user" },
+    { value: "long-answer", label: "Long Answer", icon: "las la-grip-lines" },
+    { value: "dropdown", label: "Dropdown", icon: "las la-list" },
+    { value: "checkboxes", label: "Checkboxes", icon: "las la-check-square" },
+    { value: "range", label: "Range", icon: "las la-sort-numeric-up" },
 ];
 
 // Validation function to check for blank question titles
@@ -240,18 +240,14 @@ export default function PreScreeningQuestions({
                                 {questions.length}
                             </span>
                         </div>
-
                 </div>
-
-
                 <div className="flex flex-row items-center justify-between">
-
                     <button
                         onClick={handleAddCustom}
                         className={`w-fit p-2 px-4 !text-sm !font-semibold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
                         disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer bg-black text-white`}
                     >
-                        <i className="la la-plus mr-2"></i> Add custom
+                        <i className="la la-plus mr-2 !text-1xl"></i> Add custom
                     </button>
                 </div>
             </div>
@@ -285,7 +281,7 @@ export default function PreScreeningQuestions({
 
                     {/* Suggested Questions */}
                     <div className="space-y-3 pt-2">
-                        <h4 className="font-medium text-[#181D27] text-lg sm:text-md">
+                        <h4 className="font-medium !text-gray-500 text-lg sm:text-md">
                             Suggested Pre-screening Questions:
                         </h4>
                         <div className="space-y-2">
@@ -294,9 +290,9 @@ export default function PreScreeningQuestions({
                                 return (
                                     <div
                                         key={suggested.id}
-                                        className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E9EAEB] "
+                                        className="flex items-center justify-between p-3 !py-0 bg-white rounded-lg  !mb-0"
                                     >
-                                        <div className={`flex-1 ${isAdded ? "opacity-50" : ""}`}>
+                                        <div className={`flex-1  ${isAdded ? "opacity-50" : ""}`}>
                                             <p className="text-md  text-black !font-semibold mb-1">
                                                 {suggested.id
                                                     .split("-")
@@ -308,8 +304,9 @@ export default function PreScreeningQuestions({
                                         <button
                                             onClick={() => handleAddSuggested(suggested.id)}
                                             disabled={isAdded}
-                                            className={`ml-3 px-3 py-1.5 !rounded-full text-md font-semibold sm:text-sm transition !border cursor-pointer ${isAdded
-                                                ? "!bg-[#F8F9FC] text-[#6B7280] cursor-not-allowed border-[#D5D9EB]"
+                                            className={`ml-3 px-3 py-1.5 !rounded-full text-md font-semibold sm:text-sm transition 
+                                                !border cursor-pointer ${isAdded
+                                                ? "!bg-gray-300 text-white cursor-not-allowed border-[#D5D9EB]"
                                                 : "!bg-transparent !text-[#181D27] !border !border-gray-300 hover:bg-[#F8F9FC]"
                                                 }`}
                                         >
@@ -353,11 +350,30 @@ function QuestionCard({
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
     const [questionText, setQuestionText] = useState(question.question);
     const [questionType, setQuestionType] = useState<QuestionType>(question.type);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setQuestionText(question.question);
         setQuestionType(question.type);
     }, [question.question, question.type]);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        if (dropdownOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdownOpen]);
 
     const handleQuestionChange = (value: string) => {
         setQuestionText(value);
@@ -484,28 +500,66 @@ function QuestionCard({
                     }`}
             >
                 {/* Question Input and Type Selector - Gray Bar */}
-                <div className="flex items-center gap-2 p-2 bg-gray-300 -mt-[1px] -mx-[1px] w-[calc(100%+2px)]">
-                    <input
-                        type="text"
-                        value={questionText}
-                        onChange={(e) => handleQuestionChange(e.target.value)}
-                        placeholder="Enter your question"
-                        className={`flex-1 border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 ${hasError
-                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-                            : "border-gray-300 focus:ring-indigo-500 focus:border-transparent"
-                            }`}
-                    />
-                    <select
-                        value={questionType}
-                        onChange={(e) => handleTypeChange(e.target.value as QuestionType)}
-                        className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    >
-                        {QUESTION_TYPES.map((type) => (
-                            <option key={type.value} value={type.value}>
-                                {type.label}
-                            </option>
-                        ))}
-                    </select>
+                <div className="flex items-center gap-2 p-2 bg-gray-50 -mt-[1px] -mx-[1px] w-[calc(100%+2px)]">
+                    {question.source === "suggested" ? (
+                        <h3 className="flex-1 text-base font-semibold text-[#181D27] px-3 py-2 !pl-20 sm:!pl-5 md:!pl-10 lg:!pl-10">
+                            {question.question}
+                        </h3>
+                    ) : (
+                        <>
+                            <input
+                                type="text"
+                                value={questionText}
+                                onChange={(e) => handleQuestionChange(e.target.value)}
+                                placeholder="Enter your question"
+                                className={`flex-1 border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 ${hasError
+                                    ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                                    : "border-gray-300 focus:ring-indigo-500 focus:border-transparent"
+                                    }`}
+                            />
+                            
+                        </>
+                    )}
+                    <div className="relative" ref={dropdownRef}>
+                        <button
+                            type="button"
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent flex items-center gap-2 min-w-[140px] justify-between"
+                        >
+                            <div className="flex items-center gap-2">
+                                {QUESTION_TYPES.find(t => t.value === questionType)?.icon && (
+                                    <i className={`${QUESTION_TYPES.find(t => t.value === questionType)?.icon} text-base`}></i>
+                                )}
+                                <span>{QUESTION_TYPES.find(t => t.value === questionType)?.label || questionType}</span>
+                            </div>
+                            <i className="la la-angle-down text-xs"></i>
+                        </button>
+                        {dropdownOpen && (
+                            <div className=" absolute right-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-auto">
+                                {QUESTION_TYPES.map((type) => (
+                                    <button
+                                        key={type.value}
+                                        type="button"
+                                        onClick={() => {
+                                            handleTypeChange(type.value);
+                                            setDropdownOpen(false);
+                                        }}
+                                        className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50 ${
+                                            questionType === type.value ? 'bg-[#F8F9FC] font-semibold' : ''
+                                        }`}
+                                    >
+                                        {type.icon && (
+                                            <i className={`${type.icon} text-base`}></i>
+                                        )}
+                                        <span>{type.label}</span>
+                                        {questionType === type.value && (
+                                            <i className="la la-check ml-auto text-indigo-600"></i>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Error Message */}
