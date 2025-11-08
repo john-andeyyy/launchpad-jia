@@ -9,6 +9,7 @@ interface ReviewSectionProps {
     onToggle: () => void;
     onEdit?: () => void;
     children: ReactNode;
+    className?: string;
 }
 
 export default function ReviewSection({
@@ -18,9 +19,10 @@ export default function ReviewSection({
     onToggle,
     onEdit,
     children,
+    className,
 }: ReviewSectionProps) {
     return (
-        <div className="layered-card-outer-career">
+        <div className={`layered-card-outer-career ${className}`}>
             <div className="layered-card-middle">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center gap-2">

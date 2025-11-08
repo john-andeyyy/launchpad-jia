@@ -645,6 +645,7 @@ export default function CareerForm({
                 requireVideo,
                 cvSecretPrompt,
                 aiInterviewSecretPrompt,
+                preScreeningQuestions,
                 salaryNegotiable,
                 minimumSalary: isNaN(Number(minimumSalary))
                     ? null
@@ -1036,104 +1037,104 @@ export default function CareerForm({
                 )}
                 {formType !== "add" && (
                     <div className="flex flex-row justify-between w-full gap-4 items-start mt-4 ">
-                        <div className="w-[60%] flex flex-col gap-2">
-                            <div className="layered-card-outer">
-                                <div className="layered-card-middle">
-                                    <div className="flex flex-row items-center gap-2">
-                                        <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
-                                            <i className="la la-suitcase text-white text-xl"></i>
-                                        </div>
-                                        <span className="text-base text-[#181D27] font-bold">
-                                            Career Information
-                                        </span>
+                    <div className="w-[60%] flex flex-col gap-2">
+                        <div className="layered-card-outer">
+                            <div className="layered-card-middle">
+                                <div className="flex flex-row items-center gap-2">
+                                    <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
+                                        <i className="la la-suitcase text-white text-xl"></i>
                                     </div>
-                                    <div className="layered-card-content">
-                                        <span>Job Title</span>
-                                        <input
-                                            value={jobTitle}
-                                            className="form-control"
-                                            placeholder="Enter job title"
-                                            onChange={(e) => {
-                                                setJobTitle(e.target.value || "");
-                                            }}
-                                        ></input>
-                                        <span>Description</span>
-                                        <RichTextEditor setText={setDescription} text={description} />
-                                    </div>
+                                    <span className="text-base text-[#181D27] font-bold">
+                                        Career Information
+                                    </span>
+                                </div>
+                                <div className="layered-card-content">
+                                    <span>Job Title</span>
+                                    <input
+                                        value={jobTitle}
+                                        className="form-control"
+                                        placeholder="Enter job title"
+                                        onChange={(e) => {
+                                            setJobTitle(e.target.value || "");
+                                        }}
+                                    ></input>
+                                    <span>Description</span>
+                                    <RichTextEditor setText={setDescription} text={description} />
                                 </div>
                             </div>
-                            <InterviewQuestionGeneratorV2
-                                questions={questions}
-                                setQuestions={(questions) => setQuestions(questions)}
-                                jobTitle={jobTitle}
-                                description={description}
-                            />
                         </div>
-                        <div className="w-[40%] flex flex-col gap-2">
-                            <div className="layered-card-outer">
-                                <div className="layered-card-middle">
-                                    <div className="flex flex-row items-center gap-2">
-                                        <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
-                                            <i className="la la-cog text-white text-xl"></i>
-                                        </div>
-                                        <span className="text-base text-[#181D27] font-bold">
-                                            Settings
-                                        </span>
-                                    </div>
-                                    <div className="layered-card-content">
-                                        <div className="flex flex-row gap-2">
-                                            <i className="la la-id-badge text-[#414651] text-xl"></i>
-                                            <span>Screening Setting</span>
-                                        </div>
-                                        <CustomDropdown
-                                            onSelectSetting={(setting) => {
-                                                setScreeningSetting(setting);
-                                            }}
-                                            screeningSetting={screeningSetting}
-                                            settingList={screeningSettingList}
-                                        />
-                                        <span>
-                                            Jia automatically endorses candidates who meet the chosen criteria.
-                                        </span>
-                                        <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#E9EAEB]">
-                                            <div className="flex flex-row items-center gap-2">
-                                                <i className="la la-magic text-[#7C3AED] text-xl"></i>
-                                                <span className="font-medium">CV Secret Prompt (optional)</span>
-                                            </div>
-                                            <p className="text-[#6B7280] text-sm">
-                                                Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
-                                            </p>
-                                            <textarea
-                                                className="form-control"
-                                                rows={4}
-                                                placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
-                                                value={cvSecretPrompt}
-                                                onChange={(e) => setCvSecretPrompt(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="flex flex-row justify-between gap-2 mt-4 pt-4 border-t border-[#E9EAEB]">
-                                            <div className="flex flex-row gap-2">
-                                                <i className="la la-video text-[#414651] text-xl"></i>
-                                                <span>Require Video Interview</span>
-                                            </div>
-                                            <div className="flex flex-row items-start gap-2">
-                                                <label className="switch">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={requireVideo}
-                                                        onChange={() => setRequireVideo(!requireVideo)}
-                                                    />
-                                                    <span className="slider round"></span>
-                                                </label>
-                                                <span>{requireVideo ? "Yes" : "No"}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <InterviewQuestionGeneratorV2
+                            questions={questions}
+                            setQuestions={(questions) => setQuestions(questions)}
+                            jobTitle={jobTitle}
+                            description={description}
+                        />
                     </div>
+                    <div className="w-[40%] flex flex-col gap-2">
+                        <div className="layered-card-outer">
+                            <div className="layered-card-middle">
+                                <div className="flex flex-row items-center gap-2">
+                                    <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
+                                        <i className="la la-cog text-white text-xl"></i>
+                                    </div>
+                                    <span className="text-base text-[#181D27] font-bold">
+                                        Settings
+                                    </span>
+                                </div>
+                                <div className="layered-card-content">
+                                    <div className="flex flex-row gap-2">
+                                        <i className="la la-id-badge text-[#414651] text-xl"></i>
+                                        <span>Screening Setting</span>
+                                    </div>
+                                    <CustomDropdown
+                                        onSelectSetting={(setting) => {
+                                            setScreeningSetting(setting);
+                                        }}
+                                        screeningSetting={screeningSetting}
+                                        settingList={screeningSettingList}
+                                    />
+                                    <span>
+                                        Jia automatically endorses candidates who meet the chosen criteria.
+                                    </span>
+                                    <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#E9EAEB]">
+                                        <div className="flex flex-row items-center gap-2">
+                                            <i className="la la-magic text-[#7C3AED] text-xl"></i>
+                                            <span className="font-medium">CV Secret Prompt (optional)</span>
+                                        </div>
+                                        <p className="text-[#6B7280] text-sm">
+                                            Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
+                                        </p>
+                                        <textarea
+                                            className="form-control"
+                                            rows={4}
+                                            placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
+                                            value={cvSecretPrompt}
+                                            onChange={(e) => setCvSecretPrompt(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex flex-row justify-between gap-2 mt-4 pt-4 border-t border-[#E9EAEB]">
+                                        <div className="flex flex-row gap-2">
+                                            <i className="la la-video text-[#414651] text-xl"></i>
+                                            <span>Require Video Interview</span>
+                                        </div>
+                                        <div className="flex flex-row items-start gap-2">
+                                            <label className="switch">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={requireVideo}
+                                                    onChange={() => setRequireVideo(!requireVideo)}
+                                                />
+                                                <span className="slider round"></span>
+                                            </label>
+                                            <span>{requireVideo ? "Yes" : "No"}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
                 )}
                 {showSaveModal && (
                     <CareerActionModal

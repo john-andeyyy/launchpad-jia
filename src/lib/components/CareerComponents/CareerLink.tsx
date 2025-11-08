@@ -16,19 +16,20 @@ export default function CareerLink(props: {career: any}) {
     }, [career]);
 
     return (
-            <div className="layered-card-outer">
+            <div className="layered-card-outer-career">
                 <div className="layered-card-middle">
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: 8 }}>
-                <div style={{ width: 32, height: 32, display: "flex", justifyContent: "center", alignItems: "center", gap: 8, background: "#181D27", borderRadius: "60px" }}>
-                <i className="la la-link" style={{ fontSize: 20, color: "#FFFFFF"}} /> 
-                </div>
+                <div className="pl-2"
+                 style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: 8 }}>
+                {/* <div style={{ width: 32, height: 32, display: "flex", justifyContent: "center", alignItems: "center", gap: 8, background: "#181D27", borderRadius: "60px" }}> */}
+                {/* <i className="la la-link" style={{ fontSize: 20, color: "#FFFFFF"}} />  */}
+                {/* </div> */}
                     <span style={{ fontSize: 16, color: "#181D27", fontWeight: 700 }}>Career Link</span>
                 </div>
                 {shareLink && <div className="layered-card-content">
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: 10 }}>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control bg-white"
                       value={shareLink}
                       readOnly={true}
                     />
@@ -46,12 +47,12 @@ export default function CareerLink(props: {career: any}) {
                     <i className="la la-copy" style={{ fontSize: 20, color: "#535862" }}></i>
                     </div>
                     </div>
-
+{/* 
                     <a href={shareLink} target="_blank">
                     <div style={{ color: "#414651", display: "flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid #D5D7DA", padding: "8px 16px", borderRadius: "60px", cursor: "pointer", whiteSpace: "nowrap", width: "fit-content", fontWeight: 700, fontSize: 14 }}>
-                        <i className="la la-link"></i> Open link
+                        <i className="la la-link text-lg"></i> Open link
                     </div>
-                    </a>
+                    </a> */}
                 </div>}
                 </div>
             </div>

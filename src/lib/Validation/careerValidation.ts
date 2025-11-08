@@ -107,10 +107,23 @@ const questionSchema = z.object({
     ),
 });
 
+// Pre-screening question option schema
+const preScreeningQuestionOptionSchema = z.object({
+    id: z.string(),
+    value: safeString("Option value", 500),
+});
+
 // Pre-screening question schema
 const preScreeningQuestionSchema = z.object({
+    id: z.string(),
     question: safeString("Pre-screening question", 500),
-    id: z.union([z.string(), z.number()]).optional(),
+    type: z.enum(["short-answer", "long-answer", "dropdown", "checkboxes", "range", "text"]),
+    options: z.array(preScreeningQuestionOptionSchema).optional(),
+    minValue: safeString("Minimum value", 100, false).optional().or(z.literal("")).nullable(),
+    maxValue: safeString("Maximum value", 100, false).optional().or(z.literal("")).nullable(),
+    rangeType: z.enum(["currency", "number"]).optional(),
+    currency: safeString("Currency", 10, false).optional().or(z.literal("")).nullable(),
+    source: z.enum(["custom", "suggested"]).optional(),
 });
 
 // Main career validation schema

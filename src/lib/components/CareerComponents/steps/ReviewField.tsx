@@ -11,8 +11,8 @@ interface ReviewFieldProps {
 export default function ReviewField({ label, value, className = "" }: ReviewFieldProps) {
     return (
         <div className={className}>
-            <span className="text-md font-semibold text-black">{label}</span>
-            <div className="text-base text-[#6B7280] mt-1">{value}</div>
+            <span className="text-md font-semibold text-gray-700">{label}</span>
+            <div className="text-base text-gray-500 mt-1">{value}</div>
         </div>
     );
 }

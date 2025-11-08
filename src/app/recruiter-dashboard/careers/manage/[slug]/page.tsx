@@ -169,88 +169,92 @@ export default function ManageCareerPage() {
         screeningSetting: "",
         requireVideo: false,
         directInterviewLink: "",
+        teamMembers: [],
+        cvSecretPrompt: "",
+        aiInterviewSecretPrompt: "",
+        preScreeningQuestions: [],
     });
     const [showCandidateHistory, setShowCandidateHistory] = useState(false);
     const [selectedCandidateHistory, setSelectedCandidateHistory] = useState<any>({});
     const [showCandidateActionModal, setShowCandidateActionModal] = useState("");
     const draggedCandidateRef = useRef<boolean>(false);
-    
+
     const tabs = [
-      {
-        label: "Application Timeline",
-        value: "application-timeline",
-        icon: "stream",
-      },
-      {
-        label: "All Applicants",
-        value: "all-applicants",
-        icon: "users",
-      },
-      {
-        label: "Career Description",
-        value: "job-description",
-        icon: "suitcase",
-      },
+        {
+            label: "Application Timeline",
+            value: "application-timeline",
+            icon: "stream",
+        },
+        {
+            label: "All Applicants",
+            value: "all-applicants",
+            icon: "users",
+        },
+        {
+            label: "Career Description",
+            value: "job-description",
+            icon: "suitcase",
+        },
     ];
-    
-      useEffect(() => {
+
+    useEffect(() => {
         const fetchInterviews = async () => {
-          if (!career?.id) return;
+            if (!career?.id) return;
 
-          const response = await axios.get(`/api/get-career-interviews?careerID=${career.id}`);
-          if (response.data.length > 0) {
-            let newTimelineStages = { ...timelineStages };
-            for (const interview of response.data) {
+            const response = await axios.get(`/api/get-career-interviews?careerID=${career.id}`);
+            if (response.data.length > 0) {
+                let newTimelineStages = { ...timelineStages };
+                for (const interview of response.data) {
 
-                const isDropped = interview.applicationStatus === "Dropped" || interview.applicationStatus === "Cancelled";
-                if (interview.currentStep === "AI Interview" || !interview.currentStep || (interview.currentStep === "CV Screening" && interview.status === "For AI Interview")) {
-                    if (interview.status === "For Interview" || interview.status === "For AI Interview") {
-                        isDropped ? newTimelineStages["Pending AI Interview"].droppedCandidates.push(interview) : newTimelineStages["Pending AI Interview"].candidates.push(interview);
+                    const isDropped = interview.applicationStatus === "Dropped" || interview.applicationStatus === "Cancelled";
+                    if (interview.currentStep === "AI Interview" || !interview.currentStep || (interview.currentStep === "CV Screening" && interview.status === "For AI Interview")) {
+                        if (interview.status === "For Interview" || interview.status === "For AI Interview") {
+                            isDropped ? newTimelineStages["Pending AI Interview"].droppedCandidates.push(interview) : newTimelineStages["Pending AI Interview"].candidates.push(interview);
+                            continue;
+                        }
+
+                        isDropped ? newTimelineStages["AI Interview Review"].droppedCandidates.push(interview) : newTimelineStages["AI Interview Review"].candidates.push(interview);
                         continue;
                     }
 
-                    isDropped ? newTimelineStages["AI Interview Review"].droppedCandidates.push(interview) : newTimelineStages["AI Interview Review"].candidates.push(interview);
-                    continue;
-                }
-                
-                if (interview.currentStep === "CV Screening") {
-                    isDropped ? newTimelineStages["CV Review"].droppedCandidates.push(interview) : newTimelineStages["CV Review"].candidates.push(interview);
-                    continue;
-                }
-
-                if (interview.currentStep === "Human Interview") {
-                    if (interview.status === "For Human Interview") {
-                        isDropped ? newTimelineStages["For Human Interview"].droppedCandidates.push(interview) : newTimelineStages["For Human Interview"].candidates.push(interview);
+                    if (interview.currentStep === "CV Screening") {
+                        isDropped ? newTimelineStages["CV Review"].droppedCandidates.push(interview) : newTimelineStages["CV Review"].candidates.push(interview);
                         continue;
                     }
-                    if (interview.status === "For Human Interview Review") {
-                        isDropped ? newTimelineStages["Human Interview Review"].droppedCandidates.push(interview) : newTimelineStages["Human Interview Review"].candidates.push(interview);
+
+                    if (interview.currentStep === "Human Interview") {
+                        if (interview.status === "For Human Interview") {
+                            isDropped ? newTimelineStages["For Human Interview"].droppedCandidates.push(interview) : newTimelineStages["For Human Interview"].candidates.push(interview);
+                            continue;
+                        }
+                        if (interview.status === "For Human Interview Review") {
+                            isDropped ? newTimelineStages["Human Interview Review"].droppedCandidates.push(interview) : newTimelineStages["Human Interview Review"].candidates.push(interview);
+                            continue;
+                        }
+                    }
+
+                    if (interview.currentStep === "Job Interview") {
+                        isDropped ? newTimelineStages["Pending Job Interview"].droppedCandidates.push(interview) : newTimelineStages["Pending Job Interview"].candidates.push(interview);
+                        continue;
+                    }
+
+                    if (interview.currentStep === "Job Offered") {
+                        isDropped ? newTimelineStages["Job Offered"].droppedCandidates.push(interview) : newTimelineStages["Job Offered"].candidates.push(interview);
+                        continue;
+                    }
+
+                    if (interview.currentStep === "Contract Signed") {
+                        isDropped ? newTimelineStages["Contract Signed"].droppedCandidates.push(interview) : newTimelineStages["Contract Signed"].candidates.push(interview);
                         continue;
                     }
                 }
 
-                if (interview.currentStep === "Job Interview") {
-                   isDropped ? newTimelineStages["Pending Job Interview"].droppedCandidates.push(interview) : newTimelineStages["Pending Job Interview"].candidates.push(interview);
-                   continue;
-                }
-
-                if (interview.currentStep === "Job Offered") {
-                    isDropped ? newTimelineStages["Job Offered"].droppedCandidates.push(interview) : newTimelineStages["Job Offered"].candidates.push(interview);
-                    continue;
-                }
-
-                if (interview.currentStep === "Contract Signed") {
-                    isDropped ? newTimelineStages["Contract Signed"].droppedCandidates.push(interview) : newTimelineStages["Contract Signed"].candidates.push(interview);
-                    continue;
-                }
+                setAndSortCandidates(newTimelineStages);
             }
-    
-            setAndSortCandidates(newTimelineStages);
-          }
         };
-        
+
         fetchInterviews();
-      }, [career?.id]);
+    }, [career?.id]);
 
     useEffect(() => {
         const fetchCareer = async () => {
@@ -259,10 +263,23 @@ export default function ManageCareerPage() {
                 const response = await axios.post("/api/career-data", {
                     id: slug,
                     orgID,
-                  });
-                  
+                });
+
                 setCareer(response.data);
                 const deepCopy = JSON.parse(JSON.stringify(response.data?.questions ?? []));
+                let teamMembersCopy = JSON.parse(JSON.stringify(response.data?.teamMembers ?? []));
+                const preScreeningQuestionsCopy = JSON.parse(JSON.stringify(response.data?.preScreeningQuestions ?? []));
+
+                // If no team members, initialize with current user as Job Owner
+                if (teamMembersCopy.length === 0 && user) {
+                    teamMembersCopy = [{
+                        name: user.name,
+                        email: user.email,
+                        image: user.image,
+                        role: "Job Owner"
+                    }];
+                }
+
                 setFormData({
                     _id: response.data?._id || "",
                     jobTitle: response.data?.jobTitle || "",
@@ -270,6 +287,8 @@ export default function ManageCareerPage() {
                     questions: deepCopy,
                     status: response.data?.status || "",
                     screeningSetting: response.data?.screeningSetting || "",
+                    cvScreeningSetting: response.data?.cvScreeningSetting || response.data?.screeningSetting || "",
+                    aiInterviewScreeningSetting: response.data?.aiInterviewScreeningSetting || response.data?.screeningSetting || "",
                     requireVideo: response.data?.requireVideo === null || response.data?.requireVideo === undefined ? true : response.data?.requireVideo,
                     directInterviewLink: response.data?.directInterviewLink || "",
                     createdBy: response.data?.createdBy || {},
@@ -277,6 +296,8 @@ export default function ManageCareerPage() {
                     maximumSalary: response.data?.maximumSalary || "",
                     province: response.data?.province || "",
                     location: response.data?.location || "",
+                    city: response.data?.city || response.data?.location || "",
+                    country: response.data?.country || "Philippines",
                     salaryNegotiable: response.data?.salaryNegotiable || false,
                     workSetup: response.data?.workSetup || "",
                     workSetupRemarks: response.data?.workSetupRemarks || "",
@@ -285,6 +306,10 @@ export default function ManageCareerPage() {
                     lastEditedBy: response.data?.lastEditedBy || {},
                     employmentType: response.data?.employmentType || "Full-time",
                     orgID: response.data?.orgID || "",
+                    teamMembers: teamMembersCopy,
+                    cvSecretPrompt: response.data?.cvSecretPrompt || response.data?.secretPrompt || "",
+                    aiInterviewSecretPrompt: response.data?.aiInterviewSecretPrompt || response.data?.secretPrompt || "",
+                    preScreeningQuestions: preScreeningQuestionsCopy,
                 });
                 if (tab === "edit") {
                     setActiveTab("job-description");
@@ -322,7 +347,7 @@ export default function ManageCareerPage() {
 
     const handleDroppedCandidatesOpen = (stage: string) => {
         setDroppedCandidatesOpen(prev => !prev);
-        setSelectedDroppedCandidates({...timelineStages[stage], stage});
+        setSelectedDroppedCandidates({ ...timelineStages[stage], stage });
     }
 
     const handleCandidateHistoryOpen = (candidate: any) => {
@@ -331,7 +356,7 @@ export default function ManageCareerPage() {
     }
 
     const handleCandidateAnalysisComplete = (updatedCandidate: any) => {
-        const updatedStages = {...timelineStages };
+        const updatedStages = { ...timelineStages };
         updatedStages[updatedCandidate.stage].candidates = updatedStages[updatedCandidate.stage].candidates.map((c: any) => c._id === updatedCandidate._id ? updatedCandidate : c);
         setAndSortCandidates(updatedStages);
     }
@@ -358,7 +383,7 @@ export default function ManageCareerPage() {
         setShowCandidateActionModal("drop");
         setSelectedCandidate(candidate);
     }
-    
+
     const dragEndorsedCandidate = (candidateId: string, fromStageKey: string, toStageKey: string) => {
         const candidateIndex = (timelineStages?.[fromStageKey]?.candidates as any[]).findIndex((c) => c._id.toString() === candidateId);
         const currentStage = timelineStages?.[toStageKey]?.currentStage;
@@ -367,26 +392,26 @@ export default function ManageCareerPage() {
             status: currentStage.status,
             updatedAt: Date.now(),
             applicationMetadata: {
-              updatedAt: Date.now(),
-              updatedBy: {
-                  image: user?.image,
-                  name: user?.name,
-                  email: user?.email,
-              },
-              action: "Endorsed",
+                updatedAt: Date.now(),
+                updatedBy: {
+                    image: user?.image,
+                    name: user?.name,
+                    email: user?.email,
+                },
+                action: "Endorsed",
             }
         }
         if (candidateIndex !== -1) {
-            const updatedStages = {...timelineStages }
+            const updatedStages = { ...timelineStages }
             const candidate = updatedStages?.[fromStageKey]?.candidates?.[candidateIndex];
             // Remove and add to new stage
-            
-            (updatedStages?.[toStageKey]?.candidates as any[]).push({...candidate, ...update});
+
+            (updatedStages?.[toStageKey]?.candidates as any[]).push({ ...candidate, ...update });
             (updatedStages?.[fromStageKey]?.candidates as any[]).splice(candidateIndex, 1);
             setAndSortCandidates(updatedStages);
             draggedCandidateRef.current = true;
             setShowCandidateActionModal("endorse");
-            setSelectedCandidate({...candidate, stage: fromStageKey, toStage: toStageKey});
+            setSelectedCandidate({ ...candidate, stage: fromStageKey, toStage: toStageKey });
         }
     }
 
@@ -412,13 +437,13 @@ export default function ManageCareerPage() {
                     status: nextStage.status,
                     updatedAt: Date.now(),
                     applicationMetadata: {
-                      updatedAt: Date.now(),
-                      updatedBy: {
-                          image: user?.image,
-                          name: user?.name,
-                          email: user?.email,
-                      },
-                      action: "Endorsed",
+                        updatedAt: Date.now(),
+                        updatedBy: {
+                            image: user?.image,
+                            name: user?.name,
+                            email: user?.email,
+                        },
+                        action: "Endorsed",
                     }
                 }
                 await axios.post("/api/update-interview", {
@@ -437,20 +462,20 @@ export default function ManageCareerPage() {
                     }
                 });
                 if (!draggedCandidateRef.current) {
-                    const updatedStages = {...timelineStages };
+                    const updatedStages = { ...timelineStages };
                     updatedStages[stage].candidates = updatedStages[stage].candidates.filter((c: any) => c._id !== selectedCandidate._id);
-                    updatedStages[nextStage.name].candidates.push({...selectedCandidate, ...update});
+                    updatedStages[nextStage.name].candidates.push({ ...selectedCandidate, ...update });
                     setAndSortCandidates(updatedStages);
                 }
                 candidateActionToast(
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Candidate endorsed</span>
-                        <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have endorsed the candidate to the next stage.</span>
-                      </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Candidate endorsed</span>
+                            <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have endorsed the candidate to the next stage.</span>
+                        </div>
                     </div>,
-                    1300, 
-                  <i className="la la-user-check" style={{ color: "#039855", fontSize: 32 }}></i>)
+                    1300,
+                    <i className="la la-user-check" style={{ color: "#039855", fontSize: 32 }}></i>)
             } catch (error) {
                 console.error("error", error);
                 errorToast("Failed to endorse candidate", 1300);
@@ -467,20 +492,20 @@ export default function ManageCareerPage() {
                     applicationStatus: "Dropped",
                     updatedAt: Date.now(),
                     applicationMetadata: {
-                    updatedAt: Date.now(),
-                    updatedBy: {
-                        image: user?.image,
-                        name: user?.name,
-                        email: user?.email,
-                    },
-                    action: "Dropped",
+                        updatedAt: Date.now(),
+                        updatedBy: {
+                            image: user?.image,
+                            name: user?.name,
+                            email: user?.email,
+                        },
+                        action: "Dropped",
                     }
                 }
                 await axios.post("/api/update-interview", {
                     uid: selectedCandidate._id,
                     data: update,
-                     // For logging history
-                     interviewTransaction: {
+                    // For logging history
+                    interviewTransaction: {
                         interviewUID: selectedCandidate._id,
                         fromStage: stage,
                         action: "Dropped",
@@ -491,22 +516,22 @@ export default function ManageCareerPage() {
                         },
                     }
                 });
-                 // Update state
-                 if (timelineStages?.[stage]) {
-                    const updatedStages = {...timelineStages };
-                    updatedStages[stage].droppedCandidates.push({...selectedCandidate, ...update});
+                // Update state
+                if (timelineStages?.[stage]) {
+                    const updatedStages = { ...timelineStages };
+                    updatedStages[stage].droppedCandidates.push({ ...selectedCandidate, ...update });
                     updatedStages[stage].candidates = updatedStages[stage].candidates.filter((c: any) => c._id !== selectedCandidate._id);
                     setAndSortCandidates(updatedStages);
                 }
                 candidateActionToast(
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Candidate dropped</span>
-                        <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have dropped the candidate from the application process. </span>
-                      </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Candidate dropped</span>
+                            <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have dropped the candidate from the application process. </span>
+                        </div>
                     </div>,
-                    1300, 
-                  <i className="la la-user-minus" style={{ color: "#D92D20", fontSize: 32 }}></i>)
+                    1300,
+                    <i className="la la-user-minus" style={{ color: "#D92D20", fontSize: 32 }}></i>)
             } catch (error) {
                 console.error("error", error);
                 errorToast("Failed to drop candidate", 1300);
@@ -523,16 +548,16 @@ export default function ManageCareerPage() {
                     applicationStatus: "Ongoing",
                     updatedAt: Date.now(),
                     applicationMetadata: {
-                      updatedAt: Date.now(),
-                      updatedBy: {
-                          image: user?.image,
-                          name: user?.name,
-                          email: user?.email,
-                      },
-                      action: "Reconsidered",
+                        updatedAt: Date.now(),
+                        updatedBy: {
+                            image: user?.image,
+                            name: user?.name,
+                            email: user?.email,
+                        },
+                        action: "Reconsidered",
                     }
                 };
-                 await axios.post("/api/update-interview", {
+                await axios.post("/api/update-interview", {
                     uid: selectedCandidate._id,
                     data: update,
                     interviewTransaction: {
@@ -547,20 +572,20 @@ export default function ManageCareerPage() {
                     }
                 });
                 if (timelineStages?.[stage]) {
-                    const updatedStages = {...timelineStages };
+                    const updatedStages = { ...timelineStages };
                     updatedStages[stage].droppedCandidates = updatedStages[stage].droppedCandidates.filter((c: any) => c._id !== selectedCandidate._id);
-                    updatedStages[stage].candidates.push({...selectedCandidate, ...update});
+                    updatedStages[stage].candidates.push({ ...selectedCandidate, ...update });
                     setAndSortCandidates(updatedStages);
                 }
                 candidateActionToast(
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Candidate reconsidered</span>
-                        <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have reconsidered the candidate back to the ongoing stage.</span>
-                      </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Candidate reconsidered</span>
+                            <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have reconsidered the candidate back to the ongoing stage.</span>
+                        </div>
                     </div>,
-                    1300, 
-                  <i className="la la-user-check" style={{ color: "#039855", fontSize: 32 }}></i>)
+                    1300,
+                    <i className="la la-user-check" style={{ color: "#039855", fontSize: 32 }}></i>)
             } catch (error) {
                 console.error("error", error);
                 errorToast("Failed to reconsider candidate", 1300);
@@ -572,48 +597,48 @@ export default function ManageCareerPage() {
             Swal.showLoading();
             // reset interview data
             try {
-            await axios.post("/api/reset-interview-data", {
-                id: selectedCandidate._id,
-            });
-            
-            await axios.post("/api/update-interview", {
-                uid: selectedCandidate._id,
-                data: {
-                    retakeRequest: {
-                    status: "Approved",
-                    updatedAt: Date.now(),
-                    approvedBy: {
-                        image: user.image,
-                        name: user.name,
-                        email: user.email,
+                await axios.post("/api/reset-interview-data", {
+                    id: selectedCandidate._id,
+                });
+
+                await axios.post("/api/update-interview", {
+                    uid: selectedCandidate._id,
+                    data: {
+                        retakeRequest: {
+                            status: "Approved",
+                            updatedAt: Date.now(),
+                            approvedBy: {
+                                image: user.image,
+                                name: user.name,
+                                email: user.email,
+                            },
+                        },
                     },
+                    interviewTransaction: {
+                        interviewUID: selectedCandidate._id,
+                        fromStage: getStage(selectedCandidate),
+                        toStage: "Pending AI Interview",
+                        action: "Endorsed",
+                        updatedBy: {
+                            image: user?.image,
+                            name: user?.name,
+                            email: user?.email,
+                        },
                     },
-                },
-                interviewTransaction: {
-                    interviewUID: selectedCandidate._id,
-                    fromStage: getStage(selectedCandidate),
-                    toStage: "Pending AI Interview",
-                    action: "Endorsed",
-                    updatedBy: {
-                        image: user?.image,
-                        name: user?.name,
-                        email: user?.email,
-                    },
-                },
-            });
-            Swal.close();
-            candidateActionToast(
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Approved request</span>
-                    <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have approved <strong>{selectedCandidate?.name}'s</strong> request to retake interview.</span>
-                  </div>
-                </div>,
-                1300, 
-              <i className="la la-check-circle" style={{ color: "#039855", fontSize: 32 }}></i>)
-            setTimeout(() => {
-                window.location.href = `/recruiter-dashboard/careers/manage/${slug}`;
-            }, 1300);
+                });
+                Swal.close();
+                candidateActionToast(
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Approved request</span>
+                            <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have approved <strong>{selectedCandidate?.name}'s</strong> request to retake interview.</span>
+                        </div>
+                    </div>,
+                    1300,
+                    <i className="la la-check-circle" style={{ color: "#039855", fontSize: 32 }}></i>)
+                setTimeout(() => {
+                    window.location.href = `/recruiter-dashboard/careers/manage/${slug}`;
+                }, 1300);
             } catch (error) {
                 console.error("error", error);
                 Swal.close();
@@ -621,37 +646,37 @@ export default function ManageCareerPage() {
             }
         }
 
-        if (action === "reject") {      
+        if (action === "reject") {
             Swal.showLoading();
             try {
-            await axios.post("/api/update-interview", {
-                uid: selectedCandidate._id,
-                data: {
-                  retakeRequest: {
-                    status: "Rejected",
-                    updatedAt: Date.now(),
-                    approvedBy: {
-                      image: user.image,
-                      name: user.name,
-                      email: user.email,
+                await axios.post("/api/update-interview", {
+                    uid: selectedCandidate._id,
+                    data: {
+                        retakeRequest: {
+                            status: "Rejected",
+                            updatedAt: Date.now(),
+                            approvedBy: {
+                                image: user.image,
+                                name: user.name,
+                                email: user.email,
+                            },
+                        },
                     },
-                  },
-                },
-              });
-              
-            Swal.close();
-            candidateActionToast(
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Rejected request</span>
-                    <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have rejected <strong>{selectedCandidate?.name}'s</strong> request to retake interview.</span>
-                  </div>
-                </div>,
-                1300,
-              <i className="la la-times-circle" style={{ color: "#D92D20", fontSize: 32 }}></i>)
-            setTimeout(() => {
-                window.location.href = `/recruiter-dashboard/careers/manage/${slug}`;
-            }, 1300);
+                });
+
+                Swal.close();
+                candidateActionToast(
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 8 }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#181D27" }}>Rejected request</span>
+                            <span style={{ fontSize: 14, color: "#717680", fontWeight: 500, whiteSpace: "nowrap" }}>You have rejected <strong>{selectedCandidate?.name}'s</strong> request to retake interview.</span>
+                        </div>
+                    </div>,
+                    1300,
+                    <i className="la la-times-circle" style={{ color: "#D92D20", fontSize: 32 }}></i>)
+                setTimeout(() => {
+                    window.location.href = `/recruiter-dashboard/careers/manage/${slug}`;
+                }, 1300);
             } catch (error) {
                 console.error("error", error);
                 Swal.close();
@@ -662,7 +687,7 @@ export default function ManageCareerPage() {
         if (!action && draggedCandidateRef.current) {
             // Revert the changes since cancelled
             const { stage, toStage } = selectedCandidate;
-            const revertedStages = {...timelineStages };
+            const revertedStages = { ...timelineStages };
             const newCandidateIndex = (revertedStages?.[toStage]?.candidates as any[]).findIndex((c) => c._id.toString() === selectedCandidate._id);
             (revertedStages?.[stage]?.candidates as any[]).push(selectedCandidate);
             (revertedStages?.[toStage]?.candidates as any[]).splice(newCandidateIndex, 1);
@@ -675,21 +700,21 @@ export default function ManageCareerPage() {
             {/* Header */}
             <HeaderBar activeLink="Careers" currentPage={formData.jobTitle} icon="la la-suitcase" />
             <div className="container-fluid mt--7" style={{ paddingTop: "6rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                {isEditing ? 
-                    <input 
-                    type="text" 
-                    value={formData.jobTitle} 
-                    onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} 
-                    style={{ color: "#030217", fontWeight: 550, fontSize: 30, width: "70%" }} 
-                    /> 
-                : <div style={{ maxWidth: "70%" }}>
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-                    <h1 style={{ color: "#030217", fontWeight: 550, fontSize: 30 }}>{formData.jobTitle}</h1>
-                    <CareerStatus status={formData.status} />
-                </div>
-                </div>}
-                {/* <div style={{ display: "flex", gap: 16, alignItems: "center", textAlign: "center" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    {isEditing ?
+                        <input
+                            type="text"
+                            value={formData.jobTitle}
+                            onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
+                            style={{ color: "#030217", fontWeight: 550, fontSize: 30, width: "70%" }}
+                        />
+                        : <div style={{ maxWidth: "70%" }}>
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                <h1 style={{ color: "#030217", fontWeight: 550, fontSize: 30 }}>{formData.jobTitle}</h1>
+                                <CareerStatus status={formData.status} />
+                            </div>
+                        </div>}
+                    {/* <div style={{ display: "flex", gap: 16, alignItems: "center", textAlign: "center" }}>
                 <div style={{ color: "#030217" }}>
                     <div style={{ fontSize: 20, fontWeight: 600 }}>{hired}</div>
                     <div style={{ fontSize: 14 }}>Hired</div>
@@ -706,103 +731,103 @@ export default function ManageCareerPage() {
                 </div> 
                 </div> */}
 
-                {/* Export candidates button */}
-                {interviewsInProgress > 0 && <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                    <button 
-                    style={{
-                        background: "white",
-                        border: "1px solid #E9EAEB",
-                        borderRadius: 60,
-                        padding: "8px 16px",
-                        fontSize: 14,
-                        fontWeight: 700,
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                    }}
-                    onClick={() => {
-                        // Download spreadsheed file of all candidates
-                        const candidates = Object.keys(timelineStages).flatMap((key) => {
-                            const stage = timelineStages[key];
-                            if (stage.candidates.length > 0) {
-                                return stage.candidates.map((candidate) => {
-                                    return {
-                                        ...candidate,
-                                        stage: key,
+                    {/* Export candidates button */}
+                    {interviewsInProgress > 0 && <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                        <button
+                            style={{
+                                background: "white",
+                                border: "1px solid #E9EAEB",
+                                borderRadius: 60,
+                                padding: "8px 16px",
+                                fontSize: 14,
+                                fontWeight: 700,
+                                display: "flex",
+                                alignItems: "center",
+                                cursor: "pointer",
+                            }}
+                            onClick={() => {
+                                // Download spreadsheed file of all candidates
+                                const candidates = Object.keys(timelineStages).flatMap((key) => {
+                                    const stage = timelineStages[key];
+                                    if (stage.candidates.length > 0) {
+                                        return stage.candidates.map((candidate) => {
+                                            return {
+                                                ...candidate,
+                                                stage: key,
+                                            }
+                                        });
                                     }
+                                    return [];
                                 });
-                            }
-                            return [];
-                        });
-                        const csvContent = "data:text/csv;charset=utf-8,NAME,EMAIL,JOB TITLE,DATE APPLIED,APPLICATION STAGE,CV SCREENING RATING,AI INTERVIEW RATING" + "\n" + candidates.map((candidate) => {
-                            return [
-                                candidate.name?.replace(/,/g, ""),
-                                candidate.email?.replace(/,/g, ""),
-                                career.jobTitle?.replace(/,/g, ""),
-                                new Date(candidate.createdAt).toLocaleDateString(),
-                                candidate.stage,
-                                candidate.cvStatus || "N/A",
-                                candidate.jobFit || "N/A",
-                            ]
-                        }).join("\n");
-                        const encodedUri = encodeURI(csvContent);
-                        const link = document.createElement("a");
-                        link.setAttribute("href", encodedUri);
-                        link.setAttribute("download", `${career.jobTitle}-Candidates-${new Date().toLocaleDateString()}.csv`);
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }}>
-                        <i className="la la-file-alt" style={{ fontSize: 20, marginRight: 8 }}></i>
-                        Export Candidates
-                    </button>
-                </div>}
-            </div>
-            <div style={{ padding: "16px 0 48px", background: "#FDFDFD", minHeight: "100vh" }}>
-            {/* Tabs */}
-            <div className="career-tab-container">
-                <div className="career-tab-content">
-                    {tabs.map((tab) => (
-                    <div 
-                    key={tab.value} 
-                    className={`career-tab-item ${activeTab === tab.value ? "active" : ""}`}
-                        onClick={() => setActiveTab(tab.value)}>
-                        <i className={`la la-${tab.icon}`} style={{ fontSize: 20, marginRight: 8 }}></i>
-                        {tab.label}
+                                const csvContent = "data:text/csv;charset=utf-8,NAME,EMAIL,JOB TITLE,DATE APPLIED,APPLICATION STAGE,CV SCREENING RATING,AI INTERVIEW RATING" + "\n" + candidates.map((candidate) => {
+                                    return [
+                                        candidate.name?.replace(/,/g, ""),
+                                        candidate.email?.replace(/,/g, ""),
+                                        career.jobTitle?.replace(/,/g, ""),
+                                        new Date(candidate.createdAt).toLocaleDateString(),
+                                        candidate.stage,
+                                        candidate.cvStatus || "N/A",
+                                        candidate.jobFit || "N/A",
+                                    ]
+                                }).join("\n");
+                                const encodedUri = encodeURI(csvContent);
+                                const link = document.createElement("a");
+                                link.setAttribute("href", encodedUri);
+                                link.setAttribute("download", `${career.jobTitle}-Candidates-${new Date().toLocaleDateString()}.csv`);
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }}>
+                            <i className="la la-file-alt" style={{ fontSize: 20, marginRight: 8 }}></i>
+                            Export Candidates
+                        </button>
+                    </div>}
+                </div>
+                <div style={{ padding: "16px 0 48px", background: "#FDFDFD", minHeight: "100vh" }}>
+                    {/* Tabs */}
+                    <div className="career-tab-container">
+                        <div className="career-tab-content">
+                            {tabs.map((tab) => (
+                                <div
+                                    key={tab.value}
+                                    className={`career-tab-item ${activeTab === tab.value ? "active" : ""}`}
+                                    onClick={() => setActiveTab(tab.value)}>
+                                    <i className={`la la-${tab.icon}`} style={{ fontSize: 20, marginRight: 8 }}></i>
+                                    {tab.label}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    ))}
+                    {/* Career Tab Information */}
+                    {activeTab === "application-timeline" && <CareerStageColumn
+                        timelineStages={timelineStages}
+                        handleCandidateMenuOpen={handleCandidateMenuOpen}
+                        handleCandidateCVOpen={handleCandidateCVOpen}
+                        handleDroppedCandidatesOpen={handleDroppedCandidatesOpen}
+                        handleEndorseCandidate={handleEndorseCandidate}
+                        handleDropCandidate={handleDropCandidate}
+                        dragEndorsedCandidate={dragEndorsedCandidate}
+                        handleCandidateHistoryOpen={handleCandidateHistoryOpen}
+                        handleRetakeInterview={handleRetakeInterview}
+                    />}
+                    {activeTab === "all-applicants" && <CareerApplicantsTable slug={career?.id} />}
+                    {activeTab === "job-description" && <JobDescription formData={formData} setFormData={setFormData} editModal={tab === "edit"} isEditing={isEditing} setIsEditing={setIsEditing} handleCancelEdit={handleCancelEdit} />}
+                    {candidateMenuOpen && <CandidateMenu
+                        handleCandidateMenuOpen={handleCandidateMenuOpen}
+                        candidate={selectedCandidate}
+                        handleCandidateCVOpen={handleCandidateCVOpen}
+                        handleEndorseCandidate={handleEndorseCandidate}
+                        handleDropCandidate={handleDropCandidate}
+                        handleCandidateAnalysisComplete={handleCandidateAnalysisComplete}
+                        handleRetakeInterview={handleRetakeInterview}
+                    />}
+                    {candidateCVOpen && <CandidateCV candidate={selectedCandidateCV} setShowCandidateCV={setCandidateCVOpen} />}
+                    {droppedCandidatesOpen && <DroppedCandidates handleDroppedCandidatesOpen={setDroppedCandidatesOpen} timelineStage={selectedDroppedCandidates} handleCandidateMenuOpen={handleCandidateMenuOpen} handleCandidateCVOpen={handleCandidateCVOpen} handleReconsiderCandidate={handleReconsiderCandidate} />}
+                    {showCandidateHistory && <CandidateHistory candidate={selectedCandidateHistory} setShowCandidateHistory={setShowCandidateHistory} />}
+                    {showCandidateActionModal && <CandidateActionModal candidate={selectedCandidate} onAction={handleCandidateAction} action={showCandidateActionModal} />}
+                    <Tooltip className="career-fit-tooltip fade-in" id="career-fit-tooltip" />
                 </div>
             </div>
-            {/* Career Tab Information */}
-            {activeTab === "application-timeline" && <CareerStageColumn 
-            timelineStages={timelineStages} 
-            handleCandidateMenuOpen={handleCandidateMenuOpen} 
-            handleCandidateCVOpen={handleCandidateCVOpen} 
-            handleDroppedCandidatesOpen={handleDroppedCandidatesOpen} 
-            handleEndorseCandidate={handleEndorseCandidate} 
-            handleDropCandidate={handleDropCandidate} 
-            dragEndorsedCandidate={dragEndorsedCandidate} 
-            handleCandidateHistoryOpen={handleCandidateHistoryOpen} 
-            handleRetakeInterview={handleRetakeInterview}
-            />}
-            {activeTab === "all-applicants" && <CareerApplicantsTable slug={career?.id} />}
-            {activeTab === "job-description" && <JobDescription formData={formData} setFormData={setFormData} editModal={tab === "edit"} isEditing={isEditing} setIsEditing={setIsEditing} handleCancelEdit={handleCancelEdit} />}
-            {candidateMenuOpen && <CandidateMenu 
-            handleCandidateMenuOpen={handleCandidateMenuOpen} 
-            candidate={selectedCandidate} 
-            handleCandidateCVOpen={handleCandidateCVOpen} 
-            handleEndorseCandidate={handleEndorseCandidate} 
-            handleDropCandidate={handleDropCandidate} 
-            handleCandidateAnalysisComplete={handleCandidateAnalysisComplete} 
-            handleRetakeInterview={handleRetakeInterview} 
-            />}
-            {candidateCVOpen && <CandidateCV candidate={selectedCandidateCV} setShowCandidateCV={setCandidateCVOpen} />}
-            {droppedCandidatesOpen && <DroppedCandidates handleDroppedCandidatesOpen={setDroppedCandidatesOpen} timelineStage={selectedDroppedCandidates} handleCandidateMenuOpen={handleCandidateMenuOpen} handleCandidateCVOpen={handleCandidateCVOpen} handleReconsiderCandidate={handleReconsiderCandidate} />}
-            {showCandidateHistory && <CandidateHistory candidate={selectedCandidateHistory} setShowCandidateHistory={setShowCandidateHistory} />}
-            {showCandidateActionModal && <CandidateActionModal candidate={selectedCandidate} onAction={handleCandidateAction} action={showCandidateActionModal} />}
-            <Tooltip className="career-fit-tooltip fade-in" id="career-fit-tooltip"/>
-        </div>
-        </div>
-    </>
+        </>
     )
 }
