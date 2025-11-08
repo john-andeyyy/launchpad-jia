@@ -455,20 +455,21 @@ export default function CareerForm({
 
         // Validate current step before moving forward
         if (step > currentStep) {
-            setShowValidation(true);
             const validation = validateStep(currentStep);
             if (!validation.isValid) {
+                // Set showValidation to true BEFORE setting errors to ensure state updates correctly
+                setShowValidation(true);
                 setFieldErrors(validation.fieldErrors);
                 if (currentStep === 1) {
                     setTeamAccessErrors(
                         validation.errors.filter((e) => e.includes("job owner"))
                     );
                 }
-                // errorToast(
-                //     validation.errors[0] ||
-                //     "Please complete the current step before proceeding",
-                //     2000
-                // );
+                errorToast(
+                    validation.errors[0] ||
+                    "Please complete the current step before proceeding",
+                    2000
+                );
                 return;
             }
         }
@@ -609,6 +610,8 @@ export default function CareerForm({
         setShowValidation(true);
         const validation = validateStep(currentStep);
         if (!validation.isValid) {
+            // Set showValidation to true to display error messages
+            setShowValidation(true);
             setFieldErrors(validation.fieldErrors);
             if (currentStep === 1) {
                 setTeamAccessErrors(
@@ -619,8 +622,10 @@ export default function CareerForm({
                 validation.errors[0] || "Please complete all required fields",
                 2000
             );
+            // Don't proceed with save - stay on current step with validation errors visible
             return;
         }
+        // Only clear validation state if validation passes
         setFieldErrors({});
         setShowValidation(false);
 
@@ -818,6 +823,7 @@ export default function CareerForm({
                         setScreeningSetting={setScreeningSetting}
                         secretPrompt={aiInterviewSecretPrompt}
                         setSecretPrompt={setAiInterviewSecretPrompt}
+                        showValidation={showValidation}
                     />
                 );
             case 4: // Review Career
@@ -858,10 +864,10 @@ export default function CareerForm({
                     <>
                         <div className=" flex flex-row justify-between items-center w-full">
                             <h1 className="text-2xl font-medium text-[#111827]">
-                                {jobTitle ? (
+                                {currentStep !== 1 ? (
                                     <>
                                         <span className="text-[#6B7280] font-normal">[Draft] </span>
-                                        <span className="font-medium">{jobTitle}</span>
+                                        <span className="font-bold !text-3xl">{jobTitle}</span>
                                     </>
                                 ) : (
                                     "Add new career"
@@ -892,6 +898,7 @@ export default function CareerForm({
                                         saveDraft();
                                         if (currentStep === STEPS.length) {
                                             // On Review Career step, publish the career
+                                            
                                             confirmSaveCareer("active");
                                         } else {
                                             // On other steps, continue to next step
@@ -1068,6 +1075,7 @@ export default function CareerForm({
                             setQuestions={(questions) => setQuestions(questions)}
                             jobTitle={jobTitle}
                             description={description}
+                            showValidation={showValidation}
                         />
                     </div>
                     <div className="w-[40%] flex flex-col gap-2">

@@ -95,7 +95,7 @@ export default function ReviewCareerStep({
     };
 
     return (
-        <div className="flex flex-col gap-4 max-w-[80%] w-full h-full justify-center items-center mx-auto">
+        <div className="flex flex-col gap-4 max-w-[80%] w-full h-full justify-center items-center mx-auto !pb-6">
             {/* Career Details & Team Access Section */}
             <ReviewSection
                 icon="la la-suitcase"

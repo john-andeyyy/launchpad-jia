@@ -11,7 +11,7 @@ import InterviewQuestionModal from "./InterviewQuestionModal";
 import FullScreenLoadingAnimation from "./FullScreenLoadingAnimation";
 
 export default function (props) {
-  const { questions, setQuestions, jobTitle, description } = props;
+  const { questions, setQuestions, jobTitle, description, showValidation = false } = props;
   const [questionGenPrompt, setQuestionGenPrompt] = useState("");
   const questionCount = 5;
   const [showQuestionModal, setShowQuestionModal] = useState("");
@@ -365,7 +365,7 @@ export default function (props) {
           </button>
         </div>
         <div className="layered-card-content">
-          {questions.reduce((acc, group) => acc + group.questions.length, 0) < 5 && (
+          {showValidation && questions.reduce((acc, group) => acc + group.questions.length, 0) < 5 && (
             <div style={{
               display: "flex",
               alignItems: "center",

@@ -19,6 +19,7 @@ interface CVReviewStepProps {
     setSecretPrompt?: (value: string) => void;
     preScreeningQuestions?: PreScreeningQuestion[];
     setPreScreeningQuestions?: (questions: PreScreeningQuestion[]) => void;
+    hideSectionNumbers?: boolean;
 }
 
 export default function CVReviewStep({
@@ -30,6 +31,7 @@ export default function CVReviewStep({
     setSecretPrompt,
     preScreeningQuestions = [],
     setPreScreeningQuestions,
+    hideSectionNumbers = false,
 }: CVReviewStepProps) {
     const [showTooltip, setShowTooltip] = useState(false);
     const [showHelpTooltip, setShowHelpTooltip] = useState(false);
@@ -47,7 +49,9 @@ export default function CVReviewStep({
             <div className="layered-card-outer-career">
                 <div className="layered-card-middle">
                     <div className="flex flex-row items-center gap-2">
-                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">1. CV Review Settings</span>
+                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
+                            {hideSectionNumbers ? "CV Review Settings" : "1. CV Review Settings"}
+                        </span>
                     </div>
                     <div className="layered-card-content">
                         {/* CV Screening Section */}
@@ -207,6 +211,7 @@ export default function CVReviewStep({
                     <PreScreeningQuestions
                         questions={preScreeningQuestions}
                         setQuestions={setPreScreeningQuestions}
+                        hideSectionNumbers={hideSectionNumbers}
                     />
                 </div>
             )}

@@ -18,6 +18,7 @@ interface TeamAccessProps {
     teamMembers: TeamMember[];
     setTeamMembers: (members: TeamMember[]) => void;
     errors?: string[];
+    hideSectionNumbers?: boolean;
 }
 
 const roleDescriptions: Record<TeamMemberRole, string> = {
@@ -26,7 +27,7 @@ const roleDescriptions: Record<TeamMemberRole, string> = {
     "Reviewer": "Reviews candidates and provides feedback. Can only view candidate profiles and comment."
 };
 
-export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }: TeamAccessProps) {
+export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], hideSectionNumbers = false }: TeamAccessProps) {
     const { user, orgID } = useAppContext();
     const [showMemberDropdown, setShowMemberDropdown] = useState(false);
     const [memberSearch, setMemberSearch] = useState("");
@@ -134,11 +135,13 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
         : [currentUserMember, ...teamMembers];
 
     return (
-        <div className="layered-card-outer-career">
-            <div className="layered-card-middle">
-                <div className="flex flex-row items-center gap-2">
-                    <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">3. Team Access</span>
-                </div>
+            <div className="layered-card-outer-career">
+                <div className="layered-card-middle">
+                    <div className="flex flex-row items-center gap-2">
+                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
+                            {hideSectionNumbers ? "Team Access" : "3. Team Access"}
+                        </span>
+                    </div>
                 <div className="layered-card-content">
                     <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                         <div className="flex-1">
@@ -161,8 +164,8 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                             </button>
 
                             {showMemberDropdown && (
-                                <div className="absolute bottom-full right-0 mb-2 bg-white border border-[#E5E7EB] 
-                                rounded-lg shadow-lg w-full md:min-w-[500px] max-h-[300px] overflow-hidden flex flex-col z-[1000]">
+                                <div className={`absolute ${hideSectionNumbers ?(" top-ful"):(" bottom-full") } right-0 mb-2 bg-white border border-[#E5E7EB] 
+                                rounded-lg shadow-lg w-full md:min-w-[500px] max-h-[300px] overflow-hidden flex flex-col z-[1000] `}>
                                     <div className="p-3 border-b border-[#E5E7EB]">
                                         <input
                                             type="text"
@@ -264,8 +267,10 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                         <i className="la la-chevron-down text-sm text-[#6B7280]"></i>
                                     </button>
                                     {openRoleDropdown === member.email && (
-                                        <div className="absolute bottom-full right-0 mb-2 bg-white border border-[#E5E7EB] 
-                                        rounded-lg shadow-lg w-full md:w-[450px] z-[1000] overflow-hidden">
+                                        <div className={`absolute  ${
+                                            !hideSectionNumbers ?(" top-full"):(" bottom-full max-h-[200px] p-2 overflow-y-auto") } right-0 mb-2 bg-white border 
+                                        rounded-lg shadow-lg w-full md:w-[400px] overflow-y-auto
+                                        `}>
                                             {(Object.keys(roleDescriptions) as TeamMemberRole[]).map((role) => (
                                                 <div
                                                     key={role}
@@ -273,7 +278,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [] }:
                                                         updateMemberRole(member.email, role);
                                                         setOpenRoleDropdown(null);
                                                     }}
-                                                    className={`p-4 cursor-pointer border-b border-[#F3F4F6] last:border-b-0 hover:bg-[#F9FAFB] ${member.role === role ? 'bg-[#F8F9FC]' : ''
+                                                    className={`px-4 py-2 cursor-pointer border-b border-[#F3F4F6] last:border-b-0 hover:bg-[#F9FAFB] ${member.role === role ? 'bg-[#F8F9FC]' : ''
                                                         }`}
                                                 >
                                                     <div className="flex items-start justify-between gap-3">

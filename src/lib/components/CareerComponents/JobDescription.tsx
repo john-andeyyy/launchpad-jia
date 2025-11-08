@@ -4,27 +4,23 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useAppContext } from "../../context/AppContext";
 import DirectInterviewLinkV2 from "./DirectInterviewLinkV2";
-import CareerForm from "./CareerForm";
 import CareerLink from "./CareerLink";
 import ReviewSection from "./steps/ReviewSection";
 import ReviewField from "./steps/ReviewField";
 import { TeamMember } from "./TeamAccess";
+import CareerDetailsModal from "./modals/CareerDetailsModal";
+import CVReviewModal from "./modals/CVReviewModal";
+import AIInterviewModal from "./modals/AIInterviewModal";
+import TeamAccessModal from "./modals/TeamAccessModal";
 
 export default function JobDescription({ formData, setFormData, editModal, isEditing, setIsEditing, handleCancelEdit }: { formData: any, setFormData: (formData: any) => void, editModal: boolean, isEditing: boolean, setIsEditing: (isEditing: boolean) => void, handleCancelEdit: () => void }) {
   const { user } = useAppContext();
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editSection, setEditSection] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    careerDetails: false,
-    cvReview: false,
+    careerDetails: true,
+    cvReview: true,
     aiInterview: true,
   });
-
-  useEffect(() => {
-    if (editModal) {
-      setShowEditModal(true);
-    }
-  }, [editModal]);
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
@@ -34,8 +30,11 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
   };
 
   const handleEditSection = (section: string) => {
-    setEditSection(section);
-    setShowEditModal(true);
+    setOpenModal(section);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(null);
   };
 
   const formatSalaryValue = (value: string, negotiable: boolean) => {
@@ -547,64 +546,34 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
         </div>
       </div>
 
-      {/* //! Edit Modal */}
-      {showEditModal && (
-        <div
-          className="modal show fade-in-bottom"
-          style={{
-            display: "block",
-            background: "rgba(0,0,0,0.45)",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            zIndex: 1050,
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setShowEditModal(false);
-              setEditSection(null);
-            }
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-              width: "100vw",
-            }}
-          >
-            <div
-              className="modal-content"
-              style={{
-                overflowY: "auto",
-                maxHeight: "90vh",
-                width: "90vw",
-                maxWidth: "1200px",
-                background: "#fff",
-                border: `1.5px solid #E9EAEB`,
-                borderRadius: 14,
-                boxShadow: "0 8px 32px rgba(30,32,60,0.18)",
-                padding: "24px"
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <CareerForm
-                career={formData}
-                formType="edit"
-                setShowEditModal={(show: boolean) => {
-                  setShowEditModal(show);
-                  if (!show) {
-                    setEditSection(null);
-                  }
-                }}
-              />
-            </div>
-          </div>
-        </div>
+      {/* //! Individual Edit Modals */}
+      {openModal === "careerDetails" && (
+        <CareerDetailsModal
+          formData={formData}
+          setFormData={setFormData}
+          onClose={handleCloseModal}
+        />
+      )}
+      {openModal === "cvReview" && (
+        <CVReviewModal
+          formData={formData}
+          setFormData={setFormData}
+          onClose={handleCloseModal}
+        />
+      )}
+      {openModal === "aiInterview" && (
+        <AIInterviewModal
+          formData={formData}
+          setFormData={setFormData}
+          onClose={handleCloseModal}
+        />
+      )}
+      {openModal === "teamAccess" && (
+        <TeamAccessModal
+          formData={formData}
+          setFormData={setFormData}
+          onClose={handleCloseModal}
+        />
       )}
     </div>
   );

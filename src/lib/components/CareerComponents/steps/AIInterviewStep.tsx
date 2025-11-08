@@ -21,6 +21,7 @@ interface AIInterviewStepProps {
     setScreeningSetting: (value: string) => void;
     secretPrompt: string;
     setSecretPrompt: (value: string) => void;
+    showValidation?: boolean;
 }
 
 export default function AIInterviewStep({
@@ -34,6 +35,7 @@ export default function AIInterviewStep({
     setScreeningSetting,
     secretPrompt,
     setSecretPrompt,
+    showValidation = false,
 }: AIInterviewStepProps) {
     const [showTooltip, setShowTooltip] = useState(false);
     return (
@@ -216,6 +218,7 @@ export default function AIInterviewStep({
                         setQuestions={setQuestions}
                         jobTitle={jobTitle}
                         description={description}
+                        showValidation={showValidation}
                     />
                 </div>
 

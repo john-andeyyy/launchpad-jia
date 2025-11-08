@@ -26,6 +26,7 @@ export type PreScreeningQuestion = {
 interface PreScreeningQuestionsProps {
     questions: PreScreeningQuestion[];
     setQuestions: (questions: PreScreeningQuestion[]) => void;
+    hideSectionNumbers?: boolean;
 }
 
 const SUGGESTED_QUESTIONS = [
@@ -84,6 +85,7 @@ export function validatePreScreeningQuestions(questions: PreScreeningQuestion[])
 export default function PreScreeningQuestions({
     questions,
     setQuestions,
+    hideSectionNumbers = false,
 }: PreScreeningQuestionsProps) {
     const addedQuestionIds = questions.map((q) => q.id);
     const [validationErrors, setValidationErrors] = useState<Set<string>>(new Set());
@@ -231,7 +233,7 @@ export default function PreScreeningQuestions({
 
                 <div className="flex flex-row items-center gap-2 pt-3">
                     <span className="text-base text-[#181D27] font-bold text-lg">
-                        2. Pre-Screening Questions{" "}
+                        {hideSectionNumbers ? "Pre-Screening Questions" : "2. Pre-Screening Questions"}{" "}
                         <span className="text-[#6B7280] font-normal">(optional)</span>
                         
                     </span>

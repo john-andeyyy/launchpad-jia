@@ -46,6 +46,7 @@ interface CareerDetailsStepProps {
     teamAccessErrors: string[];
     fieldErrors: Record<string, boolean>;
     setFieldErrors: (errors: Record<string, boolean>) => void;
+    hideSectionNumbers?: boolean;
 }
 
 export default function CareerDetailsStep({
@@ -80,6 +81,7 @@ export default function CareerDetailsStep({
     teamAccessErrors,
     fieldErrors,
     setFieldErrors,
+    hideSectionNumbers = false,
 }: CareerDetailsStepProps) {
     const handleProvinceChange = (selectedProvince: string) => {
         setProvince(selectedProvince);
@@ -160,7 +162,7 @@ export default function CareerDetailsStep({
             document.head.appendChild(style);
         }
 
-       
+
         const wrapper = document.querySelector('.rich-text-editor-wrapper');
         if (wrapper) {
             // Intercept execCommand to ensure editor is focused before it runs
@@ -186,14 +188,14 @@ export default function CareerDetailsStep({
                 if (execCommandOverride) {
                     (document as any).execCommand = originalExecCommand;
                 }
-              
+
             };
         }
     }, []);
 
     return (
         <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
-            <div className="w-full lg:w-[75%] flex flex-col gap-4">
+            <div className="w-full lg:w-[75%] flex flex-col gap-4 pb-4">
                 {/* Basic Information */}
 
                 <div className="layered-card-outer-career">
@@ -201,7 +203,7 @@ export default function CareerDetailsStep({
                         <div className="flex flex-row items-center gap-2">
 
                             <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
-                                1. Career Information
+                                {hideSectionNumbers ? "Career Information" : "1. Career Information"}
                             </span>
                         </div>
                         <div className="layered-card-content">
@@ -386,7 +388,7 @@ export default function CareerDetailsStep({
                                                         className={`form-control pl-5 pr-20  text-base ${(fieldErrors.minimumSalary && !salaryNegotiable) ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
-                                                        value={ minimumSalary}
+                                                        value={minimumSalary}
                                                         onChange={(e) => {
                                                             if (!salaryNegotiable) {
                                                                 setMinimumSalary(e.target.value || "");
@@ -433,10 +435,10 @@ export default function CareerDetailsStep({
                                                         PHP
                                                     </span>
                                                     {(fieldErrors.maximumSalary && !salaryNegotiable) && (
-                                                    <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2 -translate-x-3/2"></i>
-                                                )}
+                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2 -translate-x-3/2"></i>
+                                                    )}
                                                 </div>
-                                                
+
                                                 {fieldErrors.maximumSalary && !salaryNegotiable && (
                                                     <span className="text-[#DC2626] text-sm">This is a required field.</span>
                                                 )}
@@ -453,7 +455,7 @@ export default function CareerDetailsStep({
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
                         <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
-                            2. Job Description
+                            {hideSectionNumbers ? "Job Description" : "2. Job Description"}
                         </span>
                         <div className="flex flex-row items-center gap-2">
 
@@ -479,21 +481,22 @@ export default function CareerDetailsStep({
                     </div>
                 </div>
 
-
-                <TeamAccess
-                    teamMembers={teamMembers}
-                    setTeamMembers={setTeamMembers}
-                    errors={teamAccessErrors}
-                />
+                {!hideSectionNumbers && (
+                    <TeamAccess
+                        teamMembers={teamMembers}
+                        setTeamMembers={setTeamMembers}
+                        errors={teamAccessErrors}
+                    />
+                )}
             </div>
 
             <div className="w-full lg:w-[30%] lg:sticky top-0">
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
                         <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
-                            <img 
-                                src="/icons/lightbulb.svg" 
-                                alt="lightbulb" 
+                            <img
+                                src="/icons/lightbulb.svg"
+                                alt="lightbulb"
                                 style={{ width: "20px", height: "20px" }}
                             />
                             <span className="text-base text-[#181D27] font-bold text-lg">
