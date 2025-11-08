@@ -91,7 +91,7 @@ const teamMemberSchema = z.object({
     email: z.string().email("Invalid email address"),
     name: safeString("Name", 200),
     image: z.union([z.string().url("Invalid image URL"), z.literal("")]).optional(),
-    role: z.enum(["Job Owner", "Recruiter", "Interviewer"]),
+    role: z.enum(["Job Owner", "Reviewer", "Contributor"]),
 });
 
 // Question schema
