@@ -9,6 +9,7 @@ import { candidateActionToast, errorToast } from "@/lib/Utils";
 import { useAppContext } from "@/lib/context/AppContext";
 import axios from "axios";
 import CareerActionModal from "./CareerActionModal";
+import ErrorModal from "./ErrorModal";
 import FullScreenLoadingAnimation from "./FullScreenLoadingAnimation";
 import { TeamMember, TeamMemberRole } from "./TeamAccess";
 import CareerDetailsStep from "./steps/CareerDetailsStep";
@@ -103,7 +104,7 @@ export default function CareerForm({
         career?.preScreeningQuestions || []
     );
     const [salaryNegotiable, setSalaryNegotiable] = useState(
-        career?.salaryNegotiable || true
+        career?.salaryNegotiable || false
     );
     const [minimumSalary, setMinimumSalary] = useState(
         career?.minimumSalary || ""
@@ -153,6 +154,17 @@ export default function CareerForm({
     const [showSaveModal, setShowSaveModal] = useState("");
     const [isSavingCareer, setIsSavingCareer] = useState(false);
     const savingCareerRef = useRef(false);
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    
+    // Debug: Log when error modal state changes
+    useEffect(() => {
+        console.log("Error modal state changed:", showErrorModal, "Errors count:", validationErrors.length);
+        if (showErrorModal) {
+            console.log("Error modal is now visible. Errors:", validationErrors);
+        }
+    }, [showErrorModal, validationErrors]);
+    
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>(() => {
         if (career?.teamMembers) {
             return career.teamMembers;
@@ -374,44 +386,44 @@ export default function CareerForm({
         if (step === 1) {
             // Career Details & Team Access
             if (!jobTitle?.trim()) {
-                errors.push("Job title is required");
+                // errors.push("Job title is required");
                 fieldErrors.jobTitle = true;
             }
             if (!description?.trim()) {
-                errors.push("Job description is required");
+                // errors.push("Job description is required");
                 fieldErrors.description = true;
             }
             if (!employmentType) {
-                errors.push("Employment type is required");
+                // errors.push("Employment type is required");
                 fieldErrors.employmentType = true;
             }
             if (!workSetup) {
-                errors.push("Work arrangement is required");
+                // errors.push("Work arrangement is required");
                 fieldErrors.workSetup = true;
             }
             if (!province) {
-                errors.push("State/Province is required");
+                // errors.push("State/Province is required");
                 fieldErrors.province = true;
             }
             if (!city) {
-                errors.push("City is required");
+                // errors.push("City is required");
                 fieldErrors.city = true;
             }
             if (salaryNegotiable) {
                 // When negotiable, minimum salary must be "0" and maximum is not required
-                if (!minimumSalary || minimumSalary !== "0") {
-                    errors.push("Minimum salary is required");
-                    fieldErrors.minimumSalary = true;
-                }
+                // if (!minimumSalary || minimumSalary) {
+                //     errors.push("Minimum salary is required");
+                //     fieldErrors.minimumSalary = true;
+                // }
                 // Maximum salary is not required when negotiable
             } else {
                 // When not negotiable, both are required
                 if (!minimumSalary || minimumSalary === "0") {
-                    errors.push("Minimum salary is required");
+                    // errors.push("Minimum salary is required");
                     fieldErrors.minimumSalary = true;
                 }
                 if (!maximumSalary || maximumSalary === "0") {
-                    errors.push("Maximum salary is required");
+                    // errors.push("Maximum salary is required");
                     fieldErrors.maximumSalary = true;
                 }
             }
@@ -433,7 +445,9 @@ export default function CareerForm({
             }
         }
 
-        return { isValid: errors.length === 0, errors, fieldErrors };
+        // Check if there are any errors (either in errors array or fieldErrors object)
+        const hasErrors = errors.length > 0 || Object.keys(fieldErrors).length > 0;
+        return { isValid: !hasErrors, errors, fieldErrors };
     };
 
     const goToStep = (step: number) => {
@@ -450,11 +464,11 @@ export default function CareerForm({
                         validation.errors.filter((e) => e.includes("job owner"))
                     );
                 }
-                errorToast(
-                    validation.errors[0] ||
-                    "Please complete the current step before proceeding",
-                    2000
-                );
+                // errorToast(
+                //     validation.errors[0] ||
+                //     "Please complete the current step before proceeding",
+                //     2000
+                // );
                 return;
             }
         }
@@ -686,10 +700,14 @@ export default function CareerForm({
                     }, 1300);
                 }
             } catch (error) {
-                errorToast("Failed to add career", 1300);
-            } finally {
                 savingCareerRef.current = false;
                 setIsSavingCareer(false);
+                // Check if response has errors array (validation errors)
+                const responseData = error.response.data.errors;
+                setValidationErrors(responseData);
+                setShowErrorModal(true);
+                // errorToast(errors[0], 2000);
+
             }
         }
     };
@@ -1123,7 +1141,22 @@ export default function CareerForm({
                         onAction={(action) => saveCareer(action)}
                     />
                 )}
-                {isSavingCareer && (
+                {showErrorModal && (
+                    <ErrorModal
+                        key="error-modal"
+                        errors={validationErrors.length > 0 ? validationErrors : ["An error occurred"]}
+                        onClose={() => {
+                            console.log("Closing error modal");
+                            setShowErrorModal(false);
+                            // Clear errors after a short delay
+                            setTimeout(() => {
+                                setValidationErrors([]);
+                            }, 100);
+                        }}
+                    />
+                )}
+                {/* Don't show loading animation if error modal is showing */}
+                {isSavingCareer && !showErrorModal && (
                     <FullScreenLoadingAnimation
                         title={formType === "add" ? "Saving career..." : "Updating career..."}
                         subtext={`Please wait while we are ${formType === "add" ? "saving" : "updating"

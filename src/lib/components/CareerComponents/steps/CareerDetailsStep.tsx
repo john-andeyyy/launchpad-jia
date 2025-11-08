@@ -353,13 +353,16 @@ export default function CareerDetailsStep({
                                                             const newNegotiable = !salaryNegotiable;
                                                             setSalaryNegotiable(newNegotiable);
                                                             if (newNegotiable) {
-                                                                // When negotiable is true, set minimum to "0" and clear maximum
-                                                                setMinimumSalary("0");
+                                                                setMinimumSalary("");
                                                                 setMaximumSalary("");
-                                                                // Clear maximum salary error
-                                                                if (fieldErrors.maximumSalary) {
-                                                                    setFieldErrors({ ...fieldErrors, maximumSalary: false });
+                                                                const updatedErrors = { ...fieldErrors };
+                                                                if (fieldErrors.minimumSalary) {
+                                                                    updatedErrors.minimumSalary = false;
                                                                 }
+                                                                if (fieldErrors.maximumSalary) {
+                                                                    updatedErrors.maximumSalary = false;
+                                                                }
+                                                                setFieldErrors(updatedErrors);
                                                             }
                                                         }}
                                                     />
@@ -380,7 +383,7 @@ export default function CareerDetailsStep({
                                                     </span>
                                                     <input
                                                         type="number"
-                                                        className={`form-control pl-5 pr-20  text-base ${(fieldErrors.minimumSalary) ? "!border-[#DC2626]" : ""}`}
+                                                        className={`form-control pl-5 pr-20  text-base ${(fieldErrors.minimumSalary && !salaryNegotiable) ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
                                                         min={0}
                                                         value={ minimumSalary}
@@ -394,7 +397,7 @@ export default function CareerDetailsStep({
                                                         }}
                                                         disabled={salaryNegotiable}
                                                     />
-                                                    <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
+                                                    <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d"}`}>
                                                         PHP
                                                     </span>
                                                     {(fieldErrors.minimumSalary && !salaryNegotiable) && (

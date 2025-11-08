@@ -2,9 +2,35 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "@/lib/mongoDB/mongoDB";
 import { guid } from "@/lib/Utils";
 import { ObjectId } from "mongodb";
+import { addCareerSchema } from "@/lib/Validation/careerValidation";
 
 export async function POST(request: Request) {
   try {
+    const requestData = await request.json();
+
+    // Validate and sanitize input using Zod schema
+    const validationResult = addCareerSchema.safeParse(requestData);
+
+    if (!validationResult.success) {
+      // Collect all validation errors
+      const errors: string[] = [];
+      
+      validationResult.error.issues.forEach((issue) => {
+        const field = issue.path.join(".");
+        const message = issue.message;
+        errors.push(`${field ? `${field}: ` : ""}${message}`);
+      });
+
+      return NextResponse.json(
+        {
+          errors: errors,
+          error: "Validation failed",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Use validated and sanitized data
     const {
       jobTitle,
       description,
@@ -29,17 +55,7 @@ export async function POST(request: Request) {
       province,
       employmentType,
       teamMembers,
-    } = await request.json();
-    // Validate required fields
-    if (!jobTitle || !description || !questions || !location || !workSetup) {
-      return NextResponse.json(
-        {
-          error:
-            "Job title, description, questions, location and work setup are required",
-        },
-        { status: 400 }
-      );
-    }
+    } = validationResult.data;
 
     const { db } = await connectMongoDB();
 
