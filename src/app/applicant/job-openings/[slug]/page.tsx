@@ -119,7 +119,7 @@ export default function () {
                     className="btn btn-primary"
                     style={{ padding: "6px 30px", fontSize: "16px" }}
                   >
-                    <i className="la la-briefcase mr-1"></i> Apply Now
+                    <i className="la la-briefcase mr-1"></i> Apply Now 
                   </button>
                 </div>
               </div>

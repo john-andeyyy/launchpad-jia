@@ -11,6 +11,28 @@ import { useEffect, useState } from "react";
 import { processDate } from "@/lib/utils/helpersV2";
 import { getStage } from "@/lib/Utils";
 
+// Function to clean HTML content by removing empty divs
+const cleanHtmlContent = (html: string) => {
+  if (!html) return html;
+  
+  // Use regex to remove empty divs (works in both client and server)
+  // This approach is safer and doesn't require DOM APIs
+  let cleaned = html
+    // Remove divs that are completely empty or only contain whitespace
+    .replace(/<div>\s*<\/div>/gi, '')
+    // Remove divs that only contain a single <br> tag
+    .replace(/<div>\s*<br\s*\/?>\s*<\/div>/gi, '')
+    // Remove divs that only contain &nbsp;
+    .replace(/<div>\s*&nbsp;\s*<\/div>/gi, '')
+    // Remove multiple consecutive empty divs
+    .replace(/(<div>\s*<\/div>\s*){2,}/gi, '')
+    // Remove empty divs with just spaces
+    .replace(/<div>\s+<\/div>/gi, '')
+    .trim();
+  
+  return cleaned;
+};
+
 export default function ({ modalType, setModalType }) {
   const [applicationData, setApplicationData] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -48,7 +70,7 @@ export default function ({ modalType, setModalType }) {
     ],
   };
 
-  let handleButtonClick = () => {};
+  let handleButtonClick = () => { };
 
   function handleClose() {
     setModalType(null);
@@ -211,11 +233,10 @@ export default function ({ modalType, setModalType }) {
       localStorage.clear();
       sessionStorage.clear();
 
-      window.location.href = `${
-        window.location.origin.includes("localhost")
-          ? "/job-portal"
-          : pathConstants.employee
-      }`;
+      window.location.href = `${window.location.origin.includes("localhost")
+        ? "/job-portal"
+        : pathConstants.employee
+        }`;
     };
   }
 
@@ -509,8 +530,8 @@ export default function ({ modalType, setModalType }) {
             <button
               className={
                 radioValue &&
-                ((radioValue == checkList[modalType][3] && inputValue.trim()) ||
-                  radioValue != checkList[modalType][3])
+                  ((radioValue == checkList[modalType][3] && inputValue.trim()) ||
+                    radioValue != checkList[modalType][3])
                   ? styles.secondaryBtn
                   : "disabled"
               }
@@ -523,7 +544,7 @@ export default function ({ modalType, setModalType }) {
       )}
 
       {modalType == modalList[9] && applicationData && (
-        <div className={`${styles.modalContent} ${styles[modalType]}`}>
+        <div className={`${styles.modalContent} ${styles[modalType]} !w-full !max-w-3xl !h-[85%] `}>
           <div className={styles.gradientContainer}>
             <div className={styles.jobDetailsContainer}>
               {applicationData.jobTitle && (
@@ -553,20 +574,74 @@ export default function ({ modalType, setModalType }) {
                 </span>
               )}
 
-              {applicationData.workSetup && (
-                <div className={styles.tagContainer}>
-                  <span>{applicationData.workSetup}</span>
+              <div>
+                <div className="flex gap-2 !pb-4">
+                  {applicationData.workSetup && (
+                    <div className={styles.tagContainer}>
+                      <span>{applicationData.employmentType}</span>
+                    </div>
+                  )}
+                  {applicationData.workSetup && (
+                    <div className={styles.tagContainer}>
+                      <span>{applicationData.workSetup}</span>
+                    </div>
+                  )}
                 </div>
-              )}
+                <button onClick={handleClose}>Apply Now</button>
+              </div>
+
 
               <hr />
 
-              <p
-                className={styles.jobDescription}
+              <div
+                className={styles.jobDescriptionCareer}
                 dangerouslySetInnerHTML={{
-                  __html: applicationData.description,
+                  __html: cleanHtmlContent(applicationData.description || ''),
                 }}
               />
+              <hr />
+
+              <div className="bg-white rounded-2xl !p-6 max-w-3xl">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">About The Company</h2>
+
+                <div className="flex items-start gap-4">
+
+                  <div className="flex-shrink-0">
+                    <img
+                      src={applicationData.organization.image}
+                      alt={applicationData.organization.name}
+                      className="!w-16 !h-16 rounded-xl border border-gray-200 object-contain p-2"
+                    />
+                  </div>
+
+                  <div className="">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {applicationData.organization.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 mb-2">
+                      {applicationData.organization.industry} | {applicationData.organization.city}, {applicationData.organization.province}, {applicationData.organization.country}
+                    </p>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {applicationData.organization.description}
+                    </p>
+
+                    {/* Learn More Button */}
+                    <button className="!mt-4 inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium !bg-transparent !text-gray-700 rounded-full hover:bg-gray-100 transition">
+                      Learn More
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
               <button onClick={handleClose}>Close</button>
             </div>
           </div>

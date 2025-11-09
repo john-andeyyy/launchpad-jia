@@ -54,6 +54,8 @@ const SUGGESTED_QUESTIONS = [
     {
         id: "expected-salary",
         question: "How much is your expected monthly salary?",
+        minValue: "40,000",
+        maxValue: "60,000",
         type: "range" as QuestionType,
     },
 ] as const;
@@ -118,8 +120,8 @@ export default function PreScreeningQuestions({
                 ? {
                     rangeType: "currency" as RangeType,
                     currency: "PHP",
-                    minValue: "",
-                    maxValue: "",
+                    minValue: ("minValue" in suggested && suggested.minValue) ? suggested.minValue : "",
+                    maxValue: ("maxValue" in suggested && suggested.maxValue) ? suggested.maxValue : "",
                 }
                 : {}),
         };
@@ -235,13 +237,13 @@ export default function PreScreeningQuestions({
                     <span className="text-base text-[#181D27] font-bold text-lg">
                         {hideSectionNumbers ? "Pre-Screening Questions" : "2. Pre-Screening Questions"}{" "}
                         <span className="text-[#6B7280] font-normal">(optional)</span>
-                        
+
                     </span>
                     <div className="w-6 h-6 bg-[#F8F9FC] border border-[#D5D9EB] rounded-full flex items-center justify-center">
-                            <span className="text-xs font-bold text-[#181D27]">
-                                {questions.length}
-                            </span>
-                        </div>
+                        <span className="text-xs font-bold text-[#181D27]">
+                            {questions.length}
+                        </span>
+                    </div>
                 </div>
                 <div className="flex flex-row items-center justify-between">
                     <button
@@ -308,8 +310,8 @@ export default function PreScreeningQuestions({
                                             disabled={isAdded}
                                             className={`ml-3 px-3 py-1.5 !rounded-full text-md font-semibold sm:text-sm transition 
                                                 !border cursor-pointer ${isAdded
-                                                ? "!bg-gray-300 text-white cursor-not-allowed border-[#D5D9EB]"
-                                                : "!bg-transparent !text-[#181D27] !border !border-gray-300 hover:bg-[#F8F9FC]"
+                                                    ? "!bg-gray-300 text-white cursor-not-allowed border-[#D5D9EB]"
+                                                    : "!bg-transparent !text-[#181D27] !border !border-gray-300 hover:bg-[#F8F9FC]"
                                                 }`}
                                         >
                                             {isAdded ? "Added" : "Add"}
@@ -519,7 +521,7 @@ function QuestionCard({
                                     : "border-gray-300 focus:ring-indigo-500 focus:border-transparent"
                                     }`}
                             />
-                            
+
                         </>
                     )}
                     <div className="relative" ref={dropdownRef}>
@@ -546,9 +548,8 @@ function QuestionCard({
                                             handleTypeChange(type.value);
                                             setDropdownOpen(false);
                                         }}
-                                        className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50 ${
-                                            questionType === type.value ? 'bg-[#F8F9FC] font-semibold' : ''
-                                        }`}
+                                        className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50 ${questionType === type.value ? 'bg-[#F8F9FC] font-semibold' : ''
+                                            }`}
                                     >
                                         {type.icon && (
                                             <i className={`${type.icon} text-base`}></i>
@@ -825,6 +826,9 @@ type RangeInputsProps = {
 };
 
 function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUpdate }: RangeInputsProps) {
+
+
+
     const handleRangeTypeChange = (newRangeType: RangeType) => {
         const updates: Partial<PreScreeningQuestion> = {
             rangeType: newRangeType,
@@ -853,7 +857,7 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
     return (
         <div className="space-y-3">
             {/* Range Type Selector */}
-            <div>
+            <div className=" space-x-4">
                 <label className="block text-xs text-[#6B7280] mb-1">Range Type</label>
                 <select
                     value={rangeType}
@@ -885,7 +889,8 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                 });
                             }}
                             placeholder={rangeType === "currency" ? "40,000" : "1"}
-                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${rangeType === "currency" ? "pl-8 pr-2" : "px-3"
+                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 
+                                focus:ring-indigo-500 ${rangeType === "currency" ? "pl-5 pr-2" : "px-3"
                                 } ${rangeType === "currency" && "rounded-r-none"}`}
                         />
                         {rangeType === "currency" && (
@@ -896,7 +901,8 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                         currency: e.target.value,
                                     })
                                 }
-                                className="border-0 border-l border-[#E9EAEB] rounded-r-lg px-2 py-2 text-sm text-[#181D27] bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                className="border-0 border-l border-[#E9EAEB] rounded-r-lg px-2 py-2 text-sm text-[#181D27] 
+                                bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                             >
                                 <option value="PHP">PHP</option>
                                 <option value="USD">USD</option>
@@ -922,7 +928,8 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                 });
                             }}
                             placeholder={rangeType === "currency" ? "60,000" : "10"}
-                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${rangeType === "currency" ? "pl-8 pr-2" : "px-3"
+                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${rangeType === "currency" ?
+                                "pl-5 pr-2" : "px-3"
                                 } ${rangeType === "currency" && "rounded-r-none"}`}
                         />
                         {rangeType === "currency" && (

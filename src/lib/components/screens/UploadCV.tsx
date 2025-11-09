@@ -222,7 +222,7 @@ export default function () {
       if (parsedDigitalCV.errorRemarks) {
         alert(
           "Please fix the errors in the CV first.\n\n" +
-            parsedDigitalCV.errorRemarks
+          parsedDigitalCV.errorRemarks
         );
         return false;
       }
@@ -382,9 +382,9 @@ export default function () {
                     alt=""
                     src={
                       assetConstants[
-                        processState(index, true)
-                          .toLowerCase()
-                          .replace(" ", "_")
+                      processState(index, true)
+                        .toLowerCase()
+                        .replace(" ", "_")
                       ]
                     }
                   />
@@ -392,7 +392,7 @@ export default function () {
                     <hr
                       className={
                         styles[
-                          processState(index).toLowerCase().replace(" ", "_")
+                        processState(index).toLowerCase().replace(" ", "_")
                         ]
                       }
                     />
@@ -404,11 +404,10 @@ export default function () {
             <div className={styles.step}>
               {step.map((item, index) => (
                 <span
-                  className={`${styles.stepDetails} ${
-                    styles[
-                      processState(index, true).toLowerCase().replace(" ", "_")
-                    ]
-                  }`}
+                  className={`${styles.stepDetails} ${styles[
+                    processState(index, true).toLowerCase().replace(" ", "_")
+                  ]
+                    }`}
                   key={index}
                 >
                   {item}
@@ -581,18 +580,17 @@ export default function () {
                             />
                           ) : (
                             <span
-                              className={`${styles.sectionDetails} ${
-                                userCV &&
+                              className={`${styles.sectionDetails} ${userCV &&
                                 userCV[section] &&
                                 userCV[section].trim()
-                                  ? styles.withDetails
-                                  : ""
-                              }`}
+                                ? styles.withDetails
+                                : ""
+                                }`}
                             >
                               <Markdown>
                                 {userCV &&
-                                userCV[section] &&
-                                userCV[section].trim()
+                                  userCV[section] &&
+                                  userCV[section].trim()
                                   ? userCV[section].trim()
                                   : "Upload your CV to auto-fill this section."}
                               </Markdown>
@@ -602,7 +600,9 @@ export default function () {
                       </div>
                     </div>
                   ))}
-                  <button onClick={handleCVScreen}>Submit CV</button>
+                  <button onClick={handleCVScreen}>
+                    Continue <i className="las la-arrow-right !text-white ml-2"></i>
+                  </button>
                 </div>
               )}
             </>

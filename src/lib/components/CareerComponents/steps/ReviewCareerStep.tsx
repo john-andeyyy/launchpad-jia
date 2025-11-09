@@ -334,30 +334,30 @@ export default function ReviewCareerStep({
                         <span className="text-md font-bold text-gray-800x-2">
                             {requireVideo ? "Yes" : "No"}
                             {requireVideo ? <i className="la la-check text-green-500 bg-green-100 rounded-full p-1 text-3xl border border-green-500 mx-2 "
-                            style={{ fontSize: "16px" }}></i> : <i className="la la-times text-red-500 bg-red-100 rounded-full p-1 text-3xl border border-red-500 mx-2 "
-                            style={{ fontSize: "16px" }}></i>}
+                                style={{ fontSize: "16px" }}></i> : <i className="la la-times text-red-500 bg-red-100 rounded-full p-1 text-3xl border border-red-500 mx-2 "
+                                    style={{ fontSize: "16px" }}></i>}
                         </span>
                     </div>
 
-                        <div className="border-b border-gray-300 pb-3">
-                            <div className="flex flex-row items-center gap-2 mb-2">
-                                <i className="la la-magic text-[#7C3AED] text-lg"></i>
-                                <span className="text-sm font-semibold text-gray-800">AI Interview Secret Prompt</span>
-                            </div>
-                            <div className="text-base text-[#181D27] mt-1 pl-2">
-                                {aiInterviewSecretPrompt.split('\n').map((line, idx) => {
-                                    const cleanLine = line.replace(/^•\s*/, '').trim();
-                                    if (!cleanLine) return null;
-                                    return (
-                                        <div key={idx} className="flex flex-row items-start gap-2 mb-1 text-lg text-gray-500">
-                                            <span className="text-[#181D27] ">•</span>
-                                            <span className="flex-1">{cleanLine}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                    <div className="border-b border-gray-300 pb-3">
+                        <div className="flex flex-row items-center gap-2 mb-2">
+                            <i className="la la-magic text-[#7C3AED] text-lg"></i>
+                            <span className="text-sm font-semibold text-gray-800">AI Interview Secret Prompt</span>
                         </div>
-                    
+                        <div className="text-base text-[#181D27] mt-1 pl-2">
+                            {aiInterviewSecretPrompt.split('\n').map((line, idx) => {
+                                const cleanLine = line.replace(/^•\s*/, '').trim();
+                                if (!cleanLine) return null;
+                                return (
+                                    <div key={idx} className="flex flex-row items-start gap-2 mb-1 text-lg text-gray-500">
+                                        <span className="text-[#181D27] ">•</span>
+                                        <span className="flex-1">{cleanLine}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
 
                     {questions.length > 0 && (
                         <div>

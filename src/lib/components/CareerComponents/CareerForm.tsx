@@ -528,7 +528,7 @@ export default function CareerForm({
             jobTitle,
             description,
             workSetup,
-            workSetupRemarks,
+            workSetupRemarks: workSetupRemarks || "",
             questions,
             lastEditedBy: userInfoSlice,
             status,
@@ -550,6 +550,7 @@ export default function CareerForm({
             // Backwards compatibility
             location: city,
             employmentType,
+            teamMembers,
         };
         try {
             setIsSavingCareer(true);

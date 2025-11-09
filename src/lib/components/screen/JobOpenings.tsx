@@ -268,7 +268,7 @@ export default function () {
     }
 
     // if (!careers || navType === "reload") {
-      getCareers();
+    getCareers();
     // } else {
     //   setCareers(JSON.parse(careers));
     // }
@@ -277,7 +277,7 @@ export default function () {
       const interviews = localStorage.getItem("interviews");
 
       // if (!interviews || navType === "reload") {
-        fetchInterviews();
+      fetchInterviews();
       // } else {
       //   const parsedInterviews = JSON.parse(interviews);
       //   setInterviews(parsedInterviews);
@@ -373,9 +373,8 @@ export default function () {
 
   return (
     <div
-      className={`${styles.jobOpenings} ${
-        pathname.includes("/applicant") ? styles.applicant : ""
-      }`}
+      className={`${styles.jobOpenings} ${pathname.includes("/applicant") ? styles.applicant : ""
+        }`}
     >
       <div className={styles.searchFilterContainer}>
         <div className={styles.searchContainer}>
@@ -434,27 +433,25 @@ export default function () {
             {search.trim() === ""
               ? "All Job Openings"
               : filteredCareers.length +
-                ' jobs found for "' +
-                search.trim() +
-                '"'}
+              ' jobs found for "' +
+              search.trim() +
+              '"'}
           </span>
 
           <div className={styles.sort}>
             <img alt="arrow-down-up" src="/icons/arrow-down-up.svg" />
             Sort by:&nbsp;&nbsp;
             <span
-              className={`${styles.sortItem} ${
-                sort === "Newest" ? styles.active : ""
-              }`}
+              className={`${styles.sortItem} ${sort === "Newest" ? styles.active : ""
+                }`}
               onClick={() => handleSort("Newest")}
             >
               Newest
             </span>
             &nbsp;&nbsp;-&nbsp;&nbsp;
             <span
-              className={`${styles.sortItem} ${
-                sort === "Most Relevant" ? styles.active : ""
-              }`}
+              className={`${styles.sortItem} ${sort === "Most Relevant" ? styles.active : ""
+                }`}
               onClick={() => handleSort("Most Relevant")}
             >
               Most Relevant
@@ -478,12 +475,11 @@ export default function () {
                         selectedCareer?.id == item?.id
                           ? selectedCareerRef
                           : index == 0
-                          ? defaultCareerRef
-                          : null
+                            ? defaultCareerRef
+                            : null
                       }
-                      className={`${styles.cardContainer} ${
-                        selectedCareer?.id === item.id ? styles.active : ""
-                      }`}
+                      className={`${styles.cardContainer} ${selectedCareer?.id === item.id ? styles.active : ""
+                        }`}
                       key={index}
                       onClick={() => handleCardSelect(item)}
                     >
@@ -522,9 +518,8 @@ export default function () {
                   <span onClick={() => handlePageChange("prev")}>{"<"}</span>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <span
-                      className={`${styles.number} ${
-                        index + 1 == currentPage ? styles.active : ""
-                      }`}
+                      className={`${styles.number} ${index + 1 == currentPage ? styles.active : ""
+                        }`}
                       key={index}
                       onClick={() => {
                         if (index + 1 == currentPage) return;
@@ -549,8 +544,8 @@ export default function () {
               {loading
                 ? "Fetching jobs..."
                 : filteredCareers.length === 0
-                ? "No jobs found"
-                : "Select a job to view details"}
+                  ? "No jobs found"
+                  : "Select a job to view details"}
             </span>
           </div>
         ) : (

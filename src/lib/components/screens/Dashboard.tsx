@@ -566,13 +566,12 @@ export default function () {
                     key={index}
                   >
                     <div
-                      className={`${styles.titleContainer} ${
-                        interview.applicationStatus != interviewStatus[0]
+                      className={`${styles.titleContainer} ${interview.applicationStatus != interviewStatus[0]
                           ? styles.disabled
                           : activeInterviewIndex == index
-                          ? styles.active
-                          : ""
-                      }`}
+                            ? styles.active
+                            : ""
+                        }`}
                       onClick={() => handleApplication(interview, index)}
                     >
                       {interview.organization &&
@@ -616,8 +615,8 @@ export default function () {
                             interview.applicationStatus
                           )
                             ? processDisplayDate(
-                                interview.completedAt || interview.updatedAt
-                              )
+                              interview.completedAt || interview.updatedAt
+                            )
                             : processDisplayDate(interview.updatedAt)}
                         </span>
                       </div>
@@ -656,37 +655,33 @@ export default function () {
                                     alt=""
                                     src={
                                       assetConstants[
-                                        processState(interview, step, true)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                      processState(interview, step, true)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
                                     }
                                   />
 
                                   <div className={styles.stepDetails}>
                                     <span
-                                      className={`mobileView ${
-                                        styles.stepNumber
-                                      } ${
-                                        styles[
-                                          processState(interview, step, true)
-                                            .toLowerCase()
-                                            .replace(" ", "_")
+                                      className={`mobileView ${styles.stepNumber
+                                        } ${styles[
+                                        processState(interview, step, true)
+                                          .toLowerCase()
+                                          .replace(" ", "_")
                                         ]
-                                      }`}
+                                        }`}
                                     >
                                       STEP {index + 1}
                                     </span>
                                     <span
-                                      className={`mobileView ${
-                                        styles.stepDescription
-                                      } ${
-                                        styles[
-                                          processState(interview, step, true)
-                                            .toLowerCase()
-                                            .replace(" ", "_")
+                                      className={`mobileView ${styles.stepDescription
+                                        } ${styles[
+                                        processState(interview, step, true)
+                                          .toLowerCase()
+                                          .replace(" ", "_")
                                         ]
-                                      }`}
+                                        }`}
                                     >
                                       {step}
                                     </span>
@@ -700,49 +695,44 @@ export default function () {
 
                                   {index < applicationStep.length - 1 && (
                                     <hr
-                                      className={`webView ${
-                                        styles[
-                                          processState(interview, step)
-                                            .toLowerCase()
-                                            .replace(" ", "_")
+                                      className={`webView ${styles[
+                                        processState(interview, step)
+                                          .toLowerCase()
+                                          .replace(" ", "_")
                                         ]
-                                      }`}
+                                        }`}
                                     />
                                   )}
                                 </div>
                                 <div className={styles.stepDetails}>
                                   <span
-                                    className={`webView ${styles.stepNumber} ${
-                                      styles[
-                                        processState(interview, step, true)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                    className={`webView ${styles.stepNumber} ${styles[
+                                      processState(interview, step, true)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
-                                    }`}
+                                      }`}
                                   >
                                     STEP {index + 1}
                                   </span>
                                   <span
-                                    className={`webView ${
-                                      styles.stepDescription
-                                    } ${
-                                      styles[
-                                        processState(interview, step, true)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                    className={`webView ${styles.stepDescription
+                                      } ${styles[
+                                      processState(interview, step, true)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
-                                    }`}
+                                      }`}
                                   >
                                     {step}
                                   </span>
                                   <span
-                                    className={`${styles.stepStatus} ${
-                                      styles[
-                                        processState(interview, step)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                    className={`${styles.stepStatus} ${styles[
+                                      processState(interview, step)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
-                                    }`}
+                                      }`}
                                   >
                                     {processState(interview, step)}
                                   </span>
@@ -772,13 +762,12 @@ export default function () {
                                 {processButtonState(interview).spanText}:
                               </span>
                               <button
-                                className={`${
-                                  processButtonState(interview).disabled ||
-                                  (interview.retakeRequest &&
-                                    interview.retakeRequest.reason)
+                                className={`${processButtonState(interview).disabled ||
+                                    (interview.retakeRequest &&
+                                      interview.retakeRequest.reason)
                                     ? "disabled"
                                     : ""
-                                }`}
+                                  }`}
                                 disabled={
                                   (interview.retakeRequest &&
                                     interview.retakeRequest.reason) ||
@@ -807,9 +796,9 @@ export default function () {
                             </span>
                             <span className={styles.description}>
                               {interview.currentStep &&
-                              interviewStatus.includes(interview.currentStep)
+                                interviewStatus.includes(interview.currentStep)
                                 ? droppedStatus[interview.currentStep]
-                                    .description
+                                  .description
                                 : droppedStatus.generic.description}
                             </span>
                           </div>
@@ -824,7 +813,7 @@ export default function () {
                               </span>
                               <ul>
                                 {(interview.currentStep &&
-                                interviewStatus.includes(interview.currentStep)
+                                  interviewStatus.includes(interview.currentStep)
                                   ? droppedStatus[interview.currentStep].tips
                                   : droppedStatus.generic.tips
                                 ).map((item, index) => (
@@ -871,13 +860,12 @@ export default function () {
                     key={index}
                   >
                     <div
-                      className={`${styles.titleContainer} ${
-                        interview.applicationStatus != interviewStatus[0]
+                      className={`${styles.titleContainer} ${interview.applicationStatus != interviewStatus[0]
                           ? styles.disabled
                           : activeInterviewIndex == index
-                          ? styles.active
-                          : ""
-                      }`}
+                            ? styles.active
+                            : ""
+                        }`}
                       onClick={() => handleApplication(interview, index)}
                     >
                       {interview.organization &&
@@ -921,8 +909,8 @@ export default function () {
                             interview.applicationStatus
                           )
                             ? processDisplayDate(
-                                interview.completedAt || interview.updatedAt
-                              )
+                              interview.completedAt || interview.updatedAt
+                            )
                             : processDisplayDate(interview.updatedAt)}
                         </span>
                       </div>
@@ -961,37 +949,33 @@ export default function () {
                                     alt=""
                                     src={
                                       assetConstants[
-                                        processState(interview, step, true)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                      processState(interview, step, true)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
                                     }
                                   />
 
                                   <div className={styles.stepDetails}>
                                     <span
-                                      className={`mobileView ${
-                                        styles.stepNumber
-                                      } ${
-                                        styles[
-                                          processState(interview, step, true)
-                                            .toLowerCase()
-                                            .replace(" ", "_")
+                                      className={`mobileView ${styles.stepNumber
+                                        } ${styles[
+                                        processState(interview, step, true)
+                                          .toLowerCase()
+                                          .replace(" ", "_")
                                         ]
-                                      }`}
+                                        }`}
                                     >
                                       STEP {index + 1}
                                     </span>
                                     <span
-                                      className={`mobileView ${
-                                        styles.stepDescription
-                                      } ${
-                                        styles[
-                                          processState(interview, step, true)
-                                            .toLowerCase()
-                                            .replace(" ", "_")
+                                      className={`mobileView ${styles.stepDescription
+                                        } ${styles[
+                                        processState(interview, step, true)
+                                          .toLowerCase()
+                                          .replace(" ", "_")
                                         ]
-                                      }`}
+                                        }`}
                                     >
                                       {step}
                                     </span>
@@ -1005,49 +989,44 @@ export default function () {
 
                                   {index < applicationStep.length - 1 && (
                                     <hr
-                                      className={`webView ${
-                                        styles[
-                                          processState(interview, step)
-                                            .toLowerCase()
-                                            .replace(" ", "_")
+                                      className={`webView ${styles[
+                                        processState(interview, step)
+                                          .toLowerCase()
+                                          .replace(" ", "_")
                                         ]
-                                      }`}
+                                        }`}
                                     />
                                   )}
                                 </div>
                                 <div className={styles.stepDetails}>
                                   <span
-                                    className={`webView ${styles.stepNumber} ${
-                                      styles[
-                                        processState(interview, step, true)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                    className={`webView ${styles.stepNumber} ${styles[
+                                      processState(interview, step, true)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
-                                    }`}
+                                      }`}
                                   >
                                     STEP {index + 1}
                                   </span>
                                   <span
-                                    className={`webView ${
-                                      styles.stepDescription
-                                    } ${
-                                      styles[
-                                        processState(interview, step, true)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                    className={`webView ${styles.stepDescription
+                                      } ${styles[
+                                      processState(interview, step, true)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
-                                    }`}
+                                      }`}
                                   >
                                     {step}
                                   </span>
                                   <span
-                                    className={`${styles.stepStatus} ${
-                                      styles[
-                                        processState(interview, step)
-                                          .toLowerCase()
-                                          .replace(" ", "_")
+                                    className={`${styles.stepStatus} ${styles[
+                                      processState(interview, step)
+                                        .toLowerCase()
+                                        .replace(" ", "_")
                                       ]
-                                    }`}
+                                      }`}
                                   >
                                     {processState(interview, step)}
                                   </span>
@@ -1077,13 +1056,12 @@ export default function () {
                                 {processButtonState(interview).spanText}:
                               </span>
                               <button
-                                className={`${
-                                  processButtonState(interview).disabled ||
-                                  (interview.retakeRequest &&
-                                    interview.retakeRequest.reason)
+                                className={`${processButtonState(interview).disabled ||
+                                    (interview.retakeRequest &&
+                                      interview.retakeRequest.reason)
                                     ? "disabled"
                                     : ""
-                                }`}
+                                  }`}
                                 disabled={
                                   (interview.retakeRequest &&
                                     interview.retakeRequest.reason) ||
@@ -1112,9 +1090,9 @@ export default function () {
                             </span>
                             <span className={styles.description}>
                               {interview.currentStep &&
-                              interviewStatus.includes(interview.currentStep)
+                                interviewStatus.includes(interview.currentStep)
                                 ? droppedStatus[interview.currentStep]
-                                    .description
+                                  .description
                                 : droppedStatus.generic.description}
                             </span>
                           </div>
@@ -1129,7 +1107,7 @@ export default function () {
                               </span>
                               <ul>
                                 {(interview.currentStep &&
-                                interviewStatus.includes(interview.currentStep)
+                                  interviewStatus.includes(interview.currentStep)
                                   ? droppedStatus[interview.currentStep].tips
                                   : droppedStatus.generic.tips
                                 ).map((item, index) => (
@@ -1139,15 +1117,15 @@ export default function () {
                                   applicationStep[0],
                                   applicationStep[1],
                                 ].includes(processCurrentStep(interview)) && (
-                                  <li
-                                    className={styles.screeningLink}
-                                    onClick={() =>
-                                      handleViewScreeningResult(interview)
-                                    }
-                                  >
-                                    View the AI Screening Result
-                                  </li>
-                                )}
+                                    <li
+                                      className={styles.screeningLink}
+                                      onClick={() =>
+                                        handleViewScreeningResult(interview)
+                                      }
+                                    >
+                                      View the AI Screening Result
+                                    </li>
+                                  )}
                               </ul>
                             </div>
                           </div>

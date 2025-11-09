@@ -150,7 +150,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                   <ReviewField label="City" value={formData.location || formData.city || "Not set"} />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 border-b border-[#E9EAEB] pb-3">
+                <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
                   <div>
                     <span className="text-md font-semibold text-gray-700">Minimum Salary</span>
                     <div className="text-base  text-gray-600 mt-1">
@@ -257,7 +257,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
             isExpanded={expandedSections.cvReview}
             onToggle={() => toggleSection("cvReview")}
             onEdit={() => handleEditSection("cvReview")}
-            
+
           >
             <div className="flex flex-col gap-4">
               <ReviewField

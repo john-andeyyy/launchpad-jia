@@ -463,114 +463,110 @@ export default function () {
 
               {(interview.applicationStatus == interviewStatus[0] ||
                 !interviewStatus.includes(interview.applicationStatus)) && ( // old data
-                <>
-                  <div className={styles.applicationStepContainer}>
-                    {applicationStep.map((step, index) => (
-                      <div className={styles.stepContainer} key={index}>
-                        <div className={`webView ${styles.indicator}`}>
-                          <img
-                            alt="step"
-                            src={`/icons/${processState(interview, step, true)
-                              .toLowerCase()
-                              .replace(" ", "-")}.svg`}
-                          />
-                          {index < applicationStep.length - 1 && (
-                            <hr
-                              className={
-                                styles[
-                                  processState(interview, step)
-                                    .toLowerCase()
-                                    .replace(" ", "-")
-                                ]
-                              }
+                  <>
+                    <div className={styles.applicationStepContainer}>
+                      {applicationStep.map((step, index) => (
+                        <div className={styles.stepContainer} key={index}>
+                          <div className={`webView ${styles.indicator}`}>
+                            <img
+                              alt="step"
+                              src={`/icons/${processState(interview, step, true)
+                                .toLowerCase()
+                                .replace(" ", "-")}.svg`}
                             />
-                          )}
-                        </div>
-
-                        <div className={styles.stepDetails}>
-                          <img
-                            alt="step"
-                            className="mobileView"
-                            src={`/icons/${processState(interview, step, true)
-                              .toLowerCase()
-                              .replace(" ", "-")}.svg`}
-                          />
-
-                          <div className={styles.textContainer}>
-                            <span className={styles.stepNumber}>
-                              STEP {index + 1}
-                            </span>
-                            <span
-                              className={`${styles.stepDescription} ${
-                                styles[
-                                  processState(interview, step, true)
-                                    .toLowerCase()
-                                    .replace(" ", "-")
-                                ]
-                              }`}
-                            >
-                              {step}
-                            </span>
-                            <span
-                              className={`webView ${styles.stepStatus} ${
-                                styles[
+                            {index < applicationStep.length - 1 && (
+                              <hr
+                                className={
+                                  styles[
                                   processState(interview, step)
                                     .toLowerCase()
                                     .replace(" ", "-")
-                                ]
-                              }`}
-                            >
-                              {processState(interview, step)}
-                            </span>
-
-                            {processDateNoteState() && (
-                              <>
-                                <span className={styles.stepDate}>
-                                  {/* {interview.statusDate["Applied"]} */}
-                                </span>
-                                <span className={styles.stepNote}>
-                                  {/* {stepNote[index]} */}
-                                </span>
-                              </>
+                                  ]
+                                }
+                              />
                             )}
                           </div>
 
-                          <span
-                            className={`mobileView ${styles.stepStatus} ${
-                              styles[
+                          <div className={styles.stepDetails}>
+                            <img
+                              alt="step"
+                              className="mobileView"
+                              src={`/icons/${processState(interview, step, true)
+                                .toLowerCase()
+                                .replace(" ", "-")}.svg`}
+                            />
+
+                            <div className={styles.textContainer}>
+                              <span className={styles.stepNumber}>
+                                STEP {index + 1}
+                              </span>
+                              <span
+                                className={`${styles.stepDescription} ${styles[
+                                  processState(interview, step, true)
+                                    .toLowerCase()
+                                    .replace(" ", "-")
+                                  ]
+                                  }`}
+                              >
+                                {step}
+                              </span>
+                              <span
+                                className={`webView ${styles.stepStatus} ${styles[
+                                  processState(interview, step)
+                                    .toLowerCase()
+                                    .replace(" ", "-")
+                                  ]
+                                  }`}
+                              >
+                                {processState(interview, step)}
+                              </span>
+
+                              {processDateNoteState() && (
+                                <>
+                                  <span className={styles.stepDate}>
+                                    {/* {interview.statusDate["Applied"]} */}
+                                  </span>
+                                  <span className={styles.stepNote}>
+                                    {/* {stepNote[index]} */}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+
+                            <span
+                              className={`mobileView ${styles.stepStatus} ${styles[
                                 processState(interview, step)
                                   .toLowerCase()
                                   .replace(" ", "-")
-                              ]
-                            }`}
-                          >
-                            {processState(interview, step)}
-                          </span>
+                                ]
+                                }`}
+                            >
+                              {processState(interview, step)}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {processButtonState(interview) && (
-                    <div className={styles.buttonContainer}>
-                      <span>{processButtonState(interview).spanText}:</span>
-                      <button
-                        className={`${
-                          processButtonState(interview).disabled
-                            ? styles.disabled
-                            : ""
-                        }`}
-                        disabled={processButtonState(interview).disabled}
-                        onClick={() => {
-                          processButtonState(interview).handleClick(interview);
-                        }}
-                      >
-                        {processButtonState(interview).buttonText}
-                      </button>
+                      ))}
                     </div>
-                  )}
-                </>
-              )}
+
+                    {processButtonState(interview) && (
+                      <div className={styles.buttonContainer}>
+                        <span>{processButtonState(interview).spanText}:</span>
+                        <button
+                          className={`${processButtonState(interview).disabled
+                              ? styles.disabled
+                              : ""
+                            }`}
+                          disabled={processButtonState(interview).disabled}
+                          onClick={() => {
+                            processButtonState(interview).handleClick(interview);
+                          }}
+                        >
+                          {processButtonState(interview).buttonText}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
 
               {interview.applicationStatus == interviewStatus[1] && (
                 <>

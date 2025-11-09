@@ -542,11 +542,10 @@ export default function () {
 
   return (
     <div
-      className={`${styles.jobOpeningsContainer} ${
-        pathname == pathConstants.dashboardJobOpenings && deviceWidth > 768
-          ? styles.dashboard
-          : ""
-      }`}
+      className={`${styles.jobOpeningsContainer} ${pathname == pathConstants.dashboardJobOpenings && deviceWidth > 768
+        ? styles.dashboard
+        : ""
+        }`}
     >
       <div className={styles.filterContainer} ref={filterContainerRef}>
         {buttons.map((button, indexBtn) => (
@@ -559,9 +558,8 @@ export default function () {
             style={{ display: [1, 3].includes(indexBtn) ? "none" : "" }}
           >
             <button
-              className={`${
-                indexBtn > 0 && button.value.length > 0 ? "" : "secondaryBtn"
-              }`}
+              className={`${indexBtn > 0 && button.value.length > 0 ? "" : "secondaryBtn"
+                }`}
               disabled={loading}
               onClick={() => handleDropdownIndex(indexBtn)}
             >
@@ -577,13 +575,12 @@ export default function () {
               {indexBtn > 0 && (
                 <img
                   alt=""
-                  className={`${
-                    button.value.length == 0 &&
+                  className={`${button.value.length == 0 &&
                     dropdownIndex == indexBtn &&
                     indexBtn > 0
-                      ? styles.rotate
-                      : ""
-                  }`}
+                    ? styles.rotate
+                    : ""
+                    }`}
                   src={
                     indexBtn > 0 && button.value.length > 0
                       ? assetConstants.xV3
@@ -695,11 +692,10 @@ export default function () {
               // .slice((currentPage - 1) * itemPerPage, currentPage * itemPerPage)
               .map((career, index) => (
                 <div
-                  className={`${styles.gradientContainer} ${
-                    selectedCareer && selectedCareer.id == career.id
-                      ? styles.active
-                      : ""
-                  }`}
+                  className={`${styles.gradientContainer} ${selectedCareer && selectedCareer.id == career.id
+                    ? styles.active
+                    : ""
+                    }`}
                   key={index}
                   ref={
                     selectedCareer && selectedCareer.id == career.id
@@ -924,30 +920,30 @@ export default function () {
                       {selectedCareer.organization.name.includes(
                         "White Cloak"
                       ) && (
-                        <>
-                          <span
-                            className={`${styles.details} ${styles.withMargin}`}
-                          >
-                            Founded in 2014, White Cloak continues to be the
-                            innovation partner of choice for many major
-                            corporations, leveraging technology to take its
-                            client’s business to the next level. This technical
-                            superiority and commitment to our clients have
-                            brought numerous recognition and awards to White
-                            Cloak.
-                          </span>
+                          <>
+                            <span
+                              className={`${styles.details} ${styles.withMargin}`}
+                            >
+                              Founded in 2014, White Cloak continues to be the
+                              innovation partner of choice for many major
+                              corporations, leveraging technology to take its
+                              client’s business to the next level. This technical
+                              superiority and commitment to our clients have
+                              brought numerous recognition and awards to White
+                              Cloak.
+                            </span>
 
-                          <button
-                            className="secondaryBtn"
-                            onClick={() =>
-                              handleRedirection(pathConstants.whitecloak)
-                            }
-                          >
-                            Learn More
-                            <img alt="" src={assetConstants.arrowV3} />
-                          </button>
-                        </>
-                      )}
+                            <button
+                              className="secondaryBtn"
+                              onClick={() =>
+                                handleRedirection(pathConstants.whitecloak)
+                              }
+                            >
+                              Learn More
+                              <img alt="" src={assetConstants.arrowV3} />
+                            </button>
+                          </>
+                        )}
                     </div>
                   </div>
                 </>
