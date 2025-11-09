@@ -539,6 +539,26 @@ export default function () {
         console.log(err);
       });
   }
+  const cleanHtmlContent = (html: string) => {
+    if (!html) return html;
+    
+    // Use regex to remove empty divs (works in both client and server)
+    // This approach is safer and doesn't require DOM APIs
+    let cleaned = html
+      // Remove divs that are completely empty or only contain whitespace
+      .replace(/<div>\s*<\/div>/gi, '')
+      // Remove divs that only contain a single <br> tag
+      .replace(/<div>\s*<br\s*\/?>\s*<\/div>/gi, '')
+      // Remove divs that only contain &nbsp;
+      .replace(/<div>\s*&nbsp;\s*<\/div>/gi, '')
+      // Remove multiple consecutive empty divs
+      .replace(/(<div>\s*<\/div>\s*){2,}/gi, '')
+      // Remove empty divs with just spaces
+      .replace(/<div>\s+<\/div>/gi, '')
+      .trim();
+    
+    return cleaned;
+  };
 
   return (
     <div
@@ -884,11 +904,17 @@ export default function () {
 
               <hr />
 
-              <p
+              {/* <p
                 className={styles.jobDescription}
                 dangerouslySetInnerHTML={{ __html: selectedCareer.description }}
-              />
+              /> */}
 
+              <div
+                className={styles.jobDescriptionCareer}
+                dangerouslySetInnerHTML={{
+                  __html: cleanHtmlContent(selectedCareer.description || ''),
+                }}
+              />
               {selectedCareer.organization && (
                 <>
                   <hr />

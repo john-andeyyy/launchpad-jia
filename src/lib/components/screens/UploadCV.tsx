@@ -7,10 +7,11 @@ import styles from "@/lib/styles/screens/uploadCV.module.scss";
 import { useAppContext } from "@/lib/context/ContextV2";
 import { assetConstants, pathConstants } from "@/lib/utils/constantsV2";
 import { checkFile } from "@/lib/utils/helpersV2";
-import { CORE_API_URL } from "@/lib/Utils";
+import { CORE_API_URL,errorToast } from "@/lib/Utils";
 import axios from "axios";
 import Markdown from "react-markdown";
 import { useEffect, useRef, useState } from "react";
+
 
 export default function () {
   const fileInputRef = useRef(null);
@@ -23,6 +24,9 @@ export default function () {
   const [hasChanges, setHasChanges] = useState(false);
   const [loading, setLoading] = useState(true);
   const [interview, setInterview] = useState(null);
+  const [isScreening, setIsScreening] = useState(false);
+  const [preScreeningQuestions, setPreScreeningQuestions] = useState([]);
+  const [preScreeningAnswers, setPreScreeningAnswers] = useState({});
   const [screeningResult, setScreeningResult] = useState(null);
   const [userCV, setUserCV] = useState(null);
   const cvSections = [
@@ -36,7 +40,7 @@ export default function () {
     "Certifications",
     "Awards",
   ];
-  const step = ["Submit CV", "CV Screening", "Review Next Steps"];
+  const step = ["Submit CV", "Pre-Screening Questions", "Review"];
   const stepStatus = ["Completed", "Pending", "In Progress"];
 
   function handleDragOver(e) {
@@ -185,6 +189,20 @@ export default function () {
           } else {
             setCurrentStep(step[0]);
             setInterview(result[0]);
+            setPreScreeningQuestions(result[0].preScreeningQuestions || []);
+            // Load existing answers if any
+            if (result[0].preScreeningAnswers) {
+              if (Array.isArray(result[0].preScreeningAnswers)) {
+                const flatAnswers = {};
+                result[0].preScreeningAnswers.forEach((item) => {
+                  flatAnswers[item.id] = item.answer;
+                });
+                setPreScreeningAnswers(flatAnswers);
+              } else {
+                // Old format: { questionId: answer } - use as is for backwards compatibility
+                setPreScreeningAnswers(result[0].preScreeningAnswers);
+              }
+            }
             setLoading(false);
           }
         }
@@ -228,8 +246,7 @@ export default function () {
       }
     }
 
-    setCurrentStep(step[1]);
-
+    // Save CV changes if any
     if (hasChanges) {
       const formattedUserCV = cvSections.map((section) => ({
         name: section,
@@ -271,30 +288,112 @@ export default function () {
         });
     }
 
+    // Navigate to Pre-Screening Questions step
+    setCurrentStep(step[1]);
+  }
+
+  function handleAnswerChange(questionId, value) {
+    setPreScreeningAnswers({
+      ...preScreeningAnswers,
+      [questionId]: value,
+    });
+  }
+
+  function handleRangeAnswerChange(questionId, field, value) {
+    setPreScreeningAnswers({
+      ...preScreeningAnswers,
+      [questionId]: {
+        ...(preScreeningAnswers[questionId] || {}),
+        [field]: value,
+      },
+    });
+  }
+
+  function formatNumberWithCommas(value) {
+    if (!value) return "";
+    // Remove all non-digit characters
+    const numbers = value.toString().replace(/\D/g, "");
+    // Add commas for thousands
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function handleNumberInput(value, isCurrency = false) {
+    if (!value) return "";
+    // Remove all non-digit characters
+    const numbers = value.toString().replace(/\D/g, "");
+    // Format with commas
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function handlePreScreeningContinue() {
+    // Validate that all questions are answered
+    const unansweredQuestions = preScreeningQuestions.filter((q) => {
+      const answer = preScreeningAnswers[q.id];
+      if (q.type === "range") {
+        return !answer || !answer.minValue || !answer.maxValue;
+      }
+      if (q.type === "checkboxes") {
+        return !Array.isArray(answer) || answer.length === 0;
+      }
+      return !answer || answer === "";
+    });
+
+    if (unansweredQuestions.length > 0) {
+      // alert("Please answer all pre-screening questions before continuing.");
+      errorToast("Please answer all pre-screening questions before continuing.", "top-center");
+      return;
+    }
+
+    // Show loading screen immediately
+    setIsScreening(true);
     setHasChanges(true);
 
+    // Organize answers into structured format: [{ id, question, answer }]
+    const organizedAnswers = preScreeningQuestions.map((question) => {
+      return {
+        id: question.id,
+        question: question.question,
+        answer: preScreeningAnswers[question.id] || null,
+      };
+    });
+
+    // Save pre-screening answers first
     axios({
-      url: "/api/whitecloak/screen-cv",
+      url: "/api/whitecloak/save-pre-screening-answers",
       method: "POST",
       data: {
         interviewID: interview.interviewID,
-        userEmail: user.email,
+        preScreeningAnswers: organizedAnswers,
       },
     })
+      .then(() => {
+        // Then proceed to screening
+        return axios({
+          url: "/api/whitecloak/screen-cv",
+          method: "POST",
+          data: {
+            interviewID: interview.interviewID,
+            userEmail: user.email,
+          },
+        });
+      })
       .then((res) => {
         const result = res.data;
 
         if (result.error) {
           alert(result.message);
-          setCurrentStep(step[0]);
+          setIsScreening(false);
+          setCurrentStep(step[1]);
         } else {
           setCurrentStep(step[2]);
           setScreeningResult(result);
+          setIsScreening(false);
         }
       })
       .catch((err) => {
-        alert("Error screening CV. Please try again.");
-        setCurrentStep(step[0]);
+        alert("Error processing your application. Please try again.");
+        setIsScreening(false);
+        setCurrentStep(step[1]);
         console.log(err);
       })
       .finally(() => {
@@ -579,7 +678,7 @@ export default function () {
                               }}
                             />
                           ) : (
-                            <span
+                            <div
                               className={`${styles.sectionDetails} ${userCV &&
                                 userCV[section] &&
                                 userCV[section].trim()
@@ -594,7 +693,7 @@ export default function () {
                                   ? userCV[section].trim()
                                   : "Upload your CV to auto-fill this section."}
                               </Markdown>
-                            </span>
+                            </div>
                           )}
                         </div>
                       </div>
@@ -608,17 +707,197 @@ export default function () {
             </>
           )}
 
+          {/* //! Pre-Screening Questions */}
           {currentStep == step[1] && (
-            <div className={styles.cvScreeningContainer}>
-              <img alt="" src={assetConstants.loading} />
-              <span className={styles.title}>Sit tight!</span>
-              <span className={styles.description}>
-                Our smart reviewer is checking your qualifications.
-              </span>
-              <span className={styles.description}>
-                We'll let you know what's next in just a moment.
-              </span>
-            </div>
+            <>
+              {isScreening ? (
+                <div className={styles.cvScreeningContainer}>
+                  <img alt="" src={assetConstants.loading} />
+                  <span className={styles.title}>Sit tight!</span>
+                  <span className={styles.description}>
+                    Our smart reviewer is checking your qualifications.
+                  </span>
+                  <span className={styles.description}>
+                    We'll let you know what's next in just a moment.
+                  </span>
+                </div>
+              ) : (
+                <div className={styles.preScreeningContainer}>
+                  {preScreeningQuestions.length > 0 ? (
+                    preScreeningQuestions.map((question, index) => (
+                      <div key={question.id} className={styles.gradient}>
+                        <div className={styles.cvDetailsCard}>
+                          <span className={styles.sectionTitle}>
+                            {question.question}
+                          </span>
+                          <div className={styles.detailsContainer}>
+                            {question.type === "dropdown" && (
+                              <select
+                                className={styles.questionInput}
+                                value={
+                                  preScreeningAnswers[question.id] || ""
+                                }
+                                onChange={(e) => {
+                                  // Save the actual option text value, not the ID
+                                  handleAnswerChange(question.id, e.target.value);
+                                }}
+                              >
+                                <option value="">Select an option</option>
+                                {question.options?.map((option) => (
+                                  <option key={option.id} value={option.value}>
+                                    {option.value}
+                                  </option>
+                                ))}
+                              </select>
+                            )}
+                            {question.type === "range" && (
+                              <div className={styles.rangeInputContainer}>
+                                <div className={styles.rangeInputGroup}>
+                                  <label>Minimum Salary</label>
+                                  <div className={styles.currencyInput}>
+                                    {question.rangeType === "currency" && (
+                                      <span className={styles.currencySymbol}>
+                                        {question.currency === "PHP" ? "₱" : "$"}
+                                      </span>
+                                    )}
+                                    <input
+                                      type="text"
+                                      className={styles.questionInput}
+                                      placeholder={"0" }
+                                      value={
+                                        preScreeningAnswers[question.id]?.minValue || ""
+                                      }
+                                      onChange={(e) => {
+                                        const formatted = handleNumberInput(
+                                          e.target.value,
+                                          question.rangeType === "currency"
+                                        );
+                                        handleRangeAnswerChange(
+                                          question.id,
+                                          "minValue",
+                                          formatted
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                <div className={styles.rangeInputGroup}>
+                                  <label>Maximum Salary</label>
+                                  <div className={styles.currencyInput}>
+                                    {question.rangeType === "currency" && (
+                                      <span className={styles.currencySymbol}>
+                                        {question.currency === "PHP" ? "₱" : "$"}
+                                      </span>
+                                    )}
+                                    <input
+                                      type="text"
+                                      className={styles.questionInput}
+                                      placeholder={"0" }
+                                      value={
+                                        preScreeningAnswers[question.id]?.maxValue || ""
+                                      }
+                                      onChange={(e) => {
+                                        const formatted = handleNumberInput(
+                                          e.target.value,
+                                          question.rangeType === "currency"
+                                        );
+                                        handleRangeAnswerChange(
+                                          question.id,
+                                          "maxValue",
+                                          formatted
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            {question.type === "short-answer" && (
+                              <input
+                                type="text"
+                                className={styles.questionInput}
+                                value={preScreeningAnswers[question.id] || ""}
+                                onChange={(e) =>
+                                  handleAnswerChange(question.id, e.target.value)
+                                }
+                                placeholder="Enter your answer"
+                              />
+                            )}
+                            {question.type === "long-answer" && (
+                              <textarea
+                                className={styles.questionTextarea}
+                                value={preScreeningAnswers[question.id] || ""}
+                                onChange={(e) =>
+                                  handleAnswerChange(question.id, e.target.value)
+                                }
+                                placeholder="Enter your answer"
+                                rows={4}
+                              />
+                            )}
+                            {question.type === "checkboxes" && (
+                              <div className={styles.checkboxContainer}>
+                                {question.options?.map((option) => {
+                                  const currentAnswers = Array.isArray(preScreeningAnswers[question.id])
+                                    ? preScreeningAnswers[question.id]
+                                    : [];
+                                  // Check if the option value (text) is in the answers array
+                                  const isChecked = currentAnswers.includes(option.value);
+                                  return (
+                                    <label
+                                      key={option.id}
+                                      className={styles.checkboxLabel}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={isChecked}
+                                        onChange={(e) => {
+                                          if (e.target.checked) {
+                                            // Save the option value (text), not the ID
+                                            handleAnswerChange(question.id, [
+                                              ...currentAnswers,
+                                              option.value,
+                                            ]);
+                                          } else {
+                                            // Remove the option value (text)
+                                            handleAnswerChange(
+                                              question.id,
+                                              currentAnswers.filter(
+                                                (value) => value !== option.value
+                                              )
+                                            );
+                                          }
+                                        }}
+                                      />
+                                      <span>{option.value}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className={styles.gradient}>
+                      <div className={styles.cvDetailsCard}>
+                        <span className={styles.sectionTitle}>
+                          QUICK PRE SCREENING QUESTION
+                        </span>
+                        <div className={styles.detailsContainer}>
+                          <span className={styles.sectionDetails}>
+                            No pre-screening questions available.
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <button onClick={handlePreScreeningContinue}>
+                    Continue <i className="las la-arrow-right !text-white ml-2"></i>
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
           {currentStep == step[2] && screeningResult && (
