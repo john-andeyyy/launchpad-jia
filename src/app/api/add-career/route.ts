@@ -53,6 +53,7 @@ export async function POST(request: Request) {
       maximumSalary,
       country,
       province,
+      city,
       employmentType,
       teamMembers,
     } = validationResult.data;
@@ -126,6 +127,7 @@ export async function POST(request: Request) {
       maximumSalary,
       country,
       province,
+      city,
       employmentType,
       teamMembers: teamMembers || [],
     };

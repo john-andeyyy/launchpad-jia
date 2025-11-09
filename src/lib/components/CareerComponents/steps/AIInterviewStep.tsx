@@ -200,7 +200,7 @@ export default function AIInterviewStep({
                                         }}
                                         placeholder="Enter a secret prompt (e.g. Treat candidates who speak in Taglish, English, or Tagalog equally. Focus on clarity, coherence, and confidence rather than language preference or accent.)"
                                         className="mt-1 w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-lg !h-[200px] 
-                                        resize-y focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent px-7"
+                                        resize-y focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent px-3"
                                         style={{
                                             paddingLeft: '2rem',
                                             lineHeight: '1.5',

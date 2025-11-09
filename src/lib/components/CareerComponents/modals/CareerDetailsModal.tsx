@@ -110,7 +110,7 @@ export default function CareerDetailsModal({ formData, setFormData, onClose }: C
                 maximumSalary: isNaN(Number(maximumSalary)) ? null : Number(maximumSalary),
                 country,
                 province,
-                location: city,
+                location: city +", "+province+", "+country,
                 city,
                 employmentType,
                 salaryNegotiable,

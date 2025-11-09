@@ -215,7 +215,7 @@ export default function CareerDetailsStep({
                             <div className="relative">
                                 <input
                                     value={jobTitle}
-                                    className={`form-control !pl-[10%] text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
+                                    className={`form-control text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
                                     placeholder="Enter job title"
                                     onChange={(e) => {
                                         setJobTitle(e.target.value || "");
@@ -384,14 +384,16 @@ export default function CareerDetailsStep({
                                                         ₱
                                                     </span>
                                                     <input
-                                                        type="number"
+                                                        type="text"
                                                         className={`form-control pl-5 pr-20  text-base ${(fieldErrors.minimumSalary && !salaryNegotiable) ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
-                                                        min={0}
                                                         value={minimumSalary}
                                                         onChange={(e) => {
                                                             if (!salaryNegotiable) {
-                                                                setMinimumSalary(e.target.value || "");
+                                                                // Remove all non-numeric characters and format with commas
+                                                                const numbers = e.target.value.replace(/[^\d]/g, '');
+                                                                const formatted = numbers ? numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '';
+                                                                setMinimumSalary(formatted);
                                                                 if (fieldErrors.minimumSalary) {
                                                                     setFieldErrors({ ...fieldErrors, minimumSalary: false });
                                                                 }
@@ -418,14 +420,16 @@ export default function CareerDetailsStep({
                                                         ₱
                                                     </span>
                                                     <input
-                                                        type="number"
+                                                        type="text"
                                                         className={`form-control pl-5 pr-20  text-base ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : ""}`}
                                                         placeholder="0"
-                                                        min={0}
                                                         value={maximumSalary}
                                                         disabled={salaryNegotiable}
                                                         onChange={(e) => {
-                                                            setMaximumSalary(e.target.value || "");
+                                                            // Remove all non-numeric characters and format with commas
+                                                            const numbers = e.target.value.replace(/[^\d]/g, '');
+                                                            const formatted = numbers ? numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '';
+                                                            setMaximumSalary(formatted);
                                                             if (fieldErrors.maximumSalary) {
                                                                 setFieldErrors({ ...fieldErrors, maximumSalary: false });
                                                             }

@@ -619,7 +619,7 @@ export default function ({ modalType, setModalType }) {
                       {applicationData.organization.name}
                     </h3>
                     <p className="text-sm text-gray-500 mb-2">
-                      {applicationData.organization.industry} | {applicationData.organization.city}, {applicationData.organization.province}, {applicationData.organization.country}
+                      {applicationData.organization.industry} | {applicationData.organization.location}
                     </p>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       {applicationData.organization.description}

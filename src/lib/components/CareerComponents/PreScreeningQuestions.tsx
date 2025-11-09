@@ -239,8 +239,8 @@ export default function PreScreeningQuestions({
                         <span className="text-[#6B7280] font-normal">(optional)</span>
 
                     </span>
-                    <div className="w-6 h-6 bg-[#F8F9FC] border border-[#D5D9EB] rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-[#181D27]">
+                    <div className="w-8 h-8 bg-[#F8F9FC] border border-[#D5D9EB] rounded-full flex items-center justify-center">
+                        <span className="text-md font-bold text-gray-600">
                             {questions.length}
                         </span>
                     </div>
@@ -248,10 +248,10 @@ export default function PreScreeningQuestions({
                 <div className="flex flex-row items-center justify-between">
                     <button
                         onClick={handleAddCustom}
-                        className={`w-fit p-2 px-4 !text-sm !font-semibold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
+                        className={`w-fit p-2 px-4 !text-md flex items-center gap-2 !font-semibold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
                         disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer bg-black text-white`}
                     >
-                        <i className="la la-plus mr-2 !text-1xl"></i> Add custom
+                        <i className="la la-plus mr-2 !text-2xl "></i> Add custom
                     </button>
                 </div>
             </div>
@@ -285,7 +285,7 @@ export default function PreScreeningQuestions({
 
                     {/* Suggested Questions */}
                     <div className="space-y-3 pt-2">
-                        <h4 className="font-medium !text-gray-500 text-lg sm:text-md">
+                        <h4 className="font-medium !text-gray-700 text-lg sm:text-md">
                             Suggested Pre-screening Questions:
                         </h4>
                         <div className="space-y-2">
@@ -297,7 +297,7 @@ export default function PreScreeningQuestions({
                                         className="flex items-center justify-between p-3 !py-0 bg-white rounded-lg  !mb-0"
                                     >
                                         <div className={`flex-1  ${isAdded ? "opacity-50" : ""}`}>
-                                            <p className="text-md  text-black !font-semibold mb-1">
+                                            <p className="text-md  text-gray-700 !font-semibold mb-1">
                                                 {suggested.id
                                                     .split("-")
                                                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -504,9 +504,9 @@ function QuestionCard({
                     }`}
             >
                 {/* Question Input and Type Selector - Gray Bar */}
-                <div className="flex items-center gap-2 p-2 bg-gray-50 -mt-[1px] -mx-[1px] w-[calc(100%+2px)]">
+                <div className="flex items-center gap-2 p-2 pt-3 bg-gray-50 -mt-[1px] -mx-[1px] w-[calc(100%+2px)]">
                     {question.source === "suggested" ? (
-                        <h3 className="flex-1 text-base font-semibold text-[#181D27] px-3 py-2 !pl-20 sm:!pl-5 md:!pl-10 lg:!pl-10">
+                        <h3 className="flex-1 text-base font-semibold text-[#181D27] px-3 py-2 !pl-20 sm:!pl-5 md:!pl-10 lg:!pl-5">
                             {question.question}
                         </h3>
                     ) : (
@@ -528,18 +528,21 @@ function QuestionCard({
                         <button
                             type="button"
                             onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent flex items-center gap-2 min-w-[140px] justify-between"
+                            className="border border-gray-300 !rounded-lg px-3 py-2.5 text-md !text-gray-700 
+                            bg-white focus:outline-none  !focus:border-transparent
+                            flex items-center gap-2 min-w-[210px] justify-between"
                         >
                             <div className="flex items-center gap-2">
                                 {QUESTION_TYPES.find(t => t.value === questionType)?.icon && (
-                                    <i className={`${QUESTION_TYPES.find(t => t.value === questionType)?.icon} text-base`}></i>
+                                    <i className={`${QUESTION_TYPES.find(t => t.value === questionType)?.icon} text-base !text-lg`}></i>
                                 )}
                                 <span>{QUESTION_TYPES.find(t => t.value === questionType)?.label || questionType}</span>
                             </div>
-                            <i className="la la-angle-down text-xs"></i>
+                            <i className="la la-angle-down text-md"></i>
                         </button>
                         {dropdownOpen && (
-                            <div className=" absolute right-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-auto">
+                            <div className=" absolute right-0 mt-1 w-full bg-white border 
+                            border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-auto text-gray-700 font-medium">
                                 {QUESTION_TYPES.map((type) => (
                                     <button
                                         key={type.value}
@@ -548,7 +551,8 @@ function QuestionCard({
                                             handleTypeChange(type.value);
                                             setDropdownOpen(false);
                                         }}
-                                        className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50 ${questionType === type.value ? 'bg-[#F8F9FC] font-semibold' : ''
+                                        className={`w-full text-left px-3 py-2 text-sm flex items-center 
+                                            gap-2 hover:bg-gray-50 ${questionType === type.value ? 'bg-[#F8F9FC] font-bold' : ''
                                             }`}
                                     >
                                         {type.icon && (
@@ -650,7 +654,7 @@ function QuestionCard({
                                         d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
                                     />
                                 </svg>
-                                <span className="text-sm font-medium">Delete Question</span>
+                                <span className="text-md  font-bold">Delete Question</span>
                             </button>
                         </div>
                     )}
@@ -750,7 +754,8 @@ function DropdownOptions({
                     </div>
                     {/* Option Input with Number Inside */}
                     <div className="flex-1 relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#6B7280] pointer-events-none z-10 px-2 py-1">
+                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm !text-gray-900 !font-medium pointer-events-none z-10 px-2
+                        py-1 border-r-2 border-[#E9EAEB]">
                             {index + 1}
 
                         </span>
@@ -760,8 +765,8 @@ function DropdownOptions({
                             onChange={(e) => onUpdateOption?.(questionId, option.id, e.target.value)}
                             placeholder="Enter option"
                             className="w-full border border-[#E9EAEB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2
-                            focus:ring-indigo-500 focus:border-transparent pl-5
-                            border-r-2"
+                            focus:ring-indigo-500 focus:border-transparent pl-5 !text-gray-900 !font-medium
+                            border-r-2 "
                         />
                     </div>
                     {/* Remove Option Button */}
@@ -841,15 +846,20 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
         onUpdate?.(questionId, updates);
     };
 
+    const formatNumberWithCommas = (value: string): string => {
+        // Remove all non-numeric characters
+        const numbers = value.replace(/[^\d]/g, '');
+        if (!numbers) return '';
+        // Format with commas
+        return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
+
     const handleNumberInput = (value: string, isCurrency: boolean) => {
-        // Allow only numbers and commas (for currency formatting)
         if (isCurrency) {
-            // Remove all non-numeric characters except commas
-            const filtered = value.replace(/[^\d,]/g, '');
-            // Ensure commas are used correctly (no consecutive commas, no comma at start)
-            return filtered.replace(/^,|,,+/g, '');
+            // Format with commas for currency
+            return formatNumberWithCommas(value);
         } else {
-            // For number type, only allow digits
+            // For number type, only allow digits (no formatting)
             return value.replace(/[^\d]/g, '');
         }
     };
@@ -881,15 +891,16 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                         )}
                         <input
                             type="text"
-                            value={minValue}
+                            value={minValue || "40,000"}
                             onChange={(e) => {
                                 const filteredValue = handleNumberInput(e.target.value, rangeType === "currency");
                                 onUpdate?.(questionId, {
                                     minValue: filteredValue,
                                 });
                             }}
-                            placeholder={rangeType === "currency" ? "40,000" : "1"}
-                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 
+                            placeholder={rangeType === "currency" ? "0" : "0"}
+
+                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 !text-gray-800
                                 focus:ring-indigo-500 ${rangeType === "currency" ? "pl-5 pr-2" : "px-3"
                                 } ${rangeType === "currency" && "rounded-r-none"}`}
                         />
@@ -920,16 +931,17 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                         )}
                         <input
                             type="text"
-                            value={maxValue}
+                            value={maxValue || "60,000"}
                             onChange={(e) => {
                                 const filteredValue = handleNumberInput(e.target.value, rangeType === "currency");
                                 onUpdate?.(questionId, {
                                     maxValue: filteredValue,
                                 });
                             }}
-                            placeholder={rangeType === "currency" ? "60,000" : "10"}
-                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${rangeType === "currency" ?
-                                "pl-5 pr-2" : "px-3"
+                            placeholder={rangeType === "currency" ? "0" : "0"}
+                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 text-gray-800
+                                focus:ring-indigo-500 ${rangeType === "currency" ?
+                                    "pl-5 pr-2" : "px-3"
                                 } ${rangeType === "currency" && "rounded-r-none"}`}
                         />
                         {rangeType === "currency" && (

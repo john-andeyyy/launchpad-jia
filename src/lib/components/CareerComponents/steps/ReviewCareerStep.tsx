@@ -6,6 +6,7 @@ import ReviewSection from "./ReviewSection";
 import ReviewField from "./ReviewField";
 import { TeamMember } from "../TeamAccess";
 import { useAppContext } from "@/lib/context/AppContext";
+import { assetConstants } from "@/lib/utils/constantsV2";
 
 interface ReviewCareerStepProps {
     jobTitle: string;
@@ -329,14 +330,19 @@ export default function ReviewCareerStep({
                         label="AI Interview Screening"
                         value={getScreeningSettingDisplay(aiInterviewScreeningSetting)}
                     />
+
                     <div className="flex flex-row items-center justify-between gap-2 border-y pt-3 border-gray-300 pb-3">
-                        <p className="!font-semibold text-gray-800 !mb-0">Require Video Interview</p>
-                        <span className="text-md font-bold text-gray-800x-2">
+                        <p className="!text-md font-semibold text-gray-700 mb-0 !font-bold">Require Video Interview</p>
+                        <div className="text-md font-bold text-gray-800 x-2 flex items-center gap-2">
                             {requireVideo ? "Yes" : "No"}
-                            {requireVideo ? <i className="la la-check text-green-500 bg-green-100 rounded-full p-1 text-3xl border border-green-500 mx-2 "
-                                style={{ fontSize: "16px" }}></i> : <i className="la la-times text-red-500 bg-red-100 rounded-full p-1 text-3xl border border-red-500 mx-2 "
-                                    style={{ fontSize: "16px" }}></i>}
-                        </span>
+                            {requireVideo ? <img
+                                alt=""
+                                src={assetConstants.checkV2}
+                            /> : <img
+                                alt=""
+                                src={assetConstants.xV2}
+                            />}
+                        </div>
                     </div>
 
                     <div className="border-b border-gray-300 pb-3">

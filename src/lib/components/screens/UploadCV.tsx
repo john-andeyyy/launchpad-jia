@@ -7,7 +7,7 @@ import styles from "@/lib/styles/screens/uploadCV.module.scss";
 import { useAppContext } from "@/lib/context/ContextV2";
 import { assetConstants, pathConstants } from "@/lib/utils/constantsV2";
 import { checkFile } from "@/lib/utils/helpersV2";
-import { CORE_API_URL,errorToast } from "@/lib/Utils";
+import { CORE_API_URL, errorToast } from "@/lib/Utils";
 import axios from "axios";
 import Markdown from "react-markdown";
 import { useEffect, useRef, useState } from "react";
@@ -723,6 +723,12 @@ export default function () {
                 </div>
               ) : (
                 <div className={styles.preScreeningContainer}>
+                  <div>
+                    <h1 className="text-2xl font-bold">Quick Pre-Screening</h1>
+                    <p className="text-md text-gray-500">
+                      Just a few short questions to help your recruiters assess you faster. takes less than a minute.
+                    </p>
+                  </div>
                   {preScreeningQuestions.length > 0 ? (
                     preScreeningQuestions.map((question, index) => (
                       <div key={question.id} className={styles.gradient}>
@@ -751,9 +757,9 @@ export default function () {
                               </select>
                             )}
                             {question.type === "range" && (
-                              <div className={styles.rangeInputContainer}>
-                                <div className={styles.rangeInputGroup}>
-                                  <label>Minimum Salary</label>
+                              <div className="flex flex-row gap-4 w-full">
+                                <div className={styles.rangeInputGroup} style={{ flex: 1 }}>
+                                  <label>Minimum {question.rangeType === "currency" ? "Salary" : "Value"}</label>
                                   <div className={styles.currencyInput}>
                                     {question.rangeType === "currency" && (
                                       <span className={styles.currencySymbol}>
@@ -763,7 +769,7 @@ export default function () {
                                     <input
                                       type="text"
                                       className={styles.questionInput}
-                                      placeholder={"0" }
+                                      placeholder="0"
                                       value={
                                         preScreeningAnswers[question.id]?.minValue || ""
                                       }
@@ -781,8 +787,8 @@ export default function () {
                                     />
                                   </div>
                                 </div>
-                                <div className={styles.rangeInputGroup}>
-                                  <label>Maximum Salary</label>
+                                <div className={styles.rangeInputGroup} style={{ flex: 1 }}>
+                                  <label>Maximum {question.rangeType === "currency" ? "Salary" : "Value"}</label>
                                   <div className={styles.currencyInput}>
                                     {question.rangeType === "currency" && (
                                       <span className={styles.currencySymbol}>
@@ -792,7 +798,7 @@ export default function () {
                                     <input
                                       type="text"
                                       className={styles.questionInput}
-                                      placeholder={"0" }
+                                      placeholder="0"
                                       value={
                                         preScreeningAnswers[question.id]?.maxValue || ""
                                       }

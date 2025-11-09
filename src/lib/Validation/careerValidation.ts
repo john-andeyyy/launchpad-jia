@@ -150,6 +150,7 @@ export const addCareerSchema = z.object({
     maximumSalary: z.number().nullable().optional(),
     country: safeString("Country", 100, false).optional().nullable(),
     province: safeString("Province", 100, false).optional().nullable(),
+    city: safeString("City", 100, false).optional().nullable(),
     employmentType: z.enum(["Full-Time", "Part-Time"]).optional().or(z.literal("")).nullable(),
     teamMembers: z.array(teamMemberSchema).min(1, "At least one team member is required"),
     lastEditedBy: z

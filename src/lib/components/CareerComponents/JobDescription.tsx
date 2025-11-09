@@ -12,6 +12,7 @@ import CareerDetailsModal from "./modals/CareerDetailsModal";
 import CVReviewModal from "./modals/CVReviewModal";
 import AIInterviewModal from "./modals/AIInterviewModal";
 import TeamAccessModal from "./modals/TeamAccessModal";
+import { assetConstants } from "@/lib/utils/constantsV2";
 
 export default function JobDescription({ formData, setFormData, editModal, isEditing, setIsEditing, handleCancelEdit }: { formData: any, setFormData: (formData: any) => void, editModal: boolean, isEditing: boolean, setIsEditing: (isEditing: boolean) => void, handleCancelEdit: () => void }) {
   const { user } = useAppContext();
@@ -147,7 +148,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                 <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
                   <ReviewField label="Country" value={formData.country || "Philippines"} />
                   <ReviewField label="State / Province" value={formData.province || "Not set"} />
-                  <ReviewField label="City" value={formData.location || formData.city || "Not set"} />
+                  <ReviewField label="City" value={formData.city || formData.city || "Not set"} />
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
@@ -167,7 +168,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
 
                 {/* //! Job Description */}
                 {formData.description && (
-                  <div className="border-b border-[#E9EAEB] pb-3">
+                  <div className=" pb-3">
                     <span className="text-md font-semibold text-gray-700">Job Description</span>
                     <div
                       className="  mt-1 rich-text-content !text-gray-800"
@@ -363,14 +364,16 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
 
               <div className="flex flex-row items-center justify-between gap-2 border-y pt-3 border-gray-300 pb-3">
                 <p className="!text-md font-semibold text-gray-700 mb-0 !font-bold">Require Video Interview</p>
-                <span className="text-md font-bold text-gray-800 x-2">
+                <div className="text-md font-bold text-gray-800 x-2 flex items-center gap-2">
                   {formData.requireVideo ? "Yes" : "No"}
-                  {formData.requireVideo ? <i className="la la-check text-green-500 bg-green-100 rounded-full p-1 text-3xl border border-green-500 mx-2 "
-                    style={{ fontSize: "16px" }}></i> : <i className="la la-times text-red-500 bg-red-100 rounded-full p-1 text-3xl border border-red-500 mx-2 "
-                      style={{ fontSize: "16px" }}></i>}
-                </span>
-
-
+                  {formData.requireVideo ? <img
+                    alt=""
+                    src={assetConstants.checkV2}
+                  /> : <img
+                    alt=""
+                    src={assetConstants.xV2}
+                  />}
+                </div>
               </div>
 
               {formData.aiInterviewSecretPrompt && (
@@ -428,9 +431,9 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                                   <span className="text-sm pl-3 font-semibold  text-gray-600 min-w-[20px] pt-1">
                                     {currentQuestionNumber}.
                                   </span>
-                                  <p className="mb-0 text-gray-600 !text-base !font-semibold  flex-1 justify-center items-center ">
+                                  <span className="mb-0 text-gray-600 !text-base flex-1 justify-center items-center ">
                                     {questionText}
-                                  </p>
+                                  </span>
                                 </div>
                               );
                             })}

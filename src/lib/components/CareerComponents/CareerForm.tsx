@@ -547,8 +547,8 @@ export default function CareerForm({
                 : Number(maximumSalary),
             country,
             province,
-            // Backwards compatibility
-            location: city,
+            city,
+            location: city+", "+province+", "+country,
             employmentType,
             teamMembers,
         };
@@ -661,8 +661,9 @@ export default function CareerForm({
                     : Number(maximumSalary),
                 country,
                 province,
+                city,
                 // Backwards compatibility
-                location: city,
+                location: city+", "+province+", "+country,
                 status,
                 employmentType,
                 teamMembers,
