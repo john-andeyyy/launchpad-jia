@@ -1,10 +1,11 @@
 const originPath = "/";
 const jobOpeningsOriginPath = "/job-openings";
 const dashboardOriginPath = "/dashboard";
+let Vercel_URL = process.env.VERCEL_URL;
 
 export const pathConstants = {
-  employee: "https://www.hellojia.ai",
-  employer: "https://www.hirejia.ai",
+  employee: Vercel_URL ? `${Vercel_URL}/job-portal` : "https://www.hellojia.ai",
+  employer: Vercel_URL ? `${Vercel_URL}/recruiter-dashboard` : "https://www.hirejia.ai",
   whitecloak: "https://www.whitecloak.com",
   home: originPath,
   jobOpenings: jobOpeningsOriginPath,
