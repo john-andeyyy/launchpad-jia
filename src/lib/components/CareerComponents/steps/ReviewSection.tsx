@@ -52,7 +52,7 @@ export default function ReviewSection({
                                 <i className={`la la-chevron-${isExpanded ? "up" : "down"}`} style={{ color: '#6B7280', fontSize: '16px' }}></i>
                             </button>
                         </div>
-                        <span style={{ fontSize: '16px', color: '#000000', fontWeight: 700 }}>{title}</span>
+                        <span style={{ fontSize: '20px', color: '#000000', fontWeight: 700 }}>{title}</span>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
                         {onEdit && (

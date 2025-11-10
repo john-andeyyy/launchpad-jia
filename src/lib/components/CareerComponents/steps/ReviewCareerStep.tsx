@@ -242,13 +242,14 @@ export default function ReviewCareerStep({
                 onEdit={() => onEditStep?.(2)}
             >
                 <div className={styles.contentSection}>
-                    <ReviewField
-                        label="CV Screening"
-                        value={getScreeningSettingDisplay(cvScreeningSetting)}
-                    />
-
+                    <div style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "16px" }}>
+                        <ReviewField
+                            label="CV Screening"
+                            value={getScreeningSettingDisplay(cvScreeningSetting)}
+                        />
+                    </div>
                     {cvSecretPrompt && (
-                        <div>
+                        <div style={{ borderBottom: "1px solid #E5E7EB", paddingBottom: "16px" }}>
                             <span className={styles.secretPromptLabel}>CV Secret Prompt</span>
                             <div className={styles.secretPromptContent}>
                                 {cvSecretPrompt.split('\n').map((line, idx) => (

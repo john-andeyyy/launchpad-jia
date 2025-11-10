@@ -96,6 +96,7 @@ export default function AIInterviewModal({ formData, setFormData, onClose }: AII
                 setScreeningSetting={setScreeningSetting}
                 secretPrompt={aiInterviewSecretPrompt}
                 setSecretPrompt={setAiInterviewSecretPrompt}
+                hideSectionNumbers={true}
             />
         </CareerModal>
     );

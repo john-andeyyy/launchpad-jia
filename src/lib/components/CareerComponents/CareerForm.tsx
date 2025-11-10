@@ -903,7 +903,7 @@ export default function CareerForm({
                                         <span className={styles.draftJobTitle}>{jobTitle}</span>
                                     </>
                                 ) : (
-                                    "Add new career"
+                                    <span className={styles.draftJobTitle}>Add new career</span>
                                 )}
                             </h1>
                             <div className={styles.buttonGroup}>
@@ -932,7 +932,7 @@ export default function CareerForm({
                                         }
                                     }}
                                 >
-                                    <span className={`las la-check-circle ${styles.buttonIcon}`}></span>
+                                    {currentStep === STEPS.length ? <span className={`las la-check-circle ${styles.buttonIcon}`}></span> : ""}
                                     {currentStep === STEPS.length ? "Publish" : "Save and Continue →"}
                                 </button>
                             </div>

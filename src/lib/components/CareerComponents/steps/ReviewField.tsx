@@ -11,8 +11,8 @@ interface ReviewFieldProps {
 export default function ReviewField({ label, value, className = "" }: ReviewFieldProps) {
     return (
         <div className={className}>
-            <span style={{ fontSize: '16px', fontWeight: 600, color: '#374151' }}>{label}</span>
-            <div style={{ fontSize: '16px', color: '#6b7280', marginTop: '4px' }}>{value}</div>
+            <span style={{ fontSize: '16px', fontWeight: 600, color: "black" }}>{label}</span>
+            <div style={{ fontSize: '16px', color: '#1F2937', marginTop: '4px' }}>{value}</div>
         </div>
     );
 }

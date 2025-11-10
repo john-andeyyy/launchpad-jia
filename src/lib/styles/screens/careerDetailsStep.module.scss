@@ -19,7 +19,7 @@
     padding-bottom: 16px;
 
     @media (min-width: 1024px) {
-        width: 75%;
+        width: 70%;
     }
 }
 
@@ -204,6 +204,13 @@
     padding-left: 30px !important;
     padding-right: 80px;
     font-size: 16px;
+
+    &:focus {
+        outline: none !important;
+        border-color: transparent !important;
+        box-shadow: 0 0 0 0.5px black !important;
+    }
+
 }
 
 .currencySelectContainer {

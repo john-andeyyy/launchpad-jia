@@ -15,7 +15,7 @@
     width: 100%;
 
     @media (min-width: 1024px) {
-        width: 60%;
+        width: 70%;
     }
 }
 
@@ -226,17 +226,12 @@
     resize: vertical;
     padding-left: 2rem;
     line-height: 1.5;
+    height: 200px !important;
 
     @media (max-width: 640px) {
         padding: 12px;
     }
 
-    &:focus {
-        outline: none;
-        border: 2px solid #6366f1;
-        border-color: transparent;
-        box-shadow: 0 0 0 2px #6366f1;
-    }
 
     &::placeholder {
         color: #9ca3af;
@@ -247,7 +242,7 @@
     width: 100%;
 
     @media (min-width: 1024px) {
-        width: 40%;
+        width: 30%;
         position: sticky;
         top: 0;
     }
@@ -287,4 +282,21 @@
 .tipTextBold {
     font-weight: 700;
     color: #000000;
+}
+.headerRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+    padding-left: 8px;
+    padding-top: 12px;
+
+    @media (min-width: 768px) {
+        padding-left: 16px;
+    }
 }

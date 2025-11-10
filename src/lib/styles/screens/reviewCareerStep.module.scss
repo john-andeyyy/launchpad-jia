@@ -137,6 +137,7 @@
 .memberEmail {
   font-size: 14px;
   color: #6b7280;
+  font-weight: 400;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -161,7 +162,7 @@
 }
 
 .secretPromptLabel {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000000;
 }

@@ -408,7 +408,7 @@ export default function CareerDetailsStep({
                                                     />
                                                     <div className={styles.currencySelectContainer}>
                                                         <select
-                                                            className={`${styles.currencySelect} ${fieldErrors.minimumSalary ? styles.currencySelectError : styles.currencySelectNormal}`}
+                                                            className={`${styles.currencySelect} ${styles.currencySelectNormal}`}
                                                             value={salaryCurrency || "PHP"}
                                                             onChange={(e) => {
                                                                 setSalaryCurrency(e.target.value);
@@ -440,6 +440,7 @@ export default function CareerDetailsStep({
                                                 <span>Maximum Salary</span>
                                                 <div className={styles.inputWrapper}>
                                                     <span className={styles.currencySymbol}>
+                                                        
                                                         {salaryCurrency === "PHP" ? "₱" : "$"}
                                                     </span>
                                                     <input
@@ -460,7 +461,7 @@ export default function CareerDetailsStep({
                                                     />
                                                     <div className={styles.currencySelectContainer}>
                                                         <select
-                                                            className={`${styles.currencySelect} ${fieldErrors.maximumSalary ? styles.currencySelectError : styles.currencySelectNormal}`}
+                                                            className={`${styles.currencySelect} ${styles.currencySelectNormal}`}
                                                             value={salaryCurrency || "PHP"}
                                                             onChange={(e) => {
                                                                 setSalaryCurrency(e.target.value);

@@ -11,7 +11,7 @@ import InterviewQuestionModal from "./InterviewQuestionModal";
 import FullScreenLoadingAnimation from "./FullScreenLoadingAnimation";
 
 export default function (props) {
-  const { questions, setQuestions, jobTitle, description, showValidation = false } = props;
+  const { questions, setQuestions, jobTitle, description, showValidation = false, hideSectionNumbers = false } = props;
   const [questionGenPrompt, setQuestionGenPrompt] = useState("");
   const questionCount = 5;
   const [showQuestionModal, setShowQuestionModal] = useState("");
@@ -344,14 +344,24 @@ export default function (props) {
     <div className="layered-card-outer-career">
       <div className="layered-card-middle">
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8 }}
-            className="text-base text-[#181D27] font-bold !text-lg pl-2 md:pl-4 pt-3">
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8 }}>
             {/* <div style={{ width: 32, height: 32, backgroundColor: "#181D27", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <i className="la la-comment-alt" style={{ color: "#FFFFFF", fontSize: 20 }}></i>
                 </div> */}
 
-            <div className="">
+            {/* <div className="">
               <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">AI Interview Screening</span>
+            </div> */}
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <span style={{
+                fontSize: "18px",
+                fontWeight: 700,
+                color: "#181d27",
+                paddingLeft: "8px",
+                paddingTop: "12px"
+              }}>
+                {hideSectionNumbers ? "AI Interview Screening" : "2. AI Interview Screening"}
+              </span>
             </div>
 
             <div style={{ borderRadius: "50%", width: 30, height: 22, border: "1px solid #D5D9EB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, backgroundColor: "#F8F9FC", color: "#181D27", fontWeight: 700 }}>
@@ -382,8 +392,8 @@ export default function (props) {
                 viewBox="0 0 24 24"
                 strokeWidth="2"
                 stroke="#DC2626"
-                className="w-5 h-5"
-                style={{ flexShrink: 0 }}
+                className=""
+                style={{ flexShrink: 0, width: 20, height: 20 }}
               >
                 <path
                   strokeLinecap="round"

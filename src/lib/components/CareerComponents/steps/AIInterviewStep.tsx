@@ -23,6 +23,7 @@ interface AIInterviewStepProps {
     secretPrompt: string;
     setSecretPrompt: (value: string) => void;
     showValidation?: boolean;
+    hideSectionNumbers?: boolean;
 }
 
 export default function AIInterviewStep({
@@ -37,6 +38,7 @@ export default function AIInterviewStep({
     secretPrompt,
     setSecretPrompt,
     showValidation = false,
+    hideSectionNumbers = false,
 }: AIInterviewStepProps) {
     const [showTooltip, setShowTooltip] = useState(false);
     return (
@@ -44,6 +46,11 @@ export default function AIInterviewStep({
             <div className={styles.mainContent}>
                 <div className={`layered-card-outer-career ${styles.cardWrapper}`}>
                     <div className="layered-card-middle">
+                    <div className={styles.headerRow}>
+                            <span className={styles.sectionTitle}>
+                                {hideSectionNumbers ? "AI Interview Settings" : "1. AI Interview Settings"}
+                            </span>
+                        </div>
                         <div className="layered-card-content">
                             {/* //! AI Interview Screening */}
                             <div className={styles.screeningHeader}>
@@ -211,6 +218,7 @@ export default function AIInterviewStep({
                         jobTitle={jobTitle}
                         description={description}
                         showValidation={showValidation}
+                        hideSectionNumbers={hideSectionNumbers}
                     />
                 </div>
 

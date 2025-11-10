@@ -223,17 +223,14 @@ export default function CVReviewStep({
                         </div>
                         <div className={`layered-card-content ${styles.tipsContent}`}>
                             <span>
-                                <span className={styles.tipTextBold}> Use clear, standard job titles</span> for better
-                                searchability (e.g., "Software Engineer" instead of "Code Ninja" or "Tech Rockstar").
+                            <span className={styles.tipTextBold}>Add a Secret Prompt</span> to fine-tune how Jia scores and evaluates submitted CVs.
                             </span>
                             <span>
-                                <span className={styles.tipTextBold}> Avoid abbreviations</span> or internal role codes that applicants may not understand
-                                (e.g., use "QA Engineer" instead of "QE II" or "QA-TL").
+                            <span className={styles.tipTextBold}>Add Pre-Screening Questions</span> to collect key details such as notice period, work setup, or salary expectations to guide your review and candidate discussions. 
+
                             </span>
-                            <span>
-                                <span className={styles.tipTextBold}> Keep it concise</span> — job titles should be no more than a few words
-                                (2–4 max), avoiding fluff or marketing terms.
-                            </span>
+                            
+                            
                         </div>
                     </div>
                 </div>
