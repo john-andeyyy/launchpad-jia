@@ -22,6 +22,8 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
     cvReview: true,
     aiInterview: true,
   });
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
@@ -473,8 +475,18 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                   teamMembers.map((member) => {
                     const isCurrentUser = user?.email === member.email;
                     return (
-                      <div key={member.email} className="flex flex-row items-center gap-3">
-                        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                      <div key={member.email} className="flex flex-row items-center gap-3 relative">
+                        <div 
+                          className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={(e) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            setTooltipPosition({
+                              x: rect.left + rect.width / 2,
+                              y: rect.top + rect.height + 8
+                            });
+                            setSelectedMember(member);
+                          }}
+                        >
                           {member.image ? (
                             <img
                               src={member.image}
@@ -489,21 +501,21 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                             </div>
                           )}
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <div className="flex flex-row items-center gap-2">
-                            <p className="text-base text-[#181D27] font-semibold mb-0">
+                            <p className="text-base text-[#181D27] text-md !font-semibold mb-0 truncate">
                               {member.name}
                             </p>
                             {isCurrentUser && (
-                              <span className="text-sm  text-gray-600">(You)</span>
+                              <span className="text-sm text-gray-600 !font-semibold flex-shrink-0">(You)</span>
                             )}
                           </div>
-                          <p className="text-sm  text-gray-600 truncate mb-0">
+                          <p className="text-sm text-gray-600 truncate mb-0 !font-medium">
                             {member.email}
                           </p>
                         </div>
-                        <div className="flex-shrink-0">
-                          <span className="text-sm  text-gray-600 font-medium">
+                        <div className="flex-shrink-0 ml-4">
+                          <span className="text-sm text-gray-600 font-medium whitespace-nowrap">
                             {member.role}
                           </span>
                         </div>
@@ -516,6 +528,52 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
               </div>
             </div>
           </div>
+
+          {/* Member Details Tooltip/Modal */}
+          {selectedMember && tooltipPosition && (
+            <>
+              {/* Backdrop */}
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => {
+                  setSelectedMember(null);
+                  setTooltipPosition(null);
+                }}
+              />
+              {/* Tooltip */}
+              <div
+                className="fixed z-50 bg-white rounded-lg shadow-lg border border-[#E9EAEB] p-4 min-w-[200px]"
+                style={{
+                  left: `${tooltipPosition.x}px`,
+                  top: `${tooltipPosition.y}px`,
+                  transform: 'translateX(-50%)'
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-base font-semibold text-md !font-semibold text-gray-800 mb-0">
+                      
+                      {selectedMember.name}
+                      {user?.email === selectedMember.email && (
+                        <span className="text-sm text-gray-600 font-normal ml-1">(You)</span>
+                      )}
+                    </p>
+                    <p className="text-sm text-gray-600 mb-0 break-all">
+                      {selectedMember.email}
+                    </p>
+                    <p className="text-sm font-medium text-gray-600 mb-0">
+                      {selectedMember.role}
+                    </p>
+                  </div>
+                </div>
+                {/* Arrow */}
+                <div
+                  className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#E9EAEB] rotate-45"
+                />
+              </div>
+            </>
+          )}
           {/* //! Career Link */}
           <CareerLink career={formData} />
 

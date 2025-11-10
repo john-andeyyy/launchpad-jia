@@ -37,7 +37,9 @@ export default function CustomDropdown(props) {
               style={{ 
                 width: "16px", 
                 height: "16px",
-                opacity: disabled !== undefined && disabled ? 0.5 : 1
+                opacity: disabled !== undefined && disabled ? 0.5 : 1,
+                transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.2s ease"
               }} 
             />
           </button>

@@ -350,7 +350,9 @@
           min-height: auto;
           
           .questionInput {
-            width: 100%;
+            width: auto;
+            min-width: 45%;
+            max-width: 100%;
             padding: 12px 16px;
             border: 1px solid var(--Border-primary, #e9eaeb);
             border-radius: 8px;
@@ -359,12 +361,21 @@
             color: var(--Text-text-primary, #181d27);
             background: var(--Surface-white, #ffffff);
             box-sizing: border-box;
+            display: inline-block;
             
             &:focus {
               outline: none;
               border-color: #6366f1;
               box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
             }
+          }
+          
+          select.questionInput {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23181d27' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
           }
           
           .questionTextarea {
@@ -397,6 +408,8 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            width: auto;
+            min-width: 150px;
             
             label {
               font-weight: 500;
@@ -421,6 +434,7 @@
               
               .questionInput {
                 padding-left: 32px;
+                width: 100%;
               }
             }
           }

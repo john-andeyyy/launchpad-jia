@@ -14,7 +14,7 @@ import { getStage } from "@/lib/Utils";
 // Function to clean HTML content by removing empty divs
 const cleanHtmlContent = (html: string) => {
   if (!html) return html;
-  
+
   // Use regex to remove empty divs (works in both client and server)
   // This approach is safer and doesn't require DOM APIs
   let cleaned = html
@@ -29,7 +29,7 @@ const cleanHtmlContent = (html: string) => {
     // Remove empty divs with just spaces
     .replace(/<div>\s+<\/div>/gi, '')
     .trim();
-  
+
   return cleaned;
 };
 
@@ -547,11 +547,18 @@ export default function ({ modalType, setModalType }) {
         <div className={`${styles.modalContent} ${styles[modalType]} !w-full !max-w-3xl !h-[85%] `}>
           <div className={styles.gradientContainer}>
             <div className={styles.jobDetailsContainer}>
-              {applicationData.jobTitle && (
-                <div className={styles.titleContainer}>
-                  <span>{applicationData.jobTitle}</span>
+
+              <div className="flex items-center justify-between gap-2">
+                {applicationData.jobTitle && (
+                  <div className={styles.titleContainer}>
+                    <span>{applicationData.jobTitle}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <img src={assetConstants.externalLink} alt="" />
+                  <img src={assetConstants.ellipsis} alt="" />
                 </div>
-              )}
+              </div>
 
               {applicationData.organization &&
                 applicationData.organization.name && (
@@ -626,7 +633,7 @@ export default function ({ modalType, setModalType }) {
                     </p>
 
                     {/* Learn More Button */}
-                    <button className="!mt-4 inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium !bg-transparent !text-gray-700 rounded-full hover:bg-gray-100 transition">
+                    <button className="!mt-4 inline-flex items-center gap-2 px-4 py-2 border !border-gray-300 text-sm font-medium !bg-transparent !text-gray-700 rounded-full hover:bg-gray-100 transition">
                       Learn More
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -634,7 +641,7 @@ export default function ({ modalType, setModalType }) {
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="currentColor"
-                        className="w-4 h-4"
+                        className="w-6 h-6"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>

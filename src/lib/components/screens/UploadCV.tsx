@@ -325,6 +325,21 @@ export default function () {
     return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  function areAllQuestionsAnswered() {
+    if (preScreeningQuestions.length === 0) return false;
+    
+    return preScreeningQuestions.every((q) => {
+      const answer = preScreeningAnswers[q.id];
+      if (q.type === "range") {
+        return answer && answer.minValue && answer.maxValue;
+      }
+      if (q.type === "checkboxes") {
+        return Array.isArray(answer) && answer.length > 0;
+      }
+      return answer && answer !== "";
+    });
+  }
+
   function handlePreScreeningContinue() {
     // Validate that all questions are answered
     const unansweredQuestions = preScreeningQuestions.filter((q) => {
@@ -345,8 +360,10 @@ export default function () {
     }
 
     // Show loading screen immediately
+    setCurrentStep(step[2]);
     setIsScreening(true);
     setHasChanges(true);
+
 
     // Organize answers into structured format: [{ id, question, answer }]
     const organizedAnswers = preScreeningQuestions.map((question) => {
@@ -385,7 +402,6 @@ export default function () {
           setIsScreening(false);
           setCurrentStep(step[1]);
         } else {
-          setCurrentStep(step[2]);
           setScreeningResult(result);
           setIsScreening(false);
         }
@@ -700,7 +716,17 @@ export default function () {
                     </div>
                   ))}
                   <button onClick={handleCVScreen}>
-                    Continue <i className="las la-arrow-right !text-white ml-2"></i>
+                    Continue
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
                   </button>
                 </div>
               )}
@@ -757,8 +783,8 @@ export default function () {
                               </select>
                             )}
                             {question.type === "range" && (
-                              <div className="flex flex-row gap-4 w-full">
-                                <div className={styles.rangeInputGroup} style={{ flex: 1 }}>
+                              <div className="flex flex-row gap-4">
+                                <div className={styles.rangeInputGroup}>
                                   <label>Minimum {question.rangeType === "currency" ? "Salary" : "Value"}</label>
                                   <div className={styles.currencyInput}>
                                     {question.rangeType === "currency" && (
@@ -787,7 +813,7 @@ export default function () {
                                     />
                                   </div>
                                 </div>
-                                <div className={styles.rangeInputGroup} style={{ flex: 1 }}>
+                                <div className={styles.rangeInputGroup}>
                                   <label>Maximum {question.rangeType === "currency" ? "Salary" : "Value"}</label>
                                   <div className={styles.currencyInput}>
                                     {question.rangeType === "currency" && (
@@ -898,12 +924,36 @@ export default function () {
                       </div>
                     </div>
                   )}
-                  <button onClick={handlePreScreeningContinue}>
-                    Continue <i className="las la-arrow-right !text-white ml-2"></i>
+                  <button 
+                    onClick={handlePreScreeningContinue}
+                    disabled={!areAllQuestionsAnswered()}
+                    className={!areAllQuestionsAnswered() ? "!bg-gray-300 !border-gray-300 !cursor-not-allowed" : ""}
+                  >
+                    Continue
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
                   </button>
                 </div>
               )}
             </>
+          )}
+
+          {currentStep == step[2] && isScreening && !screeningResult && (
+            <div className={styles.cvScreeningContainer}>
+              <img alt="" src={assetConstants.loading} />
+              <span className={styles.title}>Sit tight!</span>
+              <span className={styles.description}>
+                Jia is checking your qualifications. We'll let you know what's next in just a moment.
+              </span>
+            </div>
           )}
 
           {currentStep == step[2] && screeningResult && (
@@ -975,8 +1025,9 @@ export default function () {
               )}
             </div>
           )}
-        </div>
-      )}
+        </div >
+      )
+      }
     </>
   );
 }

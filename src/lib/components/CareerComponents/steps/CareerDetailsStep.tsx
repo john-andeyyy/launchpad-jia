@@ -4,7 +4,8 @@ import RichTextEditor from "@/lib/components/CareerComponents/RichTextEditor";
 import CustomDropdown from "@/lib/components/CareerComponents/CustomDropdown";
 import TeamAccess, { TeamMember } from "../TeamAccess";
 import philippineCitiesAndProvinces from "../../../../../public/philippines-locations.json";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { assetConstants } from "@/lib/utils/constantsV2";
 
 const employmentTypeOptions = [{ name: "Full-Time" }, { name: "Part-Time" }];
 
@@ -31,6 +32,8 @@ interface CareerDetailsStepProps {
     setMinimumSalary: (value: string) => void;
     maximumSalary: string;
     setMaximumSalary: (value: string) => void;
+    salaryCurrency: string;
+    setSalaryCurrency: (value: string) => void;
     country: string;
     setCountry: (value: string) => void;
     province: string;
@@ -66,6 +69,8 @@ export default function CareerDetailsStep({
     setMinimumSalary,
     maximumSalary,
     setMaximumSalary,
+    salaryCurrency,
+    setSalaryCurrency,
     country,
     setCountry,
     province,
@@ -83,6 +88,9 @@ export default function CareerDetailsStep({
     setFieldErrors,
     hideSectionNumbers = false,
 }: CareerDetailsStepProps) {
+    const [isMinCurrencyOpen, setIsMinCurrencyOpen] = useState(false);
+    const [isMaxCurrencyOpen, setIsMaxCurrencyOpen] = useState(false);
+
     const handleProvinceChange = (selectedProvince: string) => {
         setProvince(selectedProvince);
         const provinceObj = provinceList.find((p) => p.name === selectedProvince);
@@ -215,7 +223,7 @@ export default function CareerDetailsStep({
                             <div className="relative">
                                 <input
                                     value={jobTitle}
-                                    className={`form-control text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : ""}`}
+                                    className={`form-control   text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : "!border-gray-300 !border-1"}`}
                                     placeholder="Enter job title"
                                     onChange={(e) => {
                                         setJobTitle(e.target.value || "");
@@ -381,11 +389,12 @@ export default function CareerDetailsStep({
                                                 <div className="relative">
                                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 
                                                     text-[#6c757d] text-base pointer-events-none z-10">
-                                                        ₱
+                                                        {salaryCurrency === "PHP" ? "₱" : "$"}
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        className={`form-control pl-5 pr-20  text-base ${(fieldErrors.minimumSalary && !salaryNegotiable) ? "!border-[#DC2626]" : ""}`}
+                                                        className={`form-control  pl-5 pr-20  text-base 
+                                                            ${(fieldErrors.minimumSalary && !salaryNegotiable) ? "!border-[#DC2626]" : "!border-1 !border-gray-300 "}`}
                                                         placeholder="0"
                                                         value={minimumSalary}
                                                         onChange={(e) => {
@@ -401,11 +410,30 @@ export default function CareerDetailsStep({
                                                         }}
                                                         disabled={salaryNegotiable}
                                                     />
-                                                    <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d"}`}>
-                                                        PHP
-                                                    </span>
+                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                                                        <select
+                                                            className={`text-md border-none bg-transparent cursor-pointer appearance-none pr-4 ${fieldErrors.minimumSalary ? "text-[#DC2626]" : "text-gray-900"}`}
+                                                            value={salaryCurrency || "PHP"}
+                                                            onChange={(e) => {
+                                                                setSalaryCurrency(e.target.value);
+                                                                setIsMinCurrencyOpen(false);
+                                                            }}
+                                                            onFocus={() => setIsMinCurrencyOpen(true)}
+                                                            onBlur={() => setIsMinCurrencyOpen(false)}
+                                                            disabled={salaryNegotiable}
+                                                        >
+                                                            <option value="PHP">PHP</option>
+                                                            <option value="USD">USD</option>
+                                                        </select>
+                                                        <img 
+                                                            src={assetConstants.chevron} 
+                                                            alt="" 
+                                                            className={`absolute right-0 pointer-events-none transition-transform duration-200 ${isMinCurrencyOpen ? 'rotate-180' : ''}`}
+                                                            style={{ width: '20px', height: '20px' }}
+                                                        />
+                                                    </div>
                                                     {(fieldErrors.minimumSalary && !salaryNegotiable) && (
-                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2 -translate-x-3/2"></i>
+                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute   right-19 top-1/2 -translate-y-1/2"></i>
                                                     )}
                                                 </div>
                                                 {(fieldErrors.minimumSalary && !salaryNegotiable) && (
@@ -417,11 +445,11 @@ export default function CareerDetailsStep({
                                                 <span>Maximum Salary</span>
                                                 <div className="relative">
                                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none z-10">
-                                                        ₱
+                                                        {salaryCurrency === "PHP" ? "₱" : "$"}
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        className={`form-control pl-5 pr-20  text-base ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : ""}`}
+                                                        className={`form-control pl-5 pr-20  text-base ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : "!border-1 !border-gray-300"}`}
                                                         placeholder="0"
                                                         value={maximumSalary}
                                                         disabled={salaryNegotiable}
@@ -435,11 +463,31 @@ export default function CareerDetailsStep({
                                                             }
                                                         }}
                                                     />
-                                                    <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-[#6c757d]"}`}>
-                                                        PHP
-                                                    </span>
+                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                                                        <select
+                                                            className={`text-md border-none bg-transparent cursor-pointer appearance-none pr-4 ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-gray-900"}`}
+                                                            value={salaryCurrency || "PHP"}
+                                                            onChange={(e) => {
+                                                                setSalaryCurrency(e.target.value);
+                                                                setIsMaxCurrencyOpen(false);
+                                                            }}
+                                                            onFocus={() => setIsMaxCurrencyOpen(true)}
+                                                            onBlur={() => setIsMaxCurrencyOpen(false)}
+                                                            disabled={salaryNegotiable}
+                                                        >
+                                                            <option value="PHP">PHP</option>
+                                                            <option value="USD">USD</option>
+                                                        </select>
+                                                        <img 
+                                                            src={assetConstants.chevron} 
+                                                            alt="" 
+                                                            className={`absolute right-0 pointer-events-none transition-transform duration-200 ${isMaxCurrencyOpen ? 'rotate-180' : ''}`}
+                                                            style={{ width: '20px', height: '20px' }}
+                                                        />
+                                                    </div>
                                                     {(fieldErrors.maximumSalary && !salaryNegotiable) && (
-                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2 -translate-x-3/2"></i>
+                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute 
+                                                        right-19 top-1/2 -translate-y-1/2"></i>
                                                     )}
                                                 </div>
 
@@ -465,7 +513,7 @@ export default function CareerDetailsStep({
 
                             <div className="layered-card-content border-none rich-text-editor-wrapper">
                                 {/* <span className="text-base text-[#181D27] font-bold text-lg">Description</span> */}
-                                <div className="">
+                                <div >
                                     <RichTextEditor
                                         setText={(text) => {
                                             setDescription(text);
@@ -475,6 +523,7 @@ export default function CareerDetailsStep({
                                         }}
                                         text={description}
                                         hasError={fieldErrors.description}
+                                        btnBorder={true}
                                     />
                                 </div>
                                 {fieldErrors.description && (

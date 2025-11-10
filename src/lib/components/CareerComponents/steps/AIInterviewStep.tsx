@@ -103,11 +103,10 @@ export default function AIInterviewStep({
                                 </div>
 
                             </div>
-
-                            <div className="border-t border-[#E9EAEB] pt-4">
+                            <div className="">
                                 {/* AI Interview Secret Prompt */}
                                 <div className="space-y-2 border-t border-gray-200 pt-2 mt-2">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 pt-2">
                                         <h3 className="font-semibold text-gray-900 text-lg sm:text-base flex items-center gap-1">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"

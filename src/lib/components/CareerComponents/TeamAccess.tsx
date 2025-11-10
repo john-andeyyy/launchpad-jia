@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAppContext } from "@/lib/context/AppContext";
 import { errorToast } from "@/lib/Utils";
+import { assetConstants } from "@/lib/utils/constantsV2";
 
 export type TeamMemberRole = "Job Owner" | "Contributor" | "Reviewer";
 
@@ -160,7 +161,8 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                                     <i className="la la-user text-base text-gray-500 !text-2xl"></i>
                                     <span className="text-base">Add member</span>
                                 </div>
-                                <i className="la la-chevron-down text-sm text-gray-500"></i>
+                                <img src={assetConstants.chevron} alt="chevron" className="w-5 h-5"
+                                style={{ transform: showMemberDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                             </button>
 
                             {showMemberDropdown && (
@@ -264,8 +266,9 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                                         shadow-sm hover:shadow-md transition-shadow"
                                     >
                                         <span className="font-medium text-base">{member.role}</span>
-                                        <i className="la la-chevron-down text-sm text-[#6B7280]"></i>
-                                    </button>
+                                        <img src={assetConstants.chevron} alt="chevron" className="w-5 h-5"
+                                        style={{ transform: openRoleDropdown === member.email ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                        </button>
                                     {openRoleDropdown === member.email && (
                                         <div className={`absolute  ${hideSectionNumbers ? (" bottom-full  max-h-[200px] p-2 overflow-y-auto") : (" bottom-full")} z-50 right-0 mb-2 bg-white border 
                                         rounded-lg shadow-lg w-full md:w-[400px] overflow-y-auto
@@ -312,7 +315,7 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                                     className="h-10 w-10 flex items-center justify-center !rounded-full !border border-gray-300 
                                     bg-white hover:bg-gray-100 transition cursor-pointer"
                                 >
-                                    <i className="la la-trash text-xl text-gray-600 !text-gray-300"></i>
+                                    <i className="la la-trash text-xl text-gray-600 !text-gray-500"></i>
                                 </button>
                             </div>
                         ))}

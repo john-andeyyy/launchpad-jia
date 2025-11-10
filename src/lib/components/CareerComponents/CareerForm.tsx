@@ -16,6 +16,8 @@ import CareerDetailsStep from "./steps/CareerDetailsStep";
 import CVReviewStep from "./steps/CVReviewStep";
 import AIInterviewStep from "./steps/AIInterviewStep";
 import ReviewCareerStep from "./steps/ReviewCareerStep";
+import { assetConstants } from "@/lib/utils/constantsV2";
+import styles from "@/lib/styles/screens/careerForm.module.scss";
 
 // Setting List icons
 const screeningSettingList = [
@@ -67,6 +69,9 @@ const STEPS = [
     { id: 4, name: "Review Career", key: "review" },
 ];
 
+const step = STEPS.map(s => s.name);
+const stepStatus = ["Completed", "Pending", "In Progress"];
+
 export default function CareerForm({
     career,
     formType,
@@ -111,6 +116,9 @@ export default function CareerForm({
     );
     const [maximumSalary, setMaximumSalary] = useState(
         career?.maximumSalary || ""
+    );
+    const [salaryCurrency, setSalaryCurrency] = useState(
+        career?.salaryCurrency || "PHP"
     );
     const [questions, setQuestions] = useState(
         career?.questions || [
@@ -175,6 +183,25 @@ export default function CareerForm({
     const [teamAccessErrors, setTeamAccessErrors] = useState<string[]>([]);
     const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
     const [showValidation, setShowValidation] = useState(false);
+
+    function processState(index, isAdvance = false) {
+        const currentStepIndex = currentStep - 1; // Convert to 0-based index
+
+        if (currentStepIndex === index) {
+            // Current step
+            // For progress bar (isAdvance = false), show "In Progress" to get partial gradient
+            // For icons/labels (isAdvance = true), show "In Progress"
+            return stepStatus[2]; // "In Progress"
+        }
+
+        if (currentStepIndex > index) {
+            // Past step - completed
+            return stepStatus[0]; // "Completed"
+        }
+
+        // Future step - pending
+        return stepStatus[1]; // "Pending"
+    }
 
     // Initialize teamMembers with current user when user is available
     useEffect(() => {
@@ -243,6 +270,7 @@ export default function CareerForm({
                             setSalaryNegotiable(draft.salaryNegotiable);
                         if (draft.minimumSalary) setMinimumSalary(draft.minimumSalary);
                         if (draft.maximumSalary) setMaximumSalary(draft.maximumSalary);
+                        if (draft.salaryCurrency) setSalaryCurrency(draft.salaryCurrency);
                         if (draft.questions) setQuestions(draft.questions);
                         if (draft.country) setCountry(draft.country);
                         if (draft.province) setProvince(draft.province);
@@ -442,6 +470,7 @@ export default function CareerForm({
             const totalQuestions = questions.reduce((acc, group) => acc + group.questions.length, 0);
             if (totalQuestions < 5) {
                 errors.push("Please add at least 5 interview questions");
+                fieldErrors.questions = true;
             }
         }
 
@@ -545,6 +574,7 @@ export default function CareerForm({
             maximumSalary: isNaN(Number(maximumSalary))
                 ? null
                 : Number(maximumSalary),
+            salaryCurrency,
             country,
             province,
             city,
@@ -659,6 +689,7 @@ export default function CareerForm({
                 maximumSalary: isNaN(Number(maximumSalary))
                     ? null
                     : Number(maximumSalary),
+                salaryCurrency,
                 country,
                 province,
                 city,
@@ -782,6 +813,8 @@ export default function CareerForm({
                         setMinimumSalary={setMinimumSalary}
                         maximumSalary={maximumSalary}
                         setMaximumSalary={setMaximumSalary}
+                        salaryCurrency={salaryCurrency}
+                        setSalaryCurrency={setSalaryCurrency}
                         country={country}
                         setCountry={setCountry}
                         province={province}
@@ -916,84 +949,72 @@ export default function CareerForm({
 
                         {/* //! Progress Indicator */}
                         <div className="w-full border-b pb-2 sm:pb-3">
-                            <div className="w-full py-1 sm:py-1.5">
-                                <div className="flex items-center w-full">
-                                    {STEPS.map((step, index) => {
-                                        const isActive = currentStep === step.id;
-                                        const isCompleted = currentStep > step.id;
-                                        const isFuture = currentStep < step.id;
+                            <div className={styles.stepContainer}>
+                                <div className={styles.step}>
+                                    {step.map((_, index) => {
+                                        const stepId = index + 1;
+                                        const isFuture = currentStep < stepId;
                                         const isClickable = !isFuture;
-                                        const isLast = index === STEPS.length - 1;
-                                        const hasErrors = step.id === 1 && showValidation && Object.keys(fieldErrors).length > 0;
-
+                                        const hasErrors = stepId === currentStep && showValidation && Object.keys(fieldErrors).length > 0;
+                                        
+                                        // Determine which icon to show
+                                        let iconKey;
+                                        if (hasErrors) {
+                                            iconKey = 'alert';
+                                        } else {
+                                            iconKey = processState(index, true).toLowerCase().replace(" ", "_");
+                                        }
+                                        
                                         return (
-                                            <React.Fragment key={step.id}>
-                                                {/* Circle + Label (stacked) */}
-                                                <div className="flex flex-col items-center relative flex-shrink-0">
-                                                    {/* Circle */}
-                                                    <div
-                                                        onClick={() => isClickable && goToStep(step.id)}
-                                                        className={`relative w-6 h-6 rounded-full flex items-center justify-center transition-colors z-10 ${
-                                                            isActive
-                                                                ? hasErrors
-                                                                    ? "bg-white border-none shadow-lg"
-                                                                    : "bg-white border-[#181D27] shadow-lg"
-                                                                : isCompleted
-                                                                    ? "bg-black text-white border-white"
-                                                                    : "bg-white border-[#D5D7DA]"
-                                                        } ${isClickable
-                                                            ? "cursor-pointer hover:scale-110 hover:shadow-md"
-                                                            : isFuture
-                                                                ? "cursor-not-allowed"
-                                                                : "cursor-default"
-                                                        }`}
-                                                    >
-                                                        {isCompleted ? (
-                                                            <i className="la la-check text-base text-white !p-5 !text-1xl"></i>
-                                                        ) : isActive && hasErrors ? (
-                                                            <i className="las la-exclamation-triangle text-[#DC2626] text-2xl"></i>
-                                                        ) : isActive ? (
-                                                            <div className="las la-dot-circle text-black text-3xl"></div>
-                                                        ) : (
-                                                            <i className="las la-dot-circle text-[#D5D7DA] text-3xl"></i>
-                                                        )}
-                                                    </div>
+                                            <div className={styles.stepBar} key={index}>
+                                                <img
+                                                    alt=""
+                                                    src={assetConstants[iconKey]}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        if (isClickable) {
+                                                            goToStep(stepId);
+                                                        }
+                                                    }}
+                                                    style={{ cursor: isClickable ? 'pointer' : 'not-allowed' }}
+                                                    className={`${iconKey === 'alert' ? " !w-10 !h-10" : ""}`}
+                                                />
+                                                {index < step.length - 1 && (() => {
+                                                    const progressState = processState(index);
+                                                    // Convert "Completed", "Pending", "In Progress" to "progressBarCompleted", "progressBarPending", "progressBarInProgress"
+                                                    const progressBarClass = `progressBar${progressState.replace(/ /g, "")}`;
+                                                    return (
+                                                        <hr
+                                                            className={styles[progressBarClass]}
+                                                        />
+                                                    );
+                                                })()}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
 
-                                                    <span
-                                                        onClick={() => isClickable && goToStep(step.id)}
-                                                        className={`mt-2 text-sm sm:text-xs md:text-sm text-center
-                                                            whitespace-nowrap leading-tight transition-colors ${isActive
-                                                                ? "font-semibold text-[#181D27]"
-                                                                : "text-[#6B7280]"
-                                                            } ${isClickable
-                                                                ? "cursor-pointer hover:text-[#181D27]"
-                                                                : isFuture
-                                                                    ? "cursor-not-allowed"
-                                                                    : "cursor-default"
-                                                            }`}
-                                                    >
-                                                        {step.name}
-                                                    </span>
-                                                </div>
-
-                                                {/* LINE (between steps only) - directly connected to circle */}
-                                                {!isLast && (
-                                                    <div className="flex-1 relative h-[3px] sm:h-[4px] md:h-[5px] -ml-[16px] -mr-[16px]">
-                                                        {/* Background line */}
-                                                        <div className="absolute inset-0 bg-[#E5E7EB] rounded-full" />
-
-                                                        {/* Progress line */}
-                                                        {index < currentStep - 1 && (
-                                                            <div
-                                                                className="absolute inset-0 rounded-full"
-                                                                style={{
-                                                                    background: 'linear-gradient(90deg, #9FCAED 0%, #CEB6DA 34%, #EBACC9 67%, #FCCEC0 100%)'
-                                                                }}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </React.Fragment>
+                                <div className={styles.step}>
+                                    {step.map((item, index) => {
+                                        const stepId = index + 1;
+                                        const isFuture = currentStep < stepId;
+                                        const isClickable = !isFuture; // Allow clicking on current and past steps
+                                         // Get state: "completed", "pending", or "in_progress"
+                                        const stateClass = processState(index, true).toLowerCase().replace(" ", "_");
+                                        
+                                        return (
+                                            <span
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    if (isClickable) {
+                                                        goToStep(stepId);
+                                                    }
+                                                }}
+                                                className={`${styles.stepDetails} ${styles[stateClass]} ${isClickable ? "cursor-pointer hover:opacity-80" : "cursor-not-allowed"}`}
+                                                key={index}
+                                            >
+                                                {item}
+                                            </span>
                                         );
                                     })}
                                 </div>

@@ -32,6 +32,7 @@ export default function CareerDetailsModal({ formData, setFormData, onClose }: C
     const [salaryNegotiable, setSalaryNegotiable] = useState(formData.salaryNegotiable || false);
     const [minimumSalary, setMinimumSalary] = useState(formData.minimumSalary || "");
     const [maximumSalary, setMaximumSalary] = useState(formData.maximumSalary || "");
+    const [salaryCurrency, setSalaryCurrency] = useState(formData.salaryCurrency || "PHP");
     const [country, setCountry] = useState(formData.country || "Philippines");
     const [province, setProvince] = useState(formData.province || "");
     const [city, setCity] = useState(formData.location || formData.city || "");
@@ -108,6 +109,7 @@ export default function CareerDetailsModal({ formData, setFormData, onClose }: C
                 updatedAt: Date.now(),
                 minimumSalary: isNaN(Number(minimumSalary)) ? null : Number(minimumSalary),
                 maximumSalary: isNaN(Number(maximumSalary)) ? null : Number(maximumSalary),
+                salaryCurrency,
                 country,
                 province,
                 location: city +", "+province+", "+country,
@@ -164,6 +166,8 @@ export default function CareerDetailsModal({ formData, setFormData, onClose }: C
                 setMinimumSalary={setMinimumSalary}
                 maximumSalary={maximumSalary}
                 setMaximumSalary={setMaximumSalary}
+                salaryCurrency={salaryCurrency}
+                setSalaryCurrency={setSalaryCurrency}
                 country={country}
                 setCountry={setCountry}
                 province={province}
