@@ -544,17 +544,17 @@ export default function ({ modalType, setModalType }) {
       )}
 
       {modalType == modalList[9] && applicationData && (
-        <div className={`${styles.modalContent} ${styles[modalType]} !w-full !max-w-3xl !h-[85%] `}>
+        <div className={`${styles.modalContent} ${styles[modalType]} ${styles.fullWidth}`}>
           <div className={styles.gradientContainer}>
             <div className={styles.jobDetailsContainer}>
 
-              <div className="flex items-center justify-between gap-2">
+              <div className={styles.headerRow}>
                 {applicationData.jobTitle && (
                   <div className={styles.titleContainer}>
                     <span>{applicationData.jobTitle}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-2">
+                <div className={styles.iconContainer}>
                   <img src={assetConstants.externalLink} alt="" />
                   <img src={assetConstants.ellipsis} alt="" />
                 </div>
@@ -582,7 +582,7 @@ export default function ({ modalType, setModalType }) {
               )}
 
               <div>
-                <div className="flex gap-2 !pb-4">
+                <div className={styles.tagsRow}>
                   {applicationData.workSetup && (
                     <div className={styles.tagContainer}>
                       <span>{applicationData.employmentType}</span>
@@ -608,32 +608,31 @@ export default function ({ modalType, setModalType }) {
               />
               <hr />
 
-              <div className="bg-white rounded-2xl !p-6 max-w-3xl">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">About The Company</h2>
+              <div className={styles.companySection}>
+                <h2 className={styles.companyHeading}>About The Company</h2>
 
-                <div className="flex items-start gap-4">
-
-                  <div className="flex-shrink-0">
+                <div className={styles.companyInfoRow}>
+                  <div className={styles.companyImageContainer}>
                     <img
                       src={applicationData.organization.image}
                       alt={applicationData.organization.name}
-                      className="!w-16 !h-16 rounded-xl border border-gray-200 object-contain p-2"
+                      className={styles.companyImage}
                     />
                   </div>
 
-                  <div className="">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                  <div className={styles.companyContent}>
+                    <h3 className={styles.companyName}>
                       {applicationData.organization.name}
                     </h3>
-                    <p className="text-sm text-gray-500 mb-2">
+                    <p className={styles.companyMeta}>
                       {applicationData.organization.industry} | {applicationData.organization.location}
                     </p>
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <p className={styles.companyDescription}>
                       {applicationData.organization.description}
                     </p>
 
                     {/* Learn More Button */}
-                    <button className="!mt-4 inline-flex items-center gap-2 px-4 py-2 border !border-gray-300 text-sm font-medium !bg-transparent !text-gray-700 rounded-full hover:bg-gray-100 transition">
+                    <button className={styles.learnMoreButton}>
                       Learn More
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -641,7 +640,7 @@ export default function ({ modalType, setModalType }) {
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="currentColor"
-                        className="w-6 h-6"
+                        className={styles.iconSvg}
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>

@@ -1,0 +1,325 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-start;
+
+    @media (min-width: 1024px) {
+        flex-direction: row;
+    }
+}
+
+.mainContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 16px;
+
+    @media (min-width: 1024px) {
+        width: 75%;
+    }
+}
+
+.headerRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+    padding-left: 8px;
+    padding-top: 12px;
+
+    @media (min-width: 768px) {
+        padding-left: 16px;
+    }
+}
+
+.basicInfoTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+}
+
+.inputWrapper {
+    position: relative;
+}
+
+.inputErrorIcon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #dc2626;
+    font-size: 24px;
+}
+
+.errorText {
+    color: #dc2626;
+    font-size: 14px;
+}
+
+.workSettingSection {
+    padding-top: 8px;
+
+    @media (min-width: 768px) {
+        padding-top: 0;
+    }
+}
+
+.workSettingContainer {
+    border: none !important;
+    padding-top: 8px;
+
+    @media (min-width: 768px) {
+        padding-top: 0;
+    }
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    @media (min-width: 768px) {
+        gap: 16px;
+    }
+}
+
+.workSettingTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+}
+
+.workSettingGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.textBlack {
+    color: #000000 !important;
+}
+
+.locationSection {
+    padding-top: 8px;
+}
+
+.locationTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+}
+
+.locationGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.salarySection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+}
+
+.salaryHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+
+    @media (min-width: 640px) {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.salaryTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+}
+
+.negotiableContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.negotiableText {
+    font-size: 14px;
+    color: #181d27;
+}
+
+.salaryGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.salaryInputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.currencySymbol {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.salaryInput {
+    padding-left: 30px !important;
+    padding-right: 80px;
+    font-size: 16px;
+}
+
+.currencySelectContainer {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.currencySelect {
+    font-size: 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    padding-right: 16px;
+}
+
+.currencySelectError {
+    color: #dc2626;
+}
+
+.currencySelectNormal {
+    color: #111827;
+}
+
+.chevronIcon {
+    position: absolute;
+    right: 0;
+    pointer-events: none;
+    transition: transform 0.2s;
+}
+
+.chevronRotated {
+    transform: rotate(180deg);
+}
+
+.salaryErrorIcon {
+    position: absolute;
+    right: 76px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #dc2626;
+    font-size: 24px;
+}
+
+.jobDescriptionSection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.richTextEditorWrapper {
+    border: none;
+}
+
+.errorTextBlock {
+    color: #dc2626;
+    font-size: 14px;
+    margin-top: 4px;
+    display: block;
+}
+
+.tipsSidebar {
+    width: 100%;
+
+    @media (min-width: 1024px) {
+        width: 30%;
+        position: sticky;
+        top: 0;
+    }
+}
+
+.tipsHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding-left: 8px;
+    padding-top: 8px;
+
+    @media (min-width: 768px) {
+        padding-left: 20px;
+    }
+}
+
+.tipsHeaderIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.tipsHeaderTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+}
+
+.tipsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tipTextBold {
+    font-weight: 700;
+    color: #000000;
+}
+
+.inputError {
+    border-color: #dc2626 !important;
+}
+
+.inputNormal {
+    border: 1px solid #d1d5db !important;
+    border-width: 1px !important;
+}

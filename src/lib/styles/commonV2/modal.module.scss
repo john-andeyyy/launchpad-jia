@@ -87,6 +87,11 @@
       height: 50%;
       max-width: 620px;
       padding: 0;
+      &.fullWidth {
+        width: 100% !important;
+        max-width: 768px !important;
+        height: 85% !important;
+      }
       .gradientContainer {
         height: 100%;
         width: 100%;
@@ -110,6 +115,7 @@
           display: flex;
           flex-direction: column;
           overflow-y: scroll;
+          overflow-x: hidden;
           padding: 32px;
           position: relative;
           .titleContainer {
@@ -144,6 +150,25 @@
               margin: 12px 0 0 0;
             }
           }
+          .headerRow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+          }
+          
+          .iconContainer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          
+          .tagsRow {
+            display: flex;
+            gap: 8px;
+            padding-bottom: 16px !important;
+          }
+          
           .tagContainer {
             margin: 16px 0 0 0;
             span {
@@ -155,6 +180,101 @@
               font-size: 12px;
               line-height: 16px;
               color: #6a6a6a;
+            }
+          }
+          
+          .companySection {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px !important;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            
+            .companyHeading {
+              font-size: 20px;
+              font-weight: 600;
+              color: #1F2937;
+              margin-bottom: 16px;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+            }
+            
+            .companyInfoRow {
+              display: flex;
+              align-items: flex-start;
+              gap: 16px;
+              width: 100%;
+              box-sizing: border-box;
+            }
+            
+            .companyImageContainer {
+              flex-shrink: 0;
+            }
+            
+            .companyImage {
+              width: 64px !important;
+              height: 64px !important;
+              border-radius: 12px;
+              border: 1px solid #E5E7EB;
+              object-fit: contain;
+              padding: 8px;
+            }
+            
+            .companyContent {
+              flex: 1;
+              min-width: 0;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+            }
+            
+            .companyName {
+              font-size: 18px;
+              font-weight: 600;
+              color: #111827;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+            }
+            
+            .companyMeta {
+              font-size: 14px;
+              color: #6B7280;
+              margin-bottom: 8px;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+            }
+            
+            .companyDescription {
+              color: #4B5563;
+              font-size: 14px;
+              line-height: 1.625;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+            }
+            
+            .learnMoreButton {
+              margin-top: 16px !important;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 8px 16px;
+              border: 1px solid #D1D5DB !important;
+              font-size: 14px;
+              font-weight: 500;
+              background: transparent !important;
+              color: #374151 !important;
+              border-radius: 9999px;
+              transition: background-color 0.2s;
+              
+              &:hover {
+                background-color: #F3F4F6 !important;
+              }
+              
+              .iconSvg {
+                width: 24px;
+                height: 24px;
+              }
             }
           }
           hr {
@@ -278,10 +398,6 @@
       .bold {
         cursor: pointer;
         font-weight: 700;
-        &:hover {
-        }
-        &:active {
-        }
       }
     }
     fieldset {

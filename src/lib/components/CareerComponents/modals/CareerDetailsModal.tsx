@@ -35,7 +35,7 @@ export default function CareerDetailsModal({ formData, setFormData, onClose }: C
     const [salaryCurrency, setSalaryCurrency] = useState(formData.salaryCurrency || "PHP");
     const [country, setCountry] = useState(formData.country || "Philippines");
     const [province, setProvince] = useState(formData.province || "");
-    const [city, setCity] = useState(formData.location || formData.city || "");
+    const [city, setCity] = useState(formData.city || "");
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>(formData.teamMembers || []);
     
     const [provinceList, setProvinceList] = useState<any[]>([]);

@@ -1,7 +1,7 @@
 "use client";
 
 import { assetConstants } from "@/lib/utils/constantsV2";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 interface ReviewSectionProps {
     icon: string;
@@ -22,40 +22,65 @@ export default function ReviewSection({
     children,
     className,
 }: ReviewSectionProps) {
+    const [isToggleHovered, setIsToggleHovered] = useState(false);
+    const [isEditHovered, setIsEditHovered] = useState(false);
+
     return (
         <div className={`layered-card-outer-career ${className}`}>
             <div className="layered-card-middle">
-                <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center gap-2">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center">
-                            {/* <i className={`${icon} text-white text-xl`}></i> */}
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <button
                                 onClick={onToggle}
-                                className="w-8 h-8 flex items-center justify-center hover:bg-[#F3F4F6] rounded-full transition-colors"
+                                onMouseEnter={() => setIsToggleHovered(true)}
+                                onMouseLeave={() => setIsToggleHovered(false)}
+                                style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: isToggleHovered ? '#F3F4F6' : 'transparent',
+                                    borderRadius: '50%',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.2s',
+                                    padding: 0
+                                }}
                             >
-                                <i className={`la la-chevron-${isExpanded ? "up" : "down"} text-[#6B7280] text-base`}></i>
+                                <i className={`la la-chevron-${isExpanded ? "up" : "down"}`} style={{ color: '#6B7280', fontSize: '16px' }}></i>
                             </button>
                         </div>
-                        <span className="text-base text-black font-bold">{title}</span>
+                        <span style={{ fontSize: '16px', color: '#000000', fontWeight: 700 }}>{title}</span>
                     </div>
-                    <div className="flex flex-row items-center  gap-2">
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
                         {onEdit && (
                             <button
                                 onClick={onEdit}
-                                className="w-8 h-8 flex items-center justify-center hover:bg-[#F3F4F6] bg-white rounded-full transition-colors
-                                border !border-gray-300 !rounded-full"
+                                onMouseEnter={() => setIsEditHovered(true)}
+                                onMouseLeave={() => setIsEditHovered(false)}
+                                style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: isEditHovered ? '#F3F4F6' : '#ffffff',
+                                    borderRadius: '50%',
+                                    border: '1px solid #d1d5db',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.2s',
+                                    padding: 0
+                                }}
                                 title="Edit"
                             >
-                                {/* <i className="la la-pen text-[#6B7280]  text-base !text-2xl"></i> */}
-
                                 <img
                                     alt=""
                                     src={assetConstants.edit}
-                                    
                                 />
                             </button>
                         )}
-
                     </div>
                 </div>
                 {isExpanded && (

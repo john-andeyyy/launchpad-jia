@@ -1,0 +1,136 @@
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.modalWrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  height: fit-content;
+  max-height: 80vh;
+  min-width: 400px;
+  max-width: 600px;
+  overflow-y: auto;
+  border-radius: 16px;
+  border: 1px solid #E9EAEB;
+  background: #ffffff;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(30, 32, 60, 0.18);
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconContainer {
+  display: flex;
+  height: 48px;
+  width: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #E9EAEB;
+  background: #FEF3F2;
+}
+
+.icon {
+  font-size: 24px;
+  color: #DC2626;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #181D27;
+}
+
+.errorsContainer {
+  display: flex;
+  max-height: 400px;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.errorItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 8px;
+  border: 1px solid #FEE4E2;
+  background: #FEF3F2;
+  padding: 12px;
+}
+
+.errorBullet {
+  margin-top: 2px;
+  font-size: 16px;
+  color: #DC2626;
+}
+
+.errorText {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+  line-height: 24px;
+  color: #181D27;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.closeButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9999px;
+  border: 1px solid #181D27;
+  background: #181D27;
+  padding: 10px 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #2a2d3a;
+  }
+}
+

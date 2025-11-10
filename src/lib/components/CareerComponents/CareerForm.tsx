@@ -891,29 +891,25 @@ export default function CareerForm({
     };
 
     return (
-        <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 max-h-[calc(100vh-100px)] !pt-0
-        flex flex-col">
-
-            <div className="">
+        <div className={styles.container}>
+            <div>
                 {formType === "add" ? (
                     <>
-                        <div className=" flex flex-row justify-between items-center w-full">
-                            <h1 className="text-2xl font-medium text-[#111827]">
+                        <div className={styles.headerRow}>
+                            <h1 className={styles.title}>
                                 {currentStep !== 1 ? (
                                     <>
-                                        <span className="text-[#6B7280] font-normal">[Draft] </span>
-                                        <span className="font-bold !text-3xl">{jobTitle}</span>
+                                        <span className={styles.draftLabel}>[Draft] </span>
+                                        <span className={styles.draftJobTitle}>{jobTitle}</span>
                                     </>
                                 ) : (
                                     "Add new career"
                                 )}
                             </h1>
-                            <div className="flex flex-row items-center gap-2.5 pb-4">
+                            <div className={styles.buttonGroup}>
                                 <button
                                     disabled={isSavingCareer}
-                                    className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4
-                                    p-2 px-4 !text-sm font-bold !rounded-full
-                                    py-2 rounded-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                                    className={styles.buttonSecondary}
                                     onClick={() => {
                                         saveDraft();
                                         confirmSaveCareer("inactive");
@@ -923,12 +919,7 @@ export default function CareerForm({
                                 </button>
                                 <button
                                     disabled={isSavingCareer}
-                                    className={`w-fit p-2 px-4 !text-sm font-bold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
-                                        disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer flex flex-row items-center gap-2
-                                        ${isSavingCareer
-                                        ? "bg-[#D5D7DA] text-white"
-                                        : "bg-black text-white"
-                                        }`}
+                                    className={`${styles.buttonPrimary} ${isSavingCareer ? styles.buttonPrimaryLoading : styles.buttonPrimaryActive}`}
                                     onClick={() => {
                                         saveDraft();
                                         if (currentStep === STEPS.length) {
@@ -941,14 +932,14 @@ export default function CareerForm({
                                         }
                                     }}
                                 >
-                                    <span className="las la-check-circle text-white text-xl ml-2"></span>
+                                    <span className={`las la-check-circle ${styles.buttonIcon}`}></span>
                                     {currentStep === STEPS.length ? "Publish" : "Save and Continue →"}
                                 </button>
                             </div>
                         </div>
 
                         {/* //! Progress Indicator */}
-                        <div className="w-full border-b pb-2 sm:pb-3">
+                        <div className={styles.progressBorder}>
                             <div className={styles.stepContainer}>
                                 <div className={styles.step}>
                                     {step.map((_, index) => {
@@ -977,7 +968,7 @@ export default function CareerForm({
                                                         }
                                                     }}
                                                     style={{ cursor: isClickable ? 'pointer' : 'not-allowed' }}
-                                                    className={`${iconKey === 'alert' ? " !w-10 !h-10" : ""}`}
+                                                    className={iconKey === 'alert' ? styles.alertIcon : ""}
                                                 />
                                                 {index < step.length - 1 && (() => {
                                                     const progressState = processState(index);
@@ -1010,7 +1001,7 @@ export default function CareerForm({
                                                         goToStep(stepId);
                                                     }
                                                 }}
-                                                className={`${styles.stepDetails} ${styles[stateClass]} ${isClickable ? "cursor-pointer hover:opacity-80" : "cursor-not-allowed"}`}
+                                                className={`${styles.stepDetails} ${styles[stateClass]} ${isClickable ? styles.stepDetailsClickable : styles.stepDetailsDisabled}`}
                                                 key={index}
                                             >
                                                 {item}
@@ -1023,17 +1014,17 @@ export default function CareerForm({
 
 
                         {/* Step Content */}
-                        <div className="mt-4">{renderStepContent()}</div>
+                        <div className={styles.stepContent}>{renderStepContent()}</div>
 
                     </>
                 ) : (
-                    <div className="mb-[35px] flex flex-row justify-between items-center w-full">
-                        <h1 className="text-2xl font-medium text-[#111827]">
+                    <div className={styles.editHeaderRow}>
+                        <h1 className={styles.title}>
                             Edit Career Details
                         </h1>
-                        <div className="flex flex-row items-center gap-2.5">
+                        <div className={styles.editButtonGroup}>
                             <button
-                                className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4 py-2 rounded-full whitespace-nowrap cursor-pointer"
+                                className={styles.editButtonCancel}
                                 onClick={() => {
                                     setShowEditModal?.(false);
                                 }}
@@ -1042,7 +1033,7 @@ export default function CareerForm({
                             </button>
                             <button
                                 disabled={!isFormValid() || isSavingCareer}
-                                className="w-fit text-[#414651] bg-white border border-[#D5D7DA] px-4 py-2 rounded-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
+                                className={styles.editButtonSave}
                                 onClick={() => {
                                     updateCareer("inactive");
                                 }}
@@ -1051,30 +1042,27 @@ export default function CareerForm({
                             </button>
                             <button
                                 disabled={!isFormValid() || isSavingCareer}
-                                className={`w-fit px-4 py-2 rounded-full whitespace-nowrap border border-[#E9EAEB] disabled:cursor-not-allowed disabled:opacity-50 ${!isFormValid() || isSavingCareer
-                                    ? "bg-[#D5D7DA] text-white"
-                                    : "bg-black text-white"
-                                    }`}
+                                className={`${styles.editButtonPublish} ${!isFormValid() || isSavingCareer ? styles.editButtonPublishDisabled : styles.editButtonPublishActive}`}
                                 onClick={() => {
                                     updateCareer("active");
                                 }}
                             >
-                                <i className="la la-check-circle text-white text-xl mr-2"></i>
+                                <i className={`la la-check-circle ${styles.buttonIconRight}`}></i>
                                 Save Changes as Published
                             </button>
                         </div>
                     </div>
                 )}
                 {formType !== "add" && (
-                    <div className="flex flex-row justify-between w-full gap-4 items-start mt-4 ">
-                    <div className="w-[60%] flex flex-col gap-2">
+                    <div className={styles.editLayout}>
+                    <div className={styles.editMainContent}>
                         <div className="layered-card-outer">
                             <div className="layered-card-middle">
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
-                                        <i className="la la-suitcase text-white text-xl"></i>
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.cardIcon}>
+                                        <i className={`la la-suitcase ${styles.cardIconText}`}></i>
                                     </div>
-                                    <span className="text-base text-[#181D27] font-bold">
+                                    <span className={styles.cardTitle}>
                                         Career Information
                                     </span>
                                 </div>
@@ -1101,20 +1089,20 @@ export default function CareerForm({
                             showValidation={showValidation}
                         />
                     </div>
-                    <div className="w-[40%] flex flex-col gap-2">
+                    <div className={styles.editSidebar}>
                         <div className="layered-card-outer">
                             <div className="layered-card-middle">
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
-                                        <i className="la la-cog text-white text-xl"></i>
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.cardIcon}>
+                                        <i className={`la la-cog ${styles.cardIconText}`}></i>
                                     </div>
-                                    <span className="text-base text-[#181D27] font-bold">
+                                    <span className={styles.cardTitle}>
                                         Settings
                                     </span>
                                 </div>
                                 <div className="layered-card-content">
-                                    <div className="flex flex-row gap-2">
-                                        <i className="la la-id-badge text-[#414651] text-xl"></i>
+                                    <div className={styles.screeningHeader}>
+                                        <i className={`la la-id-badge ${styles.screeningIcon}`}></i>
                                         <span>Screening Setting</span>
                                     </div>
                                     <CustomDropdown
@@ -1127,12 +1115,12 @@ export default function CareerForm({
                                     <span>
                                         Jia automatically endorses candidates who meet the chosen criteria.
                                     </span>
-                                    <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#E9EAEB]">
-                                        <div className="flex flex-row items-center gap-2">
-                                            <i className="la la-magic text-[#7C3AED] text-xl"></i>
-                                            <span className="font-medium">CV Secret Prompt (optional)</span>
+                                    <div className={styles.secretPromptSection}>
+                                        <div className={styles.secretPromptHeader}>
+                                            <i className={`la la-magic ${styles.secretPromptIcon}`}></i>
+                                            <span className={styles.cardTitle}>CV Secret Prompt (optional)</span>
                                         </div>
-                                        <p className="text-[#6B7280] text-sm">
+                                        <p className={styles.secretPromptDescription}>
                                             Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
                                         </p>
                                         <textarea
@@ -1143,12 +1131,12 @@ export default function CareerForm({
                                             onChange={(e) => setCvSecretPrompt(e.target.value)}
                                         />
                                     </div>
-                                    <div className="flex flex-row justify-between gap-2 mt-4 pt-4 border-t border-[#E9EAEB]">
-                                        <div className="flex flex-row gap-2">
-                                            <i className="la la-video text-[#414651] text-xl"></i>
+                                    <div className={styles.videoSection}>
+                                        <div className={styles.screeningHeader}>
+                                            <i className={`la la-video ${styles.videoIcon}`}></i>
                                             <span>Require Video Interview</span>
                                         </div>
-                                        <div className="flex flex-row items-start gap-2">
+                                        <div className={styles.videoToggle}>
                                             <label className="switch">
                                                 <input
                                                     type="checkbox"
@@ -1163,7 +1151,6 @@ export default function CareerForm({
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 )}

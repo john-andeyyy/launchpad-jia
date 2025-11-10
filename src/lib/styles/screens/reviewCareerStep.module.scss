@@ -1,0 +1,404 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 80%;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 24px !important;
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grid3Cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  border-bottom: 1px solid #e9eaeb;
+  padding-bottom: 12px;
+}
+
+.borderBottom {
+  border-bottom: 1px solid #e9eaeb;
+  padding-bottom: 12px;
+}
+
+.salaryLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.salaryValue {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.salaryValueNegotiable {
+  color: #6b7280;
+}
+
+.salaryValueNormal {
+  color: #181d27;
+}
+
+.jobDescriptionLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.richTextContent {
+  font-size: 16px;
+  color: #181d27;
+  margin-top: 4px;
+}
+
+.teamAccessLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.teamMembersList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.teamMemberRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatarContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background-color: #e9eaeb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarInitial {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.memberInfo {
+  flex: 1;
+}
+
+.memberNameRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.memberName {
+  font-size: 16px;
+  color: #181d27;
+  font-weight: 600;
+  margin-bottom: 0 !important;
+}
+
+.memberYou {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.memberEmail {
+  font-size: 14px;
+  color: #6b7280;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 0 !important;
+}
+
+.memberRole {
+  flex-shrink: 0;
+  font-size: 16px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.goodFitBadge {
+  display: inline-block;
+  background-color: #e0e7ff;
+  color: #4f46e5;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.secretPromptLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.secretPromptContent {
+  font-size: 16px;
+  color: #181d27;
+  margin-top: 4px;
+  white-space: pre-line;
+}
+
+.preScreeningLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.preScreeningBadge {
+  border: 1px solid #e9eaeb;
+  border-radius: 9999px;
+  padding: 4px 8px;
+}
+
+.preScreeningList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.questionItem {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.questionRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.questionNumber {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  min-width: 24px;
+}
+
+.questionContent {
+  flex: 1;
+}
+
+.questionText {
+  font-size: 16px !important;
+  color: #1f2937 !important;
+  font-weight: 500 !important;
+  margin-bottom: 8px;
+}
+
+.questionOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.questionOption {
+  font-size: 16px;
+  color: #1f2937;
+  padding-left: 16px;
+}
+
+.optionBullet {
+  padding-right: 8px;
+}
+
+.questionRange {
+  font-size: 16px;
+  color: #1f2937;
+  padding-left: 16px;
+}
+
+.questionRangeLabel {
+  padding-right: 4px;
+}
+
+.questionTypePlaceholder {
+  font-size: 16px;
+  color: #6b7280;
+  padding-left: 16px;
+  font-style: italic;
+}
+
+.videoRequirementRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid #d1d5db;
+  border-bottom: 1px solid #d1d5db;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.videoRequirementLabel {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #374151;
+  margin-bottom: 0;
+}
+
+.videoRequirementValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.secretPromptHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.secretPromptIcon {
+  color: #7c3aed;
+  font-size: 18px;
+}
+
+.secretPromptHeaderLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.secretPromptLines {
+  font-size: 16px;
+  color: #181d27;
+  margin-top: 4px;
+  padding-left: 8px;
+}
+
+.secretPromptLine {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.secretPromptBullet {
+  color: #181d27;
+}
+
+.secretPromptLineText {
+  flex: 1;
+}
+
+.questionsHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.questionsLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.questionsBadge {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  border: 1px solid #e9eaeb;
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.questionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.questionGroupCategory {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280 !important;
+  margin-bottom: 4px;
+}
+
+.questionGroupList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 8px;
+}
+
+.questionItemRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.questionItemNumber {
+  font-size: 14px;
+  padding-left: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  min-width: 20px;
+}
+
+.questionItemText {
+  margin-bottom: 0 !important;
+  font-size: 16px;
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  flex: 1;
+}
+

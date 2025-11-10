@@ -13,6 +13,7 @@ import CVReviewModal from "./modals/CVReviewModal";
 import AIInterviewModal from "./modals/AIInterviewModal";
 import TeamAccessModal from "./modals/TeamAccessModal";
 import { assetConstants } from "@/lib/utils/constantsV2";
+import styles from "@/lib/styles/screens/jobDescription.module.scss";
 
 export default function JobDescription({ formData, setFormData, editModal, isEditing, setIsEditing, handleCancelEdit }: { formData: any, setFormData: (formData: any) => void, editModal: boolean, isEditing: boolean, setIsEditing: (isEditing: boolean) => void, handleCancelEdit: () => void }) {
   const { user } = useAppContext();
@@ -52,7 +53,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
       return (
         <span >
           Automatically endorse candidates who are{" "}
-          <span className="inline-block bg-blue-100 text-blue-500 border !border-blue-200 !font-bold px-3 py-1 rounded-full text-sm font-medium">
+          <span className={styles.screeningBadge}>
             Good Fit
           </span>
           {" "}and above
@@ -125,10 +126,10 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
   }
 
   return (
-    <div className="flex flex-col gap-4 max-w-[1400px] w-full mx-auto px-4 py-6 !pt-0">
-      <div className="flex flex-row gap-6 items-start">
+    <div className={`${styles.container} ${styles.noTopPadding}`}>
+      <div className={styles.mainLayout}>
         {/* //? Left Column - Main Content */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className={styles.mainContent}>
           {/* //! Career Details & Team Access Section */}
           <div className="">
             <ReviewSection
@@ -137,32 +138,32 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
               isExpanded={expandedSections.careerDetails}
               onToggle={() => toggleSection("careerDetails")}
               onEdit={() => handleEditSection("careerDetails")}
-              className="!mt-0 !pt-0"
+              className={styles.noMarginTop}
             >
-              <div className="flex flex-col gap-3">
-                <ReviewField label="Job Title" value={formData.jobTitle || "Not set"} className="border-b border-[#E9EAEB] pb-3" />
+              <div className={styles.sectionContent}>
+                <ReviewField label="Job Title" value={formData.jobTitle || "Not set"} className={styles.fieldWithBorder} />
 
-                <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
+                <div className={styles.grid3Cols}>
                   <ReviewField label="Employment Type" value={formData.employmentType || "Not set"} />
                   <ReviewField label="Work Arrangement" value={formData.workSetup || "Not set"} />
                 </div>
 
-                <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
+                <div className={styles.grid3Cols}>
                   <ReviewField label="Country" value={formData.country || "Philippines"} />
                   <ReviewField label="State / Province" value={formData.province || "Not set"} />
                   <ReviewField label="City" value={formData.city || formData.city || "Not set"} />
                 </div>
 
-                <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
+                <div className={styles.grid3Cols}>
                   <div>
-                    <span className="text-md font-semibold text-gray-700">Minimum Salary</span>
-                    <div className="text-base  text-gray-600 mt-1">
+                    <span className={styles.salaryLabel}>Minimum Salary</span>
+                    <div className={styles.salaryValue}>
                       {formatSalaryValue(formData.minimumSalary, formData.salaryNegotiable)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-md font-semibold text-gray-700">Maximum Salary</span>
-                    <div className={`text-base mt-1  text-gray-600`}>
+                    <span className={styles.salaryLabel}>Maximum Salary</span>
+                    <div className={styles.salaryValue}>
                       {formatSalaryValue(formData.maximumSalary, formData.salaryNegotiable)}
                     </div>
                   </div>
@@ -170,82 +171,14 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
 
                 {/* //! Job Description */}
                 {formData.description && (
-                  <div className=" pb-3">
-                    <span className="text-md font-semibold text-gray-700">Job Description</span>
+                  <div className={styles.jobDescriptionContainer}>
+                    <span className={styles.jobDescriptionLabel}>Job Description</span>
                     <div
-                      className="  mt-1 rich-text-content !text-gray-800"
+                      className={styles.jobDescriptionContent}
                       dangerouslySetInnerHTML={{
                         __html: formData.description
                       }}
                     />
-                    <style dangerouslySetInnerHTML={{
-                      __html: `
-                                              .rich-text-content {
-                                                  line-height: 1.7;
-                                                  color: #181D27;
-                                              }
-                                              .rich-text-content b,
-                                              .rich-text-content strong {
-                                                  font-weight: 700;
-                                                  color: #181D27;
-                                              }
-                                              .rich-text-content i,
-                                              .rich-text-content em {
-                                                  font-style: italic;
-                                              }
-                                              .rich-text-content u {
-                                                  text-decoration: underline;
-                                              }
-                                              .rich-text-content p {
-                                                  margin-bottom: 12px;
-                                                  line-height: 1.7;
-                                              }
-                                              .rich-text-content > div {
-                                                  margin-bottom: 12px;
-                                                  line-height: 1.7;
-                                              }
-                                              .rich-text-content div:empty {
-                                                  margin-bottom: 8px;
-                                              }
-                                              .rich-text-content ul {
-                                                  list-style-type: disc;
-                                                  margin-left: 24px;
-                                                  margin-top: 12px;
-                                                  margin-bottom: 12px;
-                                                  padding-left: 24px;
-                                              }
-                                              .rich-text-content ol {
-                                                  list-style-type: decimal;
-                                                  margin-left: 24px;
-                                                  margin-top: 12px;
-                                                  margin-bottom: 12px;
-                                                  padding-left: 24px;
-                                              }
-                                              .rich-text-content li {
-                                                  margin-bottom: 8px;
-                                                  display: list-item;
-                                                  line-height: 1.7;
-                                                  padding-left: 4px;
-                                              }
-                                              .rich-text-content ul ul,
-                                              .rich-text-content ol ul {
-                                                  list-style-type: disc;
-                                                  margin-top: 8px;
-                                                  margin-bottom: 8px;
-                                              }
-                                              .rich-text-content ul ul li {
-                                                  margin-bottom: 6px;
-                                              }
-                                              .rich-text-content br {
-                                                  line-height: 1.7;
-                                              }
-                                              .rich-text-content div br {
-                                                  display: block;
-                                                  margin-top: 8px;
-                                                  content: "";
-                                              }
-                                          `
-                    }} />
                   </div>
                 )}
               </div>
@@ -262,16 +195,16 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
             onEdit={() => handleEditSection("cvReview")}
 
           >
-            <div className="flex flex-col gap-4">
+            <div className={styles.sectionContent}>
               <ReviewField
                 label="CV Screening"
                 value={getScreeningSettingDisplay(formData.cvScreeningSetting || formData.screeningSetting)}
               />
 
               {formData.cvSecretPrompt && (
-                <div className="border-t border-[#E9EAEB] pt-3 ">
-                  <span className="text-md font-semibold text-gray-800">CV Secret Prompt</span>
-                  <div className="text-base text-gray-600 mt-1 whitespace-pre-line pl-2">
+                <div className={styles.secretPromptSection}>
+                  <span className={styles.secretPromptLabel}>CV Secret Prompt</span>
+                  <div className={styles.secretPromptContent}>
                     {formData.cvSecretPrompt.split('\n').map((line: string, idx: number) => (
                       <div key={idx}>{line}</div>
                     ))}
@@ -280,44 +213,44 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
               )}
 
               {formData.preScreeningQuestions && formData.preScreeningQuestions.length > 0 && (
-                <div className="border-t border-[#E9EAEB] pt-4">
-                  <div className="flex flex-row items-center gap-2 mb-4">
-                    <span className="text-sm font-semibold text-gray-700">
+                <div className={styles.preScreeningSection}>
+                  <div className={styles.preScreeningHeader}>
+                    <span className={styles.preScreeningLabel}>
                       Pre-Screening Questions
                     </span>
-                    <span className="w-6 h-6 rounded-full border border-[#E9EAEB] bg-white flex items-center justify-center text-xs font-semibold text-gray-700">
+                    <span className={styles.preScreeningCount}>
                       {formData.preScreeningQuestions.length}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className={styles.preScreeningList}>
                     {formData.preScreeningQuestions.map((question: any, index: number) => (
-                      <div key={question.id || index}>
-                        <div className="flex flex-row items-start">
-                          <span className="text-base font-semibold text-gray-800 min-w-[24px]">
+                      <div key={question.id || index} className={styles.preScreeningItem}>
+                        <div className={styles.preScreeningItemContent}>
+                          <span className={styles.preScreeningNumber}>
                             {index + 1}.
                           </span>
-                          <div className="flex-1">
-                            <p className=" text-gray-600 !text-md !font-bold  mb-1">
+                          <div className={styles.preScreeningQuestion}>
+                            <p className={styles.preScreeningQuestionText}>
                               {question.question}
                             </p>
                             {question.type === "dropdown" || question.type === "checkboxes" ? (
                               question.options && question.options.length > 0 ? (
-                                <div className="flex flex-col ">
+                                <div className={styles.preScreeningOptions}>
                                   {question.options.map((option: any) => (
-                                    <div key={option.id} className="text-base text-gray-700 flex items-center">
-                                      <span className="mr-2 mt-1">•</span>
+                                    <div key={option.id} className={styles.preScreeningOption}>
+                                      <span className={styles.bullet}>•</span>
                                       <span>{option.value}</span>
                                     </div>
                                   ))}
                                 </div>
                               ) : null
                             ) : question.type === "range" ? (
-                              <div className="text-base text-gray-700">
+                              <div className={styles.preScreeningRange}>
                                 {question.rangeType === "currency" && question.currency && (
-                                  <div className="flex items-start">
-                                    <span className="mr-2">•</span>
+                                  <div className={styles.preScreeningRangeItem}>
+                                    <span className={styles.bullet}>•</span>
                                     <span>
-                                      <span className="font-medium">Preferred: </span>
+                                      <span className={styles.preScreeningRangeLabel}>Preferred: </span>
                                       {question.currency === "PHP" ? "PHP" : "$"}
                                       {question.minValue || "0"} - {question.currency === "PHP" ? "" : "$"}
                                       {question.maxValue || "0"} {question.currency}
@@ -325,8 +258,8 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                                   </div>
                                 )}
                                 {question.rangeType === "number" && (
-                                  <div className="flex items-start">
-                                    <span className="mr-2">•</span>
+                                  <div className={styles.preScreeningRangeItem}>
+                                    <span className={styles.bullet}>•</span>
                                     <span>
                                       {question.minValue || "0"} - {question.maxValue || "0"}
                                     </span>
@@ -334,7 +267,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                                 )}
                               </div>
                             ) : (
-                              <div className="text-base text-gray-500 italic">
+                              <div className={styles.preScreeningTypeHint}>
                                 {question.type === "short-answer" && "Short answer"}
                                 {question.type === "long-answer" && "Long answer"}
                                 {question.type === "text" && "Text input"}
@@ -358,40 +291,42 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
             onToggle={() => toggleSection("aiInterview")}
             onEdit={() => handleEditSection("aiInterview")}
           >
-            <div className="flex flex-col gap-4">
+            <div className={styles.sectionContent}>
               <ReviewField
                 label="AI Interview Screening"
                 value={getScreeningSettingDisplay(formData.aiInterviewScreeningSetting || formData.screeningSetting)}
               />
 
-              <div className="flex flex-row items-center justify-between gap-2 border-y pt-3 border-gray-300 pb-3">
-                <p className="!text-md font-semibold text-gray-700 mb-0 !font-bold">Require Video Interview</p>
-                <div className="text-md font-bold text-gray-800 x-2 flex items-center gap-2">
+              <div className={styles.videoSection}>
+                <p className={styles.videoLabel}>Require Video Interview</p>
+                <div className={styles.videoValue}>
                   {formData.requireVideo ? "Yes" : "No"}
                   {formData.requireVideo ? <img
                     alt=""
                     src={assetConstants.checkV2}
+                    className={styles.videoIcon}
                   /> : <img
                     alt=""
                     src={assetConstants.xV2}
+                    className={styles.videoIcon}
                   />}
                 </div>
               </div>
 
               {formData.aiInterviewSecretPrompt && (
-                <div className="border-b border-gray-300 pb-3">
-                  <div className="flex flex-row items-center gap-2 mb-2">
-                    <i className="la la-magic text-[#7C3AED] text-lg"></i>
-                    <span className="text-sm font-semibold text-gray-800">AI Interview Secret Prompt</span>
+                <div className={styles.aiSecretPromptSection}>
+                  <div className={styles.aiSecretPromptHeader}>
+                    <i className={`la la-magic ${styles.aiSecretPromptIcon}`}></i>
+                    <span className={styles.aiSecretPromptLabel}>AI Interview Secret Prompt</span>
                   </div>
-                  <div className="text-base text-[#181D27] mt-1 pl-2">
+                  <div className={styles.aiSecretPromptContent}>
                     {formData.aiInterviewSecretPrompt.split('\n').map((line: string, idx: number) => {
                       const cleanLine = line.replace(/^•\s*/, '').trim();
                       if (!cleanLine) return null;
                       return (
-                        <div key={idx} className="flex flex-row items-start gap-2 mb-1">
-                          <span className="text-[#181D27]">•</span>
-                          <span className="flex-1">{cleanLine}</span>
+                        <div key={idx} className={styles.aiSecretPromptLine}>
+                          <span className={styles.bullet}>•</span>
+                          <span className={styles.text}>{cleanLine}</span>
                         </div>
                       );
                     })}
@@ -400,14 +335,14 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
               )}
 
               {formData.questions && formData.questions.length > 0 && (
-                <div className="pb-3">
-                  <div className="flex flex-row items-center gap-2 mb-3">
-                    <span className="text-md font-semibold text-gray-700">Interview Questions</span>
-                    <span className="bg-[#F3F4F6]  text-gray-600 text-xs font-medium px-2 py-1 rounded-full border border-[#E9EAEB]">
+                <div className={styles.questionsSection}>
+                  <div className={styles.questionsHeader}>
+                    <span className={styles.questionsLabel}>Interview Questions</span>
+                    <span className={styles.questionsCount}>
                       {getTotalQuestionsCount()}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-4 mt-2">
+                  <div className={styles.questionsList}>
                     {formData.questions.map((group: any, groupIdx: number) => {
                       if (!group.questions || group.questions.length === 0) return null;
 
@@ -418,22 +353,22 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                         }
                       }
                       return (
-                        <div key={groupIdx} className="flex flex-col gap-2">
-                          <div className="text-sm font-bold text-gray-700 mb-1">
+                        <div key={groupIdx} className={styles.questionGroup}>
+                          <div className={styles.questionGroupCategory}>
                             {group.category}
                           </div>
-                          <div className="flex flex-col gap-2 pl-2">
+                          <div className={styles.questionGroupList}>
                             {group.questions.map((question: any, qIdx: number) => {
                               const currentQuestionNumber = questionNumber + qIdx;
                               const questionText = typeof question === 'string'
                                 ? question
                                 : (question.question || question.text || '');
                               return (
-                                <div key={question.id || qIdx} className="flex flex-row items-start gap-2">
-                                  <span className="text-sm pl-3 font-semibold  text-gray-600 min-w-[20px] pt-1">
+                                <div key={question.id || qIdx} className={styles.questionItem}>
+                                  <span className={styles.questionNumber}>
                                     {currentQuestionNumber}.
                                   </span>
-                                  <span className="mb-0 text-gray-600 !text-base flex-1 justify-center items-center ">
+                                  <span className={styles.questionText}>
                                     {questionText}
                                   </span>
                                 </div>
@@ -451,33 +386,32 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
         </div>
 
         {/* //! Right Column - Sidebar */}
-        <div className="w-[400px] flex flex-col">
+        <div className={styles.sidebar}>
           {/* //! Team Access Section */}
-          <div className="layered-card-outer-career !mt-0 !pt-0">
+          <div className={`layered-card-outer-career ${styles.teamAccessCard}`}>
             <div className="layered-card-middle">
-              <div className="flex flex-row items-center justify-between">
-                <div className="flex flex-row items-center gap-2">
-                  <span className="text-base text-black font-bold pl-2">Team Access</span>
+              <div className={styles.teamAccessHeader}>
+                <div className={styles.teamAccessTitle}>
+                  <span className={styles.teamAccessTitleText}>Team Access</span>
                 </div>
-                <div className="flex flex-row items-center gap-2">
+                <div className={styles.teamAccessActions}>
                   <button
                     onClick={() => handleEditSection("teamAccess")}
-                    className="w-8 h-8 flex items-center justify-center hover:bg-[#F3F4F6] rounded-full transition-colors
-                                border !border-gray-500 !rounded-full"
+                    className={styles.editButton}
                     title="Edit"
                   >
-                    <i className="la la-pen text-[#6B7280] text-base !text-2xl"></i>
+                    <i className={`la la-pen ${styles.editIcon}`}></i>
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col gap-3 layered-card-content">
+              <div className={`${styles.teamMembersList} layered-card-content`}>
                 {teamMembers.length > 0 ? (
                   teamMembers.map((member) => {
                     const isCurrentUser = user?.email === member.email;
                     return (
-                      <div key={member.email} className="flex flex-row items-center gap-3 relative">
+                      <div key={member.email} className={styles.teamMemberItem}>
                         <div 
-                          className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                          className={styles.teamMemberAvatar}
                           onClick={(e) => {
                             const rect = e.currentTarget.getBoundingClientRect();
                             setTooltipPosition({
@@ -491,31 +425,31 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                             <img
                               src={member.image}
                               alt={member.name}
-                              className="w-full h-full object-cover"
+                              className={styles.teamMemberAvatarImg}
                             />
                           ) : (
-                            <div className="w-full h-full bg-[#E9EAEB] flex items-center justify-center">
-                              <span className="text-[#6B7280] text-sm font-semibold">
+                            <div className={styles.teamMemberAvatarPlaceholder}>
+                              <span className={styles.teamMemberAvatarInitial}>
                                 {member.name.charAt(0).toUpperCase()}
                               </span>
                             </div>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-row items-center gap-2">
-                            <p className="text-base text-[#181D27] text-md !font-semibold mb-0 truncate">
+                        <div className={styles.teamMemberInfo}>
+                          <div className={styles.teamMemberNameRow}>
+                            <p className={styles.teamMemberName}>
                               {member.name}
                             </p>
                             {isCurrentUser && (
-                              <span className="text-sm text-gray-600 !font-semibold flex-shrink-0">(You)</span>
+                              <span className={styles.teamMemberYou}>(You)</span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 truncate mb-0 !font-medium">
+                          <p className={styles.teamMemberEmail}>
                             {member.email}
                           </p>
                         </div>
-                        <div className="flex-shrink-0 ml-4">
-                          <span className="text-sm text-gray-600 font-medium whitespace-nowrap">
+                        <div className={styles.teamMemberRole}>
+                          <span className={styles.teamMemberRoleText}>
                             {member.role}
                           </span>
                         </div>
@@ -523,7 +457,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                     );
                   })
                 ) : (
-                  <div className="text-sm  text-gray-600">No team members added</div>
+                  <div className={styles.noTeamMembers}>No team members added</div>
                 )}
               </div>
             </div>
@@ -534,7 +468,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
             <>
               {/* Backdrop */}
               <div
-                className="fixed inset-0 z-40"
+                className={styles.tooltipBackdrop}
                 onClick={() => {
                   setSelectedMember(null);
                   setTooltipPosition(null);
@@ -542,7 +476,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
               />
               {/* Tooltip */}
               <div
-                className="fixed z-50 bg-white rounded-lg shadow-lg border border-[#E9EAEB] p-4 min-w-[200px]"
+                className={styles.tooltip}
                 style={{
                   left: `${tooltipPosition.x}px`,
                   top: `${tooltipPosition.y}px`,
@@ -550,27 +484,24 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col gap-1">
-                    <p className="text-base font-semibold text-md !font-semibold text-gray-800 mb-0">
-                      
+                <div className={styles.tooltipContent}>
+                  <div className={styles.tooltipNameRow}>
+                    <p className={styles.tooltipName}>
                       {selectedMember.name}
                       {user?.email === selectedMember.email && (
-                        <span className="text-sm text-gray-600 font-normal ml-1">(You)</span>
+                        <span className={styles.tooltipYou}>(You)</span>
                       )}
                     </p>
-                    <p className="text-sm text-gray-600 mb-0 break-all">
+                    <p className={styles.tooltipEmail}>
                       {selectedMember.email}
                     </p>
-                    <p className="text-sm font-medium text-gray-600 mb-0">
+                    <p className={styles.tooltipRole}>
                       {selectedMember.role}
                     </p>
                   </div>
                 </div>
                 {/* Arrow */}
-                <div
-                  className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#E9EAEB] rotate-45"
-                />
+                <div className={styles.tooltipArrow} />
               </div>
             </>
           )}
@@ -583,24 +514,20 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
           {/* //! Advanced Settings */}
           <div className="layered-card-outer-career">
             <div className="layered-card-middle">
-              <div className="flex flex-row items-center gap-2">
-                <span className="text-base text-black font-bold pl-2">Advanced Settings</span>
+              <div className={styles.advancedSettingsHeader}>
+                <span className={styles.advancedSettingsTitle}>Advanced Settings</span>
               </div>
-              <div className=" layered-card-content">
-                <div className="flex flex-col gap-3">
-                  <button
-                    onClick={deleteCareer}
-                    className="flex flex-row items-center justify-center gap-2 bg-white text-[#B32318] border 
-                  !bg-red-50 !rounded-full px-4 py-2 cursor-pointer 
-                  font-bold text-sm !hover:bg-[#B32318]  transition-colors "
-                  >
-                    <i className="la la-trash text-danger text-lg"></i>
-                    <span>Delete this career</span>
-                  </button>
-                  <span className="text-sm text-[#717680] text-center">
-                    Be careful, this action cannot be undone.
-                  </span>
-                </div>
+              <div className={`${styles.advancedSettingsContent} layered-card-content`}>
+                <button
+                  onClick={deleteCareer}
+                  className={styles.deleteButton}
+                >
+                  <i className={`la la-trash ${styles.deleteIcon}`}></i>
+                  <span>Delete this career</span>
+                </button>
+                <span className={styles.deleteWarning}>
+                  Be careful, this action cannot be undone.
+                </span>
               </div>
             </div>
           </div>

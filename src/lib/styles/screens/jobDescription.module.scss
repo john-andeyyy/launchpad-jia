@@ -1,0 +1,747 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1400px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+
+    &.noTopPadding {
+        padding-top: 0 !important;
+    }
+}
+
+.mainLayout {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sectionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fieldWithBorder {
+    border-bottom: 1px solid #E9EAEB;
+    padding-bottom: 12px;
+}
+
+.grid3Cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    border-bottom: 1px solid #E9EAEB;
+    padding-bottom: 12px;
+}
+
+.noMarginTop {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.value {
+    font-size: 16px;
+    color: #4B5563;
+    margin-top: 4px;
+}
+
+.salaryLabel {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.salaryValue {
+    font-size: 16px;
+    color: #4B5563;
+    margin-top: 4px;
+}
+
+.jobDescriptionContainer {
+    padding-bottom: 12px;
+}
+
+.jobDescriptionLabel {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.jobDescriptionContent {
+    margin-top: 4px;
+    color: #1F2937;
+
+    :global(.rich-text-content) {
+        line-height: 1.7;
+        color: #181D27;
+
+        b,
+        strong {
+            font-weight: 700;
+            color: #181D27;
+        }
+
+        i,
+        em {
+            font-style: italic;
+        }
+
+        u {
+            text-decoration: underline;
+        }
+
+        p {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        > div {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        div:empty {
+            margin-bottom: 8px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 24px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding-left: 24px;
+        }
+
+        ol {
+            list-style-type: decimal;
+            margin-left: 24px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            display: list-item;
+            line-height: 1.7;
+            padding-left: 4px;
+        }
+
+        ul ul,
+        ol ul {
+            list-style-type: disc;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        ul ul li {
+            margin-bottom: 6px;
+        }
+
+        br {
+            line-height: 1.7;
+        }
+
+        div br {
+            display: block;
+            margin-top: 8px;
+            content: "";
+        }
+    }
+}
+
+.screeningBadge {
+    display: inline-block;
+    background-color: #DBEAFE;
+    color: #3B82F6;
+    border: 1px solid #BFDBFE;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.secretPromptSection {
+    border-top: 1px solid #E9EAEB;
+    padding-top: 12px;
+}
+
+.secretPromptLabel {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.secretPromptContent {
+    font-size: 16px;
+    color: #4B5563;
+    margin-top: 4px;
+    white-space: pre-line;
+    padding-left: 8px;
+}
+
+.preScreeningSection {
+    border-top: 1px solid #E9EAEB;
+    padding-top: 16px;
+}
+
+.preScreeningHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.preScreeningLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.preScreeningCount {
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    border: 1px solid #E9EAEB;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.preScreeningList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.preScreeningItemContent {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.preScreeningNumber {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    min-width: 24px;
+}
+
+.preScreeningQuestion {
+    flex: 1;
+}
+
+.preScreeningQuestionText {
+    font-size: 16px;
+    font-weight: 700;
+    color: #4B5563;
+    margin-bottom: 4px;
+}
+
+.preScreeningOptions {
+    display: flex;
+    flex-direction: column;
+}
+
+.preScreeningOption {
+    font-size: 16px;
+    color: #374151;
+    display: flex;
+    align-items: center;
+}
+
+.bullet {
+    margin-right: 8px;
+    margin-top: 4px;
+}
+
+.preScreeningRange {
+    font-size: 16px;
+    color: #374151;
+}
+
+.preScreeningRangeItem {
+    display: flex;
+    align-items: flex-start;
+}
+
+.preScreeningRangeLabel {
+    font-weight: 500;
+}
+
+.preScreeningTypeHint {
+    font-size: 16px;
+    color: #6B7280;
+    font-style: italic;
+}
+
+.videoSection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid #D1D5DB;
+    border-bottom: 1px solid #D1D5DB;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.videoLabel {
+    font-size: 16px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 0;
+}
+
+.videoValue {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aiSecretPromptSection {
+    border-bottom: 1px solid #D1D5DB;
+    padding-bottom: 12px;
+}
+
+.aiSecretPromptHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.aiSecretPromptIcon {
+    color: #7C3AED;
+    font-size: 18px;
+}
+
+.aiSecretPromptLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.aiSecretPromptContent {
+    font-size: 16px;
+    color: #181D27;
+    margin-top: 4px;
+    padding-left: 8px;
+}
+
+.aiSecretPromptLine {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.text {
+    flex: 1;
+}
+
+.questionsSection {
+    padding-bottom: 12px;
+}
+
+.questionsHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.questionsLabel {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.questionsCount {
+    background-color: #F3F4F6;
+    color: #4B5563;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 9999px;
+    border: 1px solid #E9EAEB;
+}
+
+.questionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.questionGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.questionGroupCategory {
+    font-size: 14px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.questionGroupList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 8px;
+}
+
+.questionItem {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.questionNumber {
+    font-size: 14px;
+    padding-left: 12px;
+    font-weight: 600;
+    color: #4B5563;
+    min-width: 20px;
+    padding-top: 4px;
+}
+
+.questionText {
+    margin-bottom: 0;
+    color: #4B5563;
+    font-size: 16px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+// Sidebar styles
+.sidebar {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.teamAccessCard {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.teamAccessHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.teamAccessTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.teamAccessTitleText {
+    font-size: 16px;
+    color: #000000;
+    font-weight: 700;
+    padding-left: 8px;
+}
+
+.teamAccessActions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.editButton {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 1px solid #6B7280;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #F3F4F6;
+    }
+}
+
+.editIcon {
+    color: #6B7280;
+    font-size: 24px;
+}
+
+.teamMembersList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.teamMemberItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.teamMemberAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.teamMemberAvatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.teamMemberAvatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    background-color: #E9EAEB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.teamMemberAvatarInitial {
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.teamMemberInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.teamMemberNameRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.teamMemberName {
+    font-size: 16px;
+    color: #181D27;
+    font-weight: 600;
+    margin-bottom: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.teamMemberYou {
+    font-size: 14px;
+    color: #4B5563;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.teamMemberEmail {
+    font-size: 14px;
+    color: #4B5563;
+    margin-bottom: 0;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.teamMemberRole {
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+.teamMemberRoleText {
+    font-size: 14px;
+    color: #4B5563;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.noTeamMembers {
+    font-size: 14px;
+    color: #4B5563;
+}
+
+// Tooltip styles
+.tooltipBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+}
+
+.tooltip {
+    position: fixed;
+    z-index: 50;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E9EAEB;
+    padding: 16px;
+    min-width: 200px;
+}
+
+.tooltipContent {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tooltipNameRow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tooltipName {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 0;
+}
+
+.tooltipYou {
+    font-size: 14px;
+    color: #4B5563;
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.tooltipEmail {
+    font-size: 14px;
+    color: #4B5563;
+    margin-bottom: 0;
+    word-break: break-all;
+}
+
+.tooltipRole {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4B5563;
+    margin-bottom: 0;
+}
+
+.tooltipArrow {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background-color: #FFFFFF;
+    border-left: 1px solid #E9EAEB;
+    border-top: 1px solid #E9EAEB;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+// Advanced Settings
+.advancedSettingsHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.advancedSettingsTitle {
+    font-size: 16px;
+    color: #000000;
+    font-weight: 700;
+    padding-left: 8px;
+}
+
+.advancedSettingsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.deleteButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #FEF2F2;
+    color: #B32318;
+    border: none;
+    border-radius: 9999px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background-color 0.2s;
+
+    // &:hover {
+    //     background-color: #B32318;
+    //     color: #FFFFFF;
+    // }
+}
+
+.deleteIcon {
+    color: #DC2626;
+    font-size: 18px;
+}
+
+.deleteWarning {
+    font-size: 14px;
+    color: #717680;
+    text-align: center;
+}
+

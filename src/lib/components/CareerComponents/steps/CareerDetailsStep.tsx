@@ -6,6 +6,7 @@ import TeamAccess, { TeamMember } from "../TeamAccess";
 import philippineCitiesAndProvinces from "../../../../../public/philippines-locations.json";
 import { useEffect, useState } from "react";
 import { assetConstants } from "@/lib/utils/constantsV2";
+import styles from "@/lib/styles/screens/careerDetailsStep.module.scss";
 
 const employmentTypeOptions = [{ name: "Full-Time" }, { name: "Part-Time" }];
 
@@ -202,28 +203,27 @@ export default function CareerDetailsStep({
     }, []);
 
     return (
-        <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
-            <div className="w-full lg:w-[75%] flex flex-col gap-4 pb-4">
+        <div className={styles.container}>
+            <div className={styles.mainContent}>
                 {/* Basic Information */}
 
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <div className="flex flex-row items-center gap-2">
-
-                            <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
+                        <div className={styles.headerRow}>
+                            <span className={styles.sectionTitle}>
                                 {hideSectionNumbers ? "Career Information" : "1. Career Information"}
                             </span>
                         </div>
                         <div className="layered-card-content">
-                            <span className="text-base text-[#181D27] font-bold text-lg">
+                            <span className={styles.basicInfoTitle}>
                                 Basic Information
                             </span>
                             {/* //!Job Title */}
                             <span>Job Title</span>
-                            <div className="relative">
+                            <div className={styles.inputWrapper}>
                                 <input
                                     value={jobTitle}
-                                    className={`form-control   text-base ${fieldErrors.jobTitle ? "!border-[#DC2626]" : "!border-gray-300 !border-1"}`}
+                                    className={`form-control ${styles.salaryInput} ${fieldErrors.jobTitle ? styles.inputError : styles.inputNormal}`}
                                     placeholder="Enter job title"
                                     onChange={(e) => {
                                         setJobTitle(e.target.value || "");
@@ -233,25 +233,25 @@ export default function CareerDetailsStep({
                                     }}
                                 />
                                 {fieldErrors.jobTitle && (
-                                    <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute right-3 top-1/2 -translate-y-1/2"></i>
+                                    <i className={`las la-exclamation-circle ${styles.inputErrorIcon}`}></i>
                                 )}
                             </div>
                             {fieldErrors.jobTitle && (
-                                <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                <span className={styles.errorText}>This is a required field.</span>
                             )}
 
                             {/* //! Additional Information */}
-                            <div className="pt-2 md:pt-0">
-                                <div className="!border-none pt-2 md:pt-0 space-y-2 md:space-y-4  ">
-                                    <span className="text-base text-[#181D27] font-bold text-lg ">
+                            <div className={styles.workSettingSection}>
+                                <div className={styles.workSettingContainer}>
+                                    <span className={styles.workSettingTitle}>
                                         Work Setting
                                     </span>
                                     {/* //! Work Setting */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div className={styles.workSettingGrid}>
                                         <div>
                                             {/* //! Employment Type */}
                                             <label>Employment Type</label>
-                                            <div className=" !text-black">
+                                            <div className={styles.textBlack}>
                                                 <CustomDropdown
                                                     onSelectSetting={(value) => {
                                                         setEmploymentType(value);
@@ -265,14 +265,14 @@ export default function CareerDetailsStep({
                                                     hasError={fieldErrors.employmentType}
                                                 />
                                                 {fieldErrors.employmentType && (
-                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                    <span className={styles.errorText}>This is a required field.</span>
                                                 )}
                                             </div>
                                         </div>
                                         <div>
                                             {/* //! Work Setup Arrangement */}
                                             <label>Work Setup Arrangement</label>
-                                            <div className=" !text-black">
+                                            <div className={styles.textBlack}>
                                                 <CustomDropdown
                                                     onSelectSetting={(value) => {
                                                         setWorkSetup(value);
@@ -286,20 +286,20 @@ export default function CareerDetailsStep({
                                                     hasError={fieldErrors.workSetup}
                                                 />
                                                 {fieldErrors.workSetup && (
-                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                    <span className={styles.errorText}>This is a required field.</span>
                                                 )}
                                             </div>
                                         </div>
                                     </div>
                                     {/* //! Location */}
-                                    <div className="pt-2">
-                                        <span className="text-base text-[#181D27] font-bold text-lg ">
+                                    <div className={styles.locationSection}>
+                                        <span className={styles.locationTitle}>
                                             Location
                                         </span>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                        <div className={styles.locationGrid}>
                                             <div>
                                                 <label>Country</label>
-                                                <div className=" !text-black">
+                                                <div className={styles.textBlack}>
                                                     <CustomDropdown
                                                         onSelectSetting={setCountry}
                                                         screeningSetting={country}
@@ -309,8 +309,8 @@ export default function CareerDetailsStep({
                                                 </div>
                                             </div>
                                             <div>
-                                                <label >State / Province</label>
-                                                <div className=" !text-black">
+                                                <label>State / Province</label>
+                                                <div className={styles.textBlack}>
                                                     <CustomDropdown
                                                         onSelectSetting={handleProvinceChange}
                                                         screeningSetting={province}
@@ -319,13 +319,13 @@ export default function CareerDetailsStep({
                                                         hasError={fieldErrors.province}
                                                     />
                                                     {fieldErrors.province && (
-                                                        <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                        <span className={styles.errorText}>This is a required field.</span>
                                                     )}
                                                 </div>
                                             </div>
                                             <div>
-                                                <label >City</label>
-                                                <div className=" !text-black">
+                                                <label>City</label>
+                                                <div className={styles.textBlack}>
                                                     <CustomDropdown
                                                         onSelectSetting={(value) => {
                                                             setCity(value);
@@ -340,7 +340,7 @@ export default function CareerDetailsStep({
                                                         hasError={fieldErrors.city}
                                                     />
                                                     {fieldErrors.city && (
-                                                        <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                        <span className={styles.errorText}>This is a required field.</span>
                                                     )}
                                                 </div>
                                             </div>
@@ -348,13 +348,13 @@ export default function CareerDetailsStep({
                                     </div>
 
                                     {/* //! Salary */}
-                                    <div className="flex flex-col gap-2 pt-2">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                                            <span className="text-base text-[#181D27] font-bold text-lg">
+                                    <div className={styles.salarySection}>
+                                        <div className={styles.salaryHeader}>
+                                            <span className={styles.salaryTitle}>
                                                 Salary
                                             </span>
-                                            <div className="flex flex-row items-center gap-2">
-                                                <span className="text-sm text-[#181D27]">Negotiable</span>
+                                            <div className={styles.negotiableContainer}>
+                                                <span className={styles.negotiableText}>Negotiable</span>
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
@@ -377,24 +377,20 @@ export default function CareerDetailsStep({
                                                         }}
                                                     />
                                                     <span className="slider round"></span>
-
                                                 </label>
-
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className={styles.salaryGrid}>
 
-                                            <div className="flex flex-col gap-2">
+                                            <div className={styles.salaryInputContainer}>
                                                 <span>Minimum Salary</span>
-                                                <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 
-                                                    text-[#6c757d] text-base pointer-events-none z-10">
+                                                <div className={styles.inputWrapper}>
+                                                    <span className={styles.currencySymbol}>
                                                         {salaryCurrency === "PHP" ? "₱" : "$"}
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        className={`form-control  pl-5 pr-20  text-base 
-                                                            ${(fieldErrors.minimumSalary && !salaryNegotiable) ? "!border-[#DC2626]" : "!border-1 !border-gray-300 "}`}
+                                                        className={`form-control ${styles.salaryInput} ${(fieldErrors.minimumSalary && !salaryNegotiable) ? styles.inputError : styles.inputNormal}`}
                                                         placeholder="0"
                                                         value={minimumSalary}
                                                         onChange={(e) => {
@@ -410,9 +406,9 @@ export default function CareerDetailsStep({
                                                         }}
                                                         disabled={salaryNegotiable}
                                                     />
-                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                                                    <div className={styles.currencySelectContainer}>
                                                         <select
-                                                            className={`text-md border-none bg-transparent cursor-pointer appearance-none pr-4 ${fieldErrors.minimumSalary ? "text-[#DC2626]" : "text-gray-900"}`}
+                                                            className={`${styles.currencySelect} ${fieldErrors.minimumSalary ? styles.currencySelectError : styles.currencySelectNormal}`}
                                                             value={salaryCurrency || "PHP"}
                                                             onChange={(e) => {
                                                                 setSalaryCurrency(e.target.value);
@@ -428,28 +424,27 @@ export default function CareerDetailsStep({
                                                         <img 
                                                             src={assetConstants.chevron} 
                                                             alt="" 
-                                                            className={`absolute right-0 pointer-events-none transition-transform duration-200 ${isMinCurrencyOpen ? 'rotate-180' : ''}`}
+                                                            className={`${styles.chevronIcon} ${isMinCurrencyOpen ? styles.chevronRotated : ''}`}
                                                             style={{ width: '20px', height: '20px' }}
                                                         />
                                                     </div>
                                                     {(fieldErrors.minimumSalary && !salaryNegotiable) && (
-                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute   right-19 top-1/2 -translate-y-1/2"></i>
+                                                        <i className={`las la-exclamation-circle ${styles.salaryErrorIcon}`}></i>
                                                     )}
                                                 </div>
                                                 {(fieldErrors.minimumSalary && !salaryNegotiable) && (
-                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                    <span className={styles.errorText}>This is a required field.</span>
                                                 )}
-
                                             </div>
-                                            <div className="flex flex-col gap-2">
+                                            <div className={styles.salaryInputContainer}>
                                                 <span>Maximum Salary</span>
-                                                <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-base pointer-events-none z-10">
+                                                <div className={styles.inputWrapper}>
+                                                    <span className={styles.currencySymbol}>
                                                         {salaryCurrency === "PHP" ? "₱" : "$"}
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        className={`form-control pl-5 pr-20  text-base ${fieldErrors.maximumSalary ? "!border-[#DC2626]" : "!border-1 !border-gray-300"}`}
+                                                        className={`form-control ${styles.salaryInput} ${fieldErrors.maximumSalary ? styles.inputError : styles.inputNormal}`}
                                                         placeholder="0"
                                                         value={maximumSalary}
                                                         disabled={salaryNegotiable}
@@ -463,9 +458,9 @@ export default function CareerDetailsStep({
                                                             }
                                                         }}
                                                     />
-                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                                                    <div className={styles.currencySelectContainer}>
                                                         <select
-                                                            className={`text-md border-none bg-transparent cursor-pointer appearance-none pr-4 ${fieldErrors.maximumSalary ? "text-[#DC2626]" : "text-gray-900"}`}
+                                                            className={`${styles.currencySelect} ${fieldErrors.maximumSalary ? styles.currencySelectError : styles.currencySelectNormal}`}
                                                             value={salaryCurrency || "PHP"}
                                                             onChange={(e) => {
                                                                 setSalaryCurrency(e.target.value);
@@ -481,18 +476,16 @@ export default function CareerDetailsStep({
                                                         <img 
                                                             src={assetConstants.chevron} 
                                                             alt="" 
-                                                            className={`absolute right-0 pointer-events-none transition-transform duration-200 ${isMaxCurrencyOpen ? 'rotate-180' : ''}`}
+                                                            className={`${styles.chevronIcon} ${isMaxCurrencyOpen ? styles.chevronRotated : ''}`}
                                                             style={{ width: '20px', height: '20px' }}
                                                         />
                                                     </div>
                                                     {(fieldErrors.maximumSalary && !salaryNegotiable) && (
-                                                        <i className="las la-exclamation-circle text-[#DC2626] text-2xl absolute 
-                                                        right-19 top-1/2 -translate-y-1/2"></i>
+                                                        <i className={`las la-exclamation-circle ${styles.salaryErrorIcon}`}></i>
                                                     )}
                                                 </div>
-
                                                 {fieldErrors.maximumSalary && !salaryNegotiable && (
-                                                    <span className="text-[#DC2626] text-sm">This is a required field.</span>
+                                                    <span className={styles.errorText}>This is a required field.</span>
                                                 )}
                                             </div>
                                         </div>
@@ -506,14 +499,13 @@ export default function CareerDetailsStep({
 
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
+                        <span className={styles.sectionTitle}>
                             {hideSectionNumbers ? "Job Description" : "2. Job Description"}
                         </span>
-                        <div className="flex flex-row items-center gap-2">
-
-                            <div className="layered-card-content border-none rich-text-editor-wrapper">
+                        <div className={styles.jobDescriptionSection}>
+                            <div className={`layered-card-content ${styles.richTextEditorWrapper} rich-text-editor-wrapper`}>
                                 {/* <span className="text-base text-[#181D27] font-bold text-lg">Description</span> */}
-                                <div >
+                                <div>
                                     <RichTextEditor
                                         setText={(text) => {
                                             setDescription(text);
@@ -527,7 +519,7 @@ export default function CareerDetailsStep({
                                     />
                                 </div>
                                 {fieldErrors.description && (
-                                    <span className="text-[#DC2626] text-sm mt-1 block">This is a required field.</span>
+                                    <span className={styles.errorTextBlock}>This is a required field.</span>
                                 )}
                             </div>
                         </div>
@@ -543,30 +535,30 @@ export default function CareerDetailsStep({
                 )}
             </div>
 
-            <div className="w-full lg:w-[30%] lg:sticky top-0">
+            <div className={styles.tipsSidebar}>
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
+                        <div className={styles.tipsHeader}>
                             <img
                                 src="/icons/lightbulb.svg"
                                 alt="lightbulb"
-                                style={{ width: "20px", height: "20px" }}
+                                className={styles.tipsHeaderIcon}
                             />
-                            <span className="text-base text-[#181D27] font-bold text-lg">
+                            <span className={styles.tipsHeaderTitle}>
                                 Tips
                             </span>
                         </div>
-                        <div className="layered-card-content flex flex-col gap-4">
-                            <span>
-                                <span className="font-bold text-black"> Use clear, standard job titles</span> for better
+                        <div className={`layered-card-content ${styles.tipsContent}`}>
+                            <span className={styles.tipText}>
+                                <span className={styles.tipTextBold}> Use clear, standard job titles</span> for better
                                 searchability (e.g., "Software Engineer" instead of "Code Ninja" or "Tech Rockstar").
                             </span>
-                            <span>
-                                <span className="font-bold text-black"> Avoid abbreviations</span> or internal role codes that applicants may not understand
+                            <span className={styles.tipText}>
+                                <span className={styles.tipTextBold}> Avoid abbreviations</span> or internal role codes that applicants may not understand
                                 (e.g., use "QA Engineer" instead of "QE II" or "QA-TL").
                             </span>
-                            <span>
-                                <span className="font-bold text-black"> Keep it concise</span> — job titles should be no more than a few words
+                            <span className={styles.tipText}>
+                                <span className={styles.tipTextBold}> Keep it concise</span> — job titles should be no more than a few words
                                 (2–4 max), avoiding fluff or marketing terms.
                             </span>
                         </div>

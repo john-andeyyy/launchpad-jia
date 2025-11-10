@@ -244,26 +244,6 @@
               p {
                 margin: revert;
               }
-              // Markdown styles
-              h2 {
-                font-weight: 700;
-                font-size: 18px;
-                line-height: 28px;
-                color: var(--Text-text-primary, #181d27);
-                margin: 0 0 12px 0;
-              }
-              ul {
-                margin: 0;
-                padding-left: 20px;
-                list-style-type: disc;
-              }
-              li {
-                margin: 4px 0;
-                display: list-item;
-              }
-              strong {
-                font-weight: 700;
-              }
             }
             p {
               margin: 0;
@@ -310,6 +290,38 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    
+    .preScreeningTitle {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--Text-text-primary, #181d27);
+      margin: 0;
+    }
+    
+    .preScreeningDescription {
+      font-size: 16px;
+      color: #6B7280;
+      margin: 0; 
+      padding-bottom: 16px;
+    }
+    
+    .rangeInputRow {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
+    
+    .buttonDisabled {
+      background-color: #D1D5DB !important;
+      border-color: #D1D5DB !important;
+      cursor: not-allowed !important;
+    }
+    
+    .iconSvg {
+      width: 24px;
+      height: 24px;
+    }
+    
     .gradient {
       width: 100%;
       background: linear-gradient(

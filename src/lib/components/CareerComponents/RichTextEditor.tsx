@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import styles from "@/lib/styles/components/richTextEditor.module.scss";
 
 export default function RichTextEditor({ setText, text, hasError = false, btnBorder = false }) {
   const descriptionEditorRef = useRef(null);
@@ -63,7 +64,7 @@ export default function RichTextEditor({ setText, text, hasError = false, btnBor
   }, []);
 
   return (
-    <div className={hasError ? "border-2 border-[#DC2626] rounded-lg overflow-hidden" : ""}>
+    <div className={hasError ? styles.errorBorder : ""}>
       <div
         ref={descriptionEditorRef}
         contentEditable={true}

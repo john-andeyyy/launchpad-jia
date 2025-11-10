@@ -64,38 +64,74 @@ export default function CareerModal({
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div
-                        className="flex flex-row items-center justify-between bg-white px-4 pt-4 pb-3 z-50 rounded-t-full"
                         style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            backgroundColor: "#FFFFFF",
+                            paddingLeft: "16px",
+                            paddingRight: "16px",
+                            paddingTop: "16px",
+                            paddingBottom: "12px",
+                            zIndex: 50,
+                            borderTopLeftRadius: "9999px",
+                            borderTopRightRadius: "9999px",
                             position: "sticky",
                             top: 0,
                             borderBottom: "1px solid #E9EAEB",
                         }}
                     >
-                        <h2 className="text-2xl font-bold text-[#181D27] ">{title}</h2>
+                        <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#181D27" }}>{title}</h2>
 
-                        <div className="flex flex-row items-center justify-end gap-3 ">
+                        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: "12px" }}>
                             <button
                                 onClick={onClose}
-                                className="px-4 py-2 text-[#414651] bg-white border border-[#D5D7DA] !rounded-full 
-                                whitespace-nowrap cursor-pointer hover:bg-[#F9FAFB] transition-colors "
+                                style={{
+                                    padding: "8px 16px",
+                                    color: "#414651",
+                                    backgroundColor: "#FFFFFF",
+                                    border: "1px solid #D5D7DA",
+                                    borderRadius: "9999px",
+                                    whiteSpace: "nowrap",
+                                    cursor: "pointer",
+                                    transition: "background-color 0.2s"
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                }}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={onSave}
                                 disabled={isSaving}
-                                className={`px-4 py-2 !rounded-full whitespace-nowrap border border-[#E9EAEB] disabled:cursor-not-allowed 
-                                    disabled:opacity-50 cursor-pointer flex flex-row items-center gap-2 ${isSaving ? "bg-[#D5D7DA] text-white" : "bg-black text-white"
-                                    }`}
+                                style={{
+                                    padding: "8px 16px",
+                                    borderRadius: "9999px",
+                                    whiteSpace: "nowrap",
+                                    border: "1px solid #E9EAEB",
+                                    cursor: isSaving ? "not-allowed" : "pointer",
+                                    opacity: isSaving ? 0.5 : 1,
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    backgroundColor: isSaving ? "#D5D7DA" : "#000000",
+                                    color: "#FFFFFF"
+                                }}
                             >
                                 {isSaving ? (
                                     <>
-                                        <i className="la la-spinner la-spin text-white text-xl"></i>
+                                        <i className="la la-spinner la-spin" style={{ color: "#FFFFFF", fontSize: "20px" }}></i>
                                         <span>Saving...</span>
                                     </>
                                 ) : (
                                     <>
-                                        <i className="la la-check-circle text-white text-xl"></i>
+                                        <i className="la la-check-circle" style={{ color: "#FFFFFF", fontSize: "20px" }}></i>
                                         <span>Save Changes</span>
                                     </>
                                 )}

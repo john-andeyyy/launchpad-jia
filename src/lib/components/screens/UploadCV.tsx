@@ -326,7 +326,8 @@ export default function () {
   }
 
   function areAllQuestionsAnswered() {
-    if (preScreeningQuestions.length === 0) return false;
+    // If there are no questions, button should be enabled
+    if (preScreeningQuestions.length === 0) return true;
     
     return preScreeningQuestions.every((q) => {
       const answer = preScreeningAnswers[q.id];
@@ -717,16 +718,7 @@ export default function () {
                   ))}
                   <button onClick={handleCVScreen}>
                     Continue
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
+                    <img src={assetConstants.arrowV2} alt="" />
                   </button>
                 </div>
               )}
@@ -750,8 +742,8 @@ export default function () {
               ) : (
                 <div className={styles.preScreeningContainer}>
                   <div>
-                    <h1 className="text-2xl font-bold">Quick Pre-Screening</h1>
-                    <p className="text-md text-gray-500">
+                    <h1 className={styles.preScreeningTitle}>Quick Pre-Screening</h1>
+                    <p className={styles.preScreeningDescription}>
                       Just a few short questions to help your recruiters assess you faster. takes less than a minute.
                     </p>
                   </div>
@@ -783,7 +775,7 @@ export default function () {
                               </select>
                             )}
                             {question.type === "range" && (
-                              <div className="flex flex-row gap-4">
+                              <div className={styles.rangeInputRow}>
                                 <div className={styles.rangeInputGroup}>
                                   <label>Minimum {question.rangeType === "currency" ? "Salary" : "Value"}</label>
                                   <div className={styles.currencyInput}>
@@ -924,10 +916,10 @@ export default function () {
                       </div>
                     </div>
                   )}
-                  <button 
+                  <button
                     onClick={handlePreScreeningContinue}
                     disabled={!areAllQuestionsAnswered()}
-                    className={!areAllQuestionsAnswered() ? "!bg-gray-300 !border-gray-300 !cursor-not-allowed" : ""}
+                    className={!areAllQuestionsAnswered() ? styles.buttonDisabled : ""}
                   >
                     Continue
                     <svg
@@ -936,7 +928,7 @@ export default function () {
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="currentColor"
-                      className="w-6 h-6"
+                      className={styles.iconSvg}
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>

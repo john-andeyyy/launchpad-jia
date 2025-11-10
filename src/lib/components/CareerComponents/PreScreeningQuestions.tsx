@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { guid } from "@/lib/Utils";
+import styles from "@/lib/styles/screens/preScreeningQuestions.module.scss";
 
 export type QuestionType = "short-answer" | "long-answer" | "dropdown" | "checkboxes" | "range" | "text";
 export type RangeType = "currency" | "number";
@@ -231,41 +232,40 @@ export default function PreScreeningQuestions({
     return (
         <div className="layered-card-middle">
 
-            <div className="flex flex-row items-center justify-between gap-2 pl-3">
+            <div className={styles.header}>
 
-                <div className="flex flex-row items-center gap-2 pt-3">
-                    <span className="text-base text-[#181D27] font-bold text-lg">
+                <div className={styles.headerLeft}>
+                    <span className={styles.title}>
                         {hideSectionNumbers ? "Pre-Screening Questions" : "2. Pre-Screening Questions"}{" "}
-                        <span className="text-[#6B7280] font-normal">(optional)</span>
+                        <span className={styles.optional}>(optional)</span>
 
                     </span>
-                    <div className="w-8 h-8 bg-[#F8F9FC] border border-[#D5D9EB] rounded-full flex items-center justify-center">
-                        <span className="text-md font-bold text-gray-600">
+                    <div className={styles.countBadge}>
+                        <span className={styles.countText}>
                             {questions.length}
                         </span>
                     </div>
                 </div>
-                <div className="flex flex-row items-center justify-between">
+                <div className={styles.headerRight}>
                     <button
                         onClick={handleAddCustom}
-                        className={`w-fit p-2 px-4 !text-md flex items-center gap-2 !font-semibold !rounded-full whitespace-nowrap border border-[#E9EAEB] 
-                        disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer bg-black text-white`}
+                        className={styles.addButton}
                     >
-                        <i className="la la-plus mr-2 !text-2xl "></i> Add custom
+                        <i className={`la la-plus ${styles.addButtonIcon}`}></i> Add custom
                     </button>
                 </div>
             </div>
-            <div className="flex flex-col gap-4 layered-card-content">
+            <div className={`layered-card-content ${styles.content}`}>
 
 
                 {/* Questions List */}
-                <div className="space-y-4">
+                <div className={styles.questionsList}>
                     {questions.length === 0 ? (
-                        <p className="text-md sm:text-sm !font-medium border-b border-[#E9EAEB] pb-3 ">
+                        <p className={styles.emptyMessage}>
                             No pre-screening questions added yet.
                         </p>
                     ) : (
-                        <div className="space-y-4">
+                        <div className={styles.questionsList}>
                             {questions.map((question, index) => (
                                 <QuestionCard
                                     key={question.id}
@@ -284,35 +284,31 @@ export default function PreScreeningQuestions({
                     )}
 
                     {/* Suggested Questions */}
-                    <div className="space-y-3 pt-2">
-                        <h4 className="font-medium !text-gray-700 text-lg sm:text-md">
+                    <div className={styles.suggestedSection}>
+                        <h4 className={styles.suggestedTitle}>
                             Suggested Pre-screening Questions:
                         </h4>
-                        <div className="space-y-2">
+                        <div className={styles.suggestedList}>
                             {SUGGESTED_QUESTIONS.map((suggested) => {
                                 const isAdded = addedQuestionIds.includes(suggested.id);
                                 return (
                                     <div
                                         key={suggested.id}
-                                        className="flex items-center justify-between p-3 !py-0 bg-white rounded-lg  !mb-0"
+                                        className={styles.suggestedItem}
                                     >
-                                        <div className={`flex-1  ${isAdded ? "opacity-50" : ""}`}>
-                                            <p className="text-md  text-gray-700 !font-semibold mb-1">
+                                        <div className={`${styles.suggestedItemContent} ${isAdded ? styles.suggestedItemContentDisabled : ''}`}>
+                                            <p className={styles.suggestedItemTitle}>
                                                 {suggested.id
                                                     .split("-")
                                                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                                                     .join(" ")}
                                             </p>
-                                            <p className="text-sm !font-medium text-gray-500">{suggested.question}</p>
+                                            <p className={styles.suggestedItemQuestion}>{suggested.question}</p>
                                         </div>
                                         <button
                                             onClick={() => handleAddSuggested(suggested.id)}
                                             disabled={isAdded}
-                                            className={`ml-3 px-3 py-1.5 !rounded-full text-md font-semibold sm:text-sm transition 
-                                                !border cursor-pointer ${isAdded
-                                                    ? "!bg-gray-300 text-white cursor-not-allowed border-[#D5D9EB]"
-                                                    : "!bg-transparent !text-[#181D27] !border !border-gray-300 hover:bg-[#F8F9FC]"
-                                                }`}
+                                            className={`${styles.suggestedAddButton} ${isAdded ? styles.suggestedAddButtonDisabled : styles.suggestedAddButtonEnabled}`}
                                         >
                                             {isAdded ? "Added" : "Add"}
                                         </button>
@@ -468,7 +464,7 @@ function QuestionCard({
 
     return (
         <div
-            className="flex items-center gap-2 "
+            className={styles.questionCardContainer}
             draggable={!!onReorderQuestion}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
@@ -479,16 +475,14 @@ function QuestionCard({
         >
             {/* Drag Handle for Question - On the side */}
             {onReorderQuestion && (
-                <div
-                    className="cursor-move text-gray-400 hover:text-gray-600 pt-2 flex-shrink-0"
-                >
+                <div className={styles.dragHandle}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="2"
                         stroke="currentColor"
-                        className="w-5 h-5"
+                        className={styles.dragHandleIcon}
                     >
                         <path
                             strokeLinecap="round"
@@ -499,14 +493,18 @@ function QuestionCard({
                 </div>
             )}
             <div
-                className={`flex-1 bg-white rounded-lg border overflow-hidden transition-all ${hasError ? "border-red-500" : "border-[#E9EAEB]"
-                    } ${isDragging ? "opacity-50" : ""} ${dragOverIndex === index ? "border-indigo-500 border-2" : ""
-                    }`}
+                className={`${styles.questionCard} ${
+                    dragOverIndex === index 
+                        ? styles.questionCardDragOver 
+                        : hasError 
+                        ? styles.questionCardError 
+                        : styles.questionCardBorder
+                } ${isDragging ? styles.questionCardDragging : ''}`}
             >
                 {/* Question Input and Type Selector - Gray Bar */}
-                <div className="flex items-center gap-2 p-2 pt-3 bg-gray-50 -mt-[1px] -mx-[1px] w-[calc(100%+2px)]">
+                <div className={styles.questionHeader}>
                     {question.source === "suggested" ? (
-                        <h3 className="flex-1 text-base font-semibold text-[#181D27] px-3 py-2 !pl-20 sm:!pl-5 md:!pl-10 lg:!pl-5">
+                        <h3 className={styles.questionTitleReadonly}>
                             {question.question}
                         </h3>
                     ) : (
@@ -516,33 +514,39 @@ function QuestionCard({
                                 value={questionText}
                                 onChange={(e) => handleQuestionChange(e.target.value)}
                                 placeholder="Enter your question"
-                                className={`flex-1 border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 ${hasError
-                                    ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-                                    : "border-gray-300 focus:ring-indigo-500 focus:border-transparent"
-                                    }`}
+                                className={`${styles.questionInput} ${hasError ? styles.questionInputError : styles.questionInputDefault}`}
+                                onFocus={(e) => {
+                                    e.currentTarget.classList.add(hasError ? styles.questionInputFocusError : styles.questionInputFocus);
+                                }}
+                                onBlur={(e) => {
+                                    e.currentTarget.classList.remove(styles.questionInputFocus, styles.questionInputFocusError);
+                                }}
                             />
 
                         </>
                     )}
-                    <div className="relative" ref={dropdownRef}>
+                    <div className={styles.typeSelector} ref={dropdownRef}>
                         <button
                             type="button"
                             onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="border border-gray-300 !rounded-lg px-3 py-2.5 text-md !text-gray-700 
-                            bg-white focus:outline-none  !focus:border-transparent
-                            flex items-center gap-2 min-w-[210px] justify-between"
+                            className={styles.typeButton}
+                            onFocus={(e) => {
+                                e.currentTarget.classList.add(styles.typeButtonFocus);
+                            }}
+                            onBlur={(e) => {
+                                e.currentTarget.classList.remove(styles.typeButtonFocus);
+                            }}
                         >
-                            <div className="flex items-center gap-2">
+                            <div className={styles.typeButtonContent}>
                                 {QUESTION_TYPES.find(t => t.value === questionType)?.icon && (
-                                    <i className={`${QUESTION_TYPES.find(t => t.value === questionType)?.icon} text-base !text-lg`}></i>
+                                    <i className={`${QUESTION_TYPES.find(t => t.value === questionType)?.icon} ${styles.typeButtonIcon}`}></i>
                                 )}
                                 <span>{QUESTION_TYPES.find(t => t.value === questionType)?.label || questionType}</span>
                             </div>
-                            <i className="la la-angle-down text-md"></i>
+                            <i className="la la-angle-down"></i>
                         </button>
                         {dropdownOpen && (
-                            <div className=" absolute right-0 mt-1 w-full bg-white border 
-                            border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-auto text-gray-700 font-medium">
+                            <div className={styles.typeDropdown}>
                                 {QUESTION_TYPES.map((type) => (
                                     <button
                                         key={type.value}
@@ -551,16 +555,14 @@ function QuestionCard({
                                             handleTypeChange(type.value);
                                             setDropdownOpen(false);
                                         }}
-                                        className={`w-full text-left px-3 py-2 text-sm flex items-center 
-                                            gap-2 hover:bg-gray-50 ${questionType === type.value ? 'bg-[#F8F9FC] font-bold' : ''
-                                            }`}
+                                        className={`${styles.typeOption} ${questionType === type.value ? styles.typeOptionSelected : ''}`}
                                     >
                                         {type.icon && (
-                                            <i className={`${type.icon} text-base`}></i>
+                                            <i className={`${type.icon} ${styles.typeOptionIcon}`}></i>
                                         )}
                                         <span>{type.label}</span>
                                         {questionType === type.value && (
-                                            <i className="la la-check ml-auto text-indigo-600"></i>
+                                            <i className={`la la-check ${styles.typeOptionCheck}`}></i>
                                         )}
                                     </button>
                                 ))}
@@ -571,15 +573,15 @@ function QuestionCard({
 
                 {/* Error Message */}
                 {hasError && (
-                    <div className="px-4 pt-2">
-                        <p className="text-xs text-red-600">
+                    <div className={styles.errorMessage}>
+                        <p className={styles.errorText}>
                             Please enter a question title.
                         </p>
                     </div>
                 )}
 
                 {/* Question Content */}
-                <div className="p-4 space-y-3">
+                <div className={styles.questionContent}>
                     {/* Question Type Content */}
                     {questionType === "dropdown" && (
                         <DropdownOptions
@@ -604,13 +606,13 @@ function QuestionCard({
                     )}
 
                     {questionType === "short-answer" && (
-                        <div className="text-xs text-[#6B7280]">
+                        <div className={styles.hintText}>
                             Short text input field will be shown to candidates
                         </div>
                     )}
 
                     {questionType === "long-answer" && (
-                        <div className="text-xs text-[#6B7280]">
+                        <div className={styles.hintText}>
                             Long text input field (textarea) will be shown to candidates
                         </div>
                     )}
@@ -627,18 +629,17 @@ function QuestionCard({
                     )}
 
                     {questionType === "text" && (
-                        <div className="text-xs text-[#6B7280]">
+                        <div className={styles.hintText}>
                             Text input field will be shown to candidates
                         </div>
                     )}
 
                     {/* Delete Question Button */}
                     {onRemove && (
-                        <div className="flex justify-end pt-2 border-t border-[#E9EAEB]">
+                        <div className={styles.deleteButtonContainer}>
                             <button
                                 onClick={() => onRemove(question.id)}
-                                className="flex items-center gap-2 px-4 py-2 !bg-transparent !text-red-600 !border !border-red-600 !rounded-full
-                            hover:!bg-red-50  text-sm cursor-pointer"
+                                className={styles.deleteButton}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -646,7 +647,7 @@ function QuestionCard({
                                     viewBox="0 0 24 24"
                                     strokeWidth="1.5"
                                     stroke="currentColor"
-                                    className="w-5 h-5"
+                                    className={styles.deleteButtonIcon}
                                 >
                                     <path
                                         strokeLinecap="round"
@@ -654,7 +655,7 @@ function QuestionCard({
                                         d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
                                     />
                                 </svg>
-                                <span className="text-md  font-bold">Delete Question</span>
+                                <span className={styles.deleteButtonText}>Delete Question</span>
                             </button>
                         </div>
                     )}
@@ -720,7 +721,7 @@ function DropdownOptions({
     };
 
     return (
-        <div className="space-y-2">
+        <div className={styles.optionsContainer}>
             {options.map((option, index) => (
                 <div
                     key={option.id}
@@ -731,19 +732,17 @@ function DropdownOptions({
                     onDrop={(e) => handleOptionDrop(e, index)}
                     onDragEnter={() => handleOptionDragEnter(index)}
                     onDragLeave={handleOptionDragLeave}
-                    className={`flex items-center gap-2 transition-all ${draggingOptionId === option.id ? "opacity-50" : ""
-                        } ${dragOverOptionIndex === index ? "bg-indigo-50 rounded-lg p-1 -m-1" : ""
-                        }`}
+                    className={`${styles.optionItem} ${draggingOptionId === option.id ? styles.optionItemDragging : ''} ${dragOverOptionIndex === index ? styles.optionItemDragOver : ''}`}
                 >
                     {/* Drag Handle */}
-                    <div className="cursor-move text-[#6B7280] hover:text-[#181D27]">
+                    <div className={styles.optionDragHandle}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth="2"
                             stroke="currentColor"
-                            className="w-5 h-5"
+                            className={styles.optionDragHandleIcon}
                         >
                             <path
                                 strokeLinecap="round"
@@ -753,28 +752,23 @@ function DropdownOptions({
                         </svg>
                     </div>
                     {/* Option Input with Number Inside */}
-                    <div className="flex-1 relative">
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm !text-gray-900 !font-medium pointer-events-none z-10 px-2
-                        py-1 border-r-2 border-[#E9EAEB]">
+                    <div className={styles.optionInputWrapper}>
+                        <span className={styles.optionNumber}>
                             {index + 1}
-
                         </span>
                         <input
                             type="text"
                             value={option.value}
                             onChange={(e) => onUpdateOption?.(questionId, option.id, e.target.value)}
                             placeholder="Enter option"
-                            className="w-full border border-[#E9EAEB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2
-                            focus:ring-indigo-500 focus:border-transparent pl-5 !text-gray-900 !font-medium
-                            border-r-2 "
+                            className={styles.optionInput}
                         />
                     </div>
                     {/* Remove Option Button */}
                     {onRemoveOption && (
                         <button
                             onClick={() => onRemoveOption(questionId, option.id)}
-                            className="w-8 h-8 flex items-center justify-center !rounded-full hover:bg-[#F8F9FC] 
-                            !text-[#181D27] hover:text-red-500 transition !bg-transparent border !border-[#E9EAEB]"
+                            className={styles.optionRemoveButton}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -782,7 +776,7 @@ function DropdownOptions({
                                 viewBox="0 0 24 24"
                                 strokeWidth="2"
                                 stroke="currentColor"
-                                className="w-5 h-5"
+                                className={styles.optionRemoveButtonIcon}
                             >
                                 <path
                                     strokeLinecap="round"
@@ -798,7 +792,7 @@ function DropdownOptions({
             {onAddOption && (
                 <button
                     onClick={() => onAddOption(questionId)}
-                    className="flex items-center gap-2 !bg-transparent !border-none text-sm !text-[#6B7280] hover:text-[#181D27] transition"
+                    className={styles.addOptionButton}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -806,7 +800,7 @@ function DropdownOptions({
                         viewBox="0 0 24 24"
                         strokeWidth="2"
                         stroke="currentColor"
-                        className="w-4 h-4"
+                        className={styles.addOptionButtonIcon}
                     >
                         <path
                             strokeLinecap="round"
@@ -865,14 +859,14 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
     };
 
     return (
-        <div className="space-y-3">
+        <div className={styles.rangeContainer}>
             {/* Range Type Selector */}
-            <div className=" space-x-4">
-                <label className="block text-xs text-[#6B7280] mb-1">Range Type</label>
+            <div className={styles.rangeTypeSelector}>
+                <label className={styles.rangeLabel}>Range Type</label>
                 <select
                     value={rangeType}
                     onChange={(e) => handleRangeTypeChange(e.target.value as RangeType)}
-                    className="border border-[#E9EAEB] rounded-lg px-3 py-2 text-sm text-[#181D27] bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className={styles.rangeTypeSelect}
                 >
                     <option value="number">Number</option>
                     <option value="currency">Currency</option>
@@ -880,12 +874,12 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
             </div>
 
             {/* Range Inputs */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className={styles.rangeInputsGrid}>
                 <div>
-                    <label className="block text-xs text-[#6B7280] mb-1">Minimum</label>
-                    <div className="relative flex items-center border border-[#E9EAEB] rounded-lg bg-white">
+                    <label className={styles.rangeLabel}>Minimum</label>
+                    <div className={styles.rangeInputWrapper}>
                         {rangeType === "currency" && (
-                            <span className="absolute left-3 text-[#6B7280] text-sm pointer-events-none z-10">
+                            <span className={styles.rangeCurrencySymbol}>
                                 {currency === "PHP" ? "₱" : "$"}
                             </span>
                         )}
@@ -899,10 +893,7 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                 });
                             }}
                             placeholder={rangeType === "currency" ? "0" : "0"}
-
-                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 !text-gray-800
-                                focus:ring-indigo-500 ${rangeType === "currency" ? "pl-5 pr-2" : "px-3"
-                                } ${rangeType === "currency" && "rounded-r-none"}`}
+                            className={`${styles.rangeInput} ${rangeType === "currency" ? styles.rangeInputCurrency : styles.rangeInputNumber}`}
                         />
                         {rangeType === "currency" && (
                             <select
@@ -912,8 +903,7 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                         currency: e.target.value,
                                     })
                                 }
-                                className="border-0 border-l border-[#E9EAEB] rounded-r-lg px-2 py-2 text-sm text-[#181D27] 
-                                bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                className={styles.rangeCurrencySelect}
                             >
                                 <option value="PHP">PHP</option>
                                 <option value="USD">USD</option>
@@ -922,10 +912,10 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                     </div>
                 </div>
                 <div>
-                    <label className="block text-xs text-[#6B7280] mb-1">Maximum</label>
-                    <div className="relative flex items-center border border-[#E9EAEB] rounded-lg bg-white">
+                    <label className={styles.rangeLabel}>Maximum</label>
+                    <div className={styles.rangeInputWrapper}>
                         {rangeType === "currency" && (
-                            <span className="absolute left-3 text-[#6B7280] text-sm pointer-events-none z-10">
+                            <span className={styles.rangeCurrencySymbol}>
                                 {currency === "PHP" ? "₱" : "$"}
                             </span>
                         )}
@@ -939,10 +929,7 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                 });
                             }}
                             placeholder={rangeType === "currency" ? "0" : "0"}
-                            className={`flex-1 border-0 rounded-lg py-2 text-sm focus:outline-none focus:ring-2 text-gray-800
-                                focus:ring-indigo-500 ${rangeType === "currency" ?
-                                    "pl-5 pr-2" : "px-3"
-                                } ${rangeType === "currency" && "rounded-r-none"}`}
+                            className={`${styles.rangeInput} ${rangeType === "currency" ? styles.rangeInputCurrency : styles.rangeInputNumber}`}
                         />
                         {rangeType === "currency" && (
                             <select
@@ -952,7 +939,7 @@ function RangeInputs({ questionId, minValue, maxValue, rangeType, currency, onUp
                                         currency: e.target.value,
                                     })
                                 }
-                                className="border-0 border-l border-[#E9EAEB] rounded-r-lg px-2 py-2 text-sm text-[#181D27] bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                className={styles.rangeCurrencySelect}
                             >
                                 <option value="PHP">PHP</option>
                                 <option value="USD">USD</option>

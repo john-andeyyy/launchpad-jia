@@ -1,0 +1,219 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-start;
+
+    @media (min-width: 1024px) {
+        flex-direction: row;
+    }
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+
+    @media (min-width: 1024px) {
+        width: auto;
+    }
+}
+
+.headerRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+    padding-left: 8px;
+    padding-top: 12px;
+
+    @media (min-width: 768px) {
+        padding-left: 16px;
+    }
+}
+
+.cvScreeningSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cvScreeningHeader {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.cvScreeningIcon {
+    color: #414651;
+    font-size: 20px;
+}
+
+.cvScreeningLabel {
+    font-weight: 500;
+}
+
+.cvScreeningDescription {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.dropdownWrapper {
+    position: relative;
+}
+
+.dropdownGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.secretPromptSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e9eaeb;
+}
+
+.secretPromptHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.magicIcon {
+    color: #7c3aed;
+    font-size: 20px;
+}
+
+.secretPromptLabel {
+    font-weight: 500;
+    color: #000000;
+}
+
+.optionalText {
+    color: #6b7280;
+}
+
+.helpTooltipContainer {
+    position: relative;
+}
+
+.helpIcon {
+    color: #6b7280;
+    font-size: 16px;
+    margin-left: 4px;
+    font-size: 24px !important;
+    cursor: help;
+}
+
+.tooltip {
+    position: absolute;
+    z-index: 50;
+    background-color: #181d27;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    margin-top: 8px;
+    left: 0;
+    width: 300px;
+    max-width: 90vw;
+    transform: translateX(-50%);
+}
+
+.secretPromptDescription {
+    color: #6b7280;
+    font-size: 16px;
+    font-weight: 500;
+    padding-right: 20px;
+}
+
+.textarea {
+    height: 120px !important;
+    font-size: 16px !important;
+    padding: 8px !important;
+    margin-top: 8px !important;
+    width: 100%;
+    border: 1px solid #e9eaeb;
+    border-radius: 8px;
+    padding-left: 40px !important;
+    margin-top: 8px;
+    font-weight: 500;
+    color: #181d27;
+
+    &:focus {
+        outline: none;
+        border: 1px solid #7c3aed;
+        box-shadow: none;
+    }
+
+    &::placeholder {
+        color: #6b7280;
+        font-weight: 500;
+    }
+}
+
+.tipsSidebar {
+    width: 100%;
+
+    @media (min-width: 1024px) {
+        width: 40%;
+        position: sticky;
+        top: 0;
+    }
+}
+
+.tipsHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding-left: 8px;
+    padding-top: 8px;
+
+    @media (min-width: 768px) {
+        padding-left: 20px;
+    }
+}
+
+.tipsHeaderIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.tipsHeaderTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #181d27;
+}
+
+.tipsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tipTextBold {
+    font-weight: 700;
+    color: #000000;
+}

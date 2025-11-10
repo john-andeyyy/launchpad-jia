@@ -7,6 +7,7 @@ import ReviewField from "./ReviewField";
 import { TeamMember } from "../TeamAccess";
 import { useAppContext } from "@/lib/context/AppContext";
 import { assetConstants } from "@/lib/utils/constantsV2";
+import styles from "@/lib/styles/screens/reviewCareerStep.module.scss";
 
 interface ReviewCareerStepProps {
     jobTitle: string;
@@ -75,7 +76,7 @@ export default function ReviewCareerStep({
             return (
                 <span>
                     Automatically endorse candidates who are{" "}
-                    <span className="inline-block bg-[#E0E7FF] text-[#4F46E5] px-2 py-0.5 rounded-full text-sm font-medium">
+                    <span className={styles.goodFitBadge}>
                         Good Fit
                     </span>
                     {" "}and above
@@ -96,7 +97,7 @@ export default function ReviewCareerStep({
     };
 
     return (
-        <div className="flex flex-col gap-4 max-w-[80%] w-full h-full justify-center items-center mx-auto !pb-6">
+        <div className={styles.container}>
             {/* Career Details & Team Access Section */}
             <ReviewSection
                 icon="la la-suitcase"
@@ -105,38 +106,38 @@ export default function ReviewCareerStep({
                 onToggle={() => toggleSection("careerDetails")}
                 onEdit={() => onEditStep?.(1)}
             >
-                <div className="flex flex-col gap-3">
-                    <ReviewField label="Job Title" value={jobTitle || "Not set"} className="border-b border-[#E9EAEB] pb-3" />
+                <div className={styles.contentSection}>
+                    <ReviewField label="Job Title" value={jobTitle || "Not set"} className={styles.borderBottom} />
 
-                    <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
+                    <div className={styles.grid3Cols}>
                         <ReviewField label="Employment Type" value={employmentType || "Not set"} />
                         <ReviewField label="Work Arrangement" value={workSetup || "Not set"} />
                     </div>
-                    <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
+                    <div className={styles.grid3Cols}>
                         <ReviewField label="Country" value={country || country || "Not set"} />
                         <ReviewField label="State / Province" value={province || "Not set"} />
                         <ReviewField label="City" value={city || "Not set"} />
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3 border-b border-[#E9EAEB] pb-3">
+                    <div className={styles.grid3Cols}>
                         <div>
-                            <span className="text-sm font-semibold text-black">Minimum Salary</span>
-                            <div className={`text-base mt-1`}>
+                            <span className={styles.salaryLabel}>Minimum Salary</span>
+                            <div className={styles.salaryValue}>
                                 {formatSalaryValue(minimumSalary, salaryNegotiable)}
                             </div>
                         </div>
                         <div>
-                            <span className="text-sm font-semibold text-black">Maximum Salary</span>
-                            <div className={`text-base mt-1 ${salaryNegotiable ? "text-[#6B7280]" : "text-[#181D27]"}`}>
+                            <span className={styles.salaryLabel}>Maximum Salary</span>
+                            <div className={`${styles.salaryValue} ${salaryNegotiable ? styles.salaryValueNegotiable : styles.salaryValueNormal}`}>
                                 {formatSalaryValue(maximumSalary, salaryNegotiable)}
                             </div>
                         </div>
                     </div>
                     {description && (
-                        <div className="border-b border-[#E9EAEB] pb-3">
-                            <span className="text-md font-semibold text-black">Job Description</span>
+                        <div className={styles.borderBottom}>
+                            <span className={styles.jobDescriptionLabel}>Job Description</span>
                             <div
-                                className="text-base text-[#181D27] mt-1 rich-text-content"
+                                className={`${styles.richTextContent} rich-text-content`}
                                 dangerouslySetInnerHTML={{
                                     __html: description
                                 }}
@@ -185,42 +186,42 @@ export default function ReviewCareerStep({
                     )}
 
                     <div>
-                        <span className="text-sm font-semibold text-black">Team Access</span>
-                        <div className="flex flex-col gap-3 mt-2">
+                        <span className={styles.teamAccessLabel}>Team Access</span>
+                        <div className={styles.teamMembersList}>
                             {teamMembers.map((member) => {
                                 const isCurrentUser = user?.email === member.email;
                                 return (
-                                    <div key={member.email} className="flex flex-row items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                                    <div key={member.email} className={styles.teamMemberRow}>
+                                        <div className={styles.avatarContainer}>
                                             {member.image ? (
                                                 <img
                                                     src={member.image}
                                                     alt={member.name}
-                                                    className="w-full h-full object-cover"
+                                                    className={styles.avatarImage}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-[#E9EAEB] flex items-center justify-center">
-                                                    <span className="text-[#6B7280] text-sm font-semibold">
+                                                <div className={styles.avatarPlaceholder}>
+                                                    <span className={styles.avatarInitial}>
                                                         {member.name.charAt(0).toUpperCase()}
                                                     </span>
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="flex-1 ">
-                                            <div className="flex flex-row items-center gap-2">
-                                                <p className="text-base text-[#181D27] font-semibold !mb-0">
+                                        <div className={styles.memberInfo}>
+                                            <div className={styles.memberNameRow}>
+                                                <p className={styles.memberName}>
                                                     {member.name}
                                                 </p>
                                                 {isCurrentUser && (
-                                                    <span className="text-sm text-[#6B7280]">(You)</span>
+                                                    <span className={styles.memberYou}>(You)</span>
                                                 )}
                                             </div>
-                                            <p className="text-sm text-[#6B7280] truncate !mb-0">
+                                            <p className={styles.memberEmail}>
                                                 {member.email}
                                             </p>
                                         </div>
-                                        <div className="flex-shrink-0">
-                                            <span className="text-md text-[#6B7280] font-medium">
+                                        <div className={styles.memberRole}>
+                                            <span>
                                                 {member.role}
                                             </span>
                                         </div>
@@ -240,7 +241,7 @@ export default function ReviewCareerStep({
                 onToggle={() => toggleSection("cvReview")}
                 onEdit={() => onEditStep?.(2)}
             >
-                <div className="flex flex-col gap-4">
+                <div className={styles.contentSection}>
                     <ReviewField
                         label="CV Screening"
                         value={getScreeningSettingDisplay(cvScreeningSetting)}
@@ -248,8 +249,8 @@ export default function ReviewCareerStep({
 
                     {cvSecretPrompt && (
                         <div>
-                            <span className="text-sm font-semibold text-black">CV Secret Prompt</span>
-                            <div className="text-base text-[#181D27] mt-1 whitespace-pre-line">
+                            <span className={styles.secretPromptLabel}>CV Secret Prompt</span>
+                            <div className={styles.secretPromptContent}>
                                 {cvSecretPrompt.split('\n').map((line, idx) => (
                                     <div key={idx}>{line}</div>
                                 ))}
@@ -259,36 +260,36 @@ export default function ReviewCareerStep({
 
                     {preScreeningQuestions.length > 0 && (
                         <div>
-                            <span className="text-sm font-semibold text-[#6B7280]">
-                                Pre-Screening Questions <span className="border border-[#E9EAEB] rounded-full px-2 py-1">
+                            <span className={styles.preScreeningLabel}>
+                                Pre-Screening Questions <span className={styles.preScreeningBadge}>
                                     {preScreeningQuestions.length}</span>
                             </span>
-                            <div className="flex flex-col gap-3 mt-2">
+                            <div className={styles.preScreeningList}>
                                 {preScreeningQuestions.map((question, index) => (
-                                    <div key={question.id} className=" px-3">
-                                        <div className="flex flex-row items-start gap-2">
-                                            <span className="text-md font-semibold text-gray-800 min-w-[24px]">
+                                    <div key={question.id} className={styles.questionItem}>
+                                        <div className={styles.questionRow}>
+                                            <span className={styles.questionNumber}>
                                                 {index + 1}.
                                             </span>
-                                            <div className="flex-1">
-                                                <p className=" !text-md text-base !text-gray-800 !font-medium mb-2">
+                                            <div className={styles.questionContent}>
+                                                <p className={styles.questionText}>
                                                     {question.question}
                                                 </p>
                                                 {question.type === "dropdown" || question.type === "checkboxes" ? (
                                                     question.options && question.options.length > 0 ? (
-                                                        <div className="flex flex-col gap-1 mt-2">
+                                                        <div className={styles.questionOptions}>
                                                             {question.options.map((option) => (
-                                                                <div key={option.id} className="text-md text-gray-800  pl-4">
-                                                                    <span className=" pr-2"> •</span> {option.value}
+                                                                <div key={option.id} className={styles.questionOption}>
+                                                                    <span className={styles.optionBullet}> •</span> {option.value}
                                                                 </div>
                                                             ))}
                                                         </div>
                                                     ) : null
                                                 ) : question.type === "range" ? (
-                                                    <div className="text-md text-gray-800 pl-4">
+                                                    <div className={styles.questionRange}>
                                                         {question.rangeType === "currency" && question.currency && (
                                                             <span>
-                                                                <span className=" pr-1">• Preferred: </span>
+                                                                <span className={styles.questionRangeLabel}>• Preferred: </span>
                                                                 {question.currency === "PHP" ? "PHP" : "$"}
                                                                 {question.minValue || "0"} - {question.currency === "PHP" ? "" : "$"}
                                                                 {question.maxValue || "0"} {question.currency}
@@ -301,7 +302,7 @@ export default function ReviewCareerStep({
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <div className="text-md text-[#6B7280] pl-4 italic">
+                                                    <div className={styles.questionTypePlaceholder}>
                                                         {question.type === "short-answer" && "Short answer"}
                                                         {question.type === "long-answer" && "Long answer"}
                                                         {question.type === "text" && "Text input"}
@@ -325,15 +326,15 @@ export default function ReviewCareerStep({
                 onToggle={() => toggleSection("aiInterview")}
                 onEdit={() => onEditStep?.(3)}
             >
-                <div className="flex flex-col gap-4">
+                <div className={styles.contentSection}>
                     <ReviewField
                         label="AI Interview Screening"
                         value={getScreeningSettingDisplay(aiInterviewScreeningSetting)}
                     />
 
-                    <div className="flex flex-row items-center justify-between gap-2 border-y pt-3 border-gray-300 pb-3">
-                        <p className="!text-md font-semibold text-gray-700 mb-0 !font-bold">Require Video Interview</p>
-                        <div className="text-md font-bold text-gray-800 x-2 flex items-center gap-2">
+                    <div className={styles.videoRequirementRow}>
+                        <p className={styles.videoRequirementLabel}>Require Video Interview</p>
+                        <div className={styles.videoRequirementValue}>
                             {requireVideo ? "Yes" : "No"}
                             {requireVideo ? <img
                                 alt=""
@@ -345,19 +346,19 @@ export default function ReviewCareerStep({
                         </div>
                     </div>
 
-                    <div className="border-b border-gray-300 pb-3">
-                        <div className="flex flex-row items-center gap-2 mb-2">
-                            <i className="la la-magic text-[#7C3AED] text-lg"></i>
-                            <span className="text-sm font-semibold text-gray-800">AI Interview Secret Prompt</span>
+                    <div className={styles.borderBottom}>
+                        <div className={styles.secretPromptHeader}>
+                            <i className={`la la-magic ${styles.secretPromptIcon}`}></i>
+                            <span className={styles.secretPromptHeaderLabel}>AI Interview Secret Prompt</span>
                         </div>
-                        <div className="text-base text-[#181D27] mt-1 pl-2">
+                        <div className={styles.secretPromptLines}>
                             {aiInterviewSecretPrompt.split('\n').map((line, idx) => {
                                 const cleanLine = line.replace(/^•\s*/, '').trim();
                                 if (!cleanLine) return null;
                                 return (
-                                    <div key={idx} className="flex flex-row items-start gap-2 mb-1 text-lg text-gray-500">
-                                        <span className="text-[#181D27] ">•</span>
-                                        <span className="flex-1">{cleanLine}</span>
+                                    <div key={idx} className={styles.secretPromptLine}>
+                                        <span className={styles.secretPromptBullet}>•</span>
+                                        <span className={styles.secretPromptLineText}>{cleanLine}</span>
                                     </div>
                                 );
                             })}
@@ -367,13 +368,13 @@ export default function ReviewCareerStep({
 
                     {questions.length > 0 && (
                         <div>
-                            <div className="flex flex-row items-center gap-2 mb-3">
-                                <span className="text-sm font-semibold text-black">Interview Questions</span>
-                                <span className="bg-[#F3F4F6] text-[#6B7280] text-xs font-medium px-2 py-1 rounded-full border border-[#E9EAEB]">
+                            <div className={styles.questionsHeader}>
+                                <span className={styles.questionsLabel}>Interview Questions</span>
+                                <span className={styles.questionsBadge}>
                                     {getTotalQuestionsCount()}
                                 </span>
                             </div>
-                            <div className="flex flex-col gap-4 mt-2">
+                            <div className={styles.questionsList}>
                                 {questions.map((group, groupIdx) => {
                                     if (!group.questions || group.questions.length === 0) return null;
 
@@ -386,22 +387,22 @@ export default function ReviewCareerStep({
                                     }
 
                                     return (
-                                        <div key={groupIdx} className="flex flex-col gap-2">
-                                            <div className="text-sm font-semibold !text-gray-500 mb-1">
+                                        <div key={groupIdx} className={styles.questionGroup}>
+                                            <div className={styles.questionGroupCategory}>
                                                 {group.category}
                                             </div>
-                                            <div className="flex flex-col gap-2 pl-2">
+                                            <div className={styles.questionGroupList}>
                                                 {group.questions.map((question: any, qIdx: number) => {
                                                     const currentQuestionNumber = questionNumber + qIdx;
                                                     const questionText = typeof question === 'string'
                                                         ? question
                                                         : (question.question || question.text || '');
                                                     return (
-                                                        <div key={question.id || qIdx} className="flex flex-row items-center gap-2">
-                                                            <span className="text-sm pl-3 font-semibold text-gray-500 min-w-[20px]">
+                                                        <div key={question.id || qIdx} className={styles.questionItemRow}>
+                                                            <span className={styles.questionItemNumber}>
                                                                 {currentQuestionNumber}.
                                                             </span>
-                                                            <p className="!mb-0 text-base !text-gray-500 !font-medium flex-1">
+                                                            <p className={styles.questionItemText}>
                                                                 {questionText}
                                                             </p>
                                                         </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import InterviewQuestionGeneratorV2 from "../InterviewQuestionGeneratorV2";
 import CustomDropdown from "@/lib/components/CareerComponents/CustomDropdown";
+import styles from "@/lib/styles/screens/aiInterviewStep.module.scss";
 
 const screeningSettingList = [
     { name: "Good Fit and above", icon: "la la-check" },
@@ -39,23 +40,21 @@ export default function AIInterviewStep({
 }: AIInterviewStepProps) {
     const [showTooltip, setShowTooltip] = useState(false);
     return (
-        <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
-            <div>
-                <div className="layered-card-outer-career mb-4">
+        <div className={styles.container}>
+            <div className={styles.mainContent}>
+                <div className={`layered-card-outer-career ${styles.cardWrapper}`}>
                     <div className="layered-card-middle">
                         <div className="layered-card-content">
                             {/* //! AI Interview Screening */}
-                            <div className="flex flex-row items-center gap-2 ">
-                                <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">AI Interview Screening</span>
+                            <div className={styles.screeningHeader}>
+                                <span className={styles.screeningHeaderTitle}>AI Interview Screening</span>
                             </div>
 
-                            <div className="flex flex-col gap-2 pb-4">
-
-                                <span className="text-[#6B7280] text-md">
+                            <div className={styles.screeningContent}>
+                                <span className={styles.screeningDescription}>
                                     Jia automatically endorses candidates who meet the chosen criteria.
                                 </span>
-                                <div
-                                    className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <div className={styles.dropdownGrid}>
                                     <CustomDropdown
                                         onSelectSetting={setScreeningSetting}
                                         screeningSetting={screeningSetting}
@@ -64,19 +63,19 @@ export default function AIInterviewStep({
                                 </div>
                             </div>
                             {/* //! Require Video Interview */}
-                            <div className="border-t border-[#E9EAEB] pt-4">
-                                <h1 className="text-lg font-bold text-[#181D27]">Require Video on Interview</h1>
-                                <p className="text-[#6B7280] text-md !font-medium">Require candidates to keep their camera on. Recordings will appear on their analysis page</p>
-                                <div className="flex items-center justify-between gap-3 mt-2  pb-2">
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <span className="text-md text-gray-900 flex items-center gap-1.5">
+                            <div className={styles.videoSection}>
+                                <h1 className={styles.videoTitle}>Require Video on Interview</h1>
+                                <p className={styles.videoDescription}>Require candidates to keep their camera on. Recordings will appear on their analysis page</p>
+                                <div className={styles.videoToggle}>
+                                    <label className={styles.videoToggleLabel}>
+                                        <span className={styles.videoToggleLabelText}>
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
                                                 strokeWidth="1.5"
                                                 stroke="currentColor"
-                                                className="w-6 h-6 text-gray-400"
+                                                className={styles.videoIcon}
                                             >
                                                 <path
                                                     strokeLinecap="round"
@@ -87,34 +86,34 @@ export default function AIInterviewStep({
                                             Require Video Interview
                                         </span>
                                     </label>
-                                    <div>
-                                        <label className="switch ">
+                                    <div className={styles.toggleContainer}>
+                                        <label className="switch">
                                             <input
                                                 type="checkbox"
                                                 checked={requireVideo}
                                                 onChange={() => setRequireVideo(!requireVideo)}
                                             />
-                                            <span className="slider round "></span>
+                                            <span className="slider round"></span>
                                         </label>
-                                        <span className="text-[#181D27] font-medium text-md pl-2">
+                                        <span className={styles.toggleText}>
                                             {requireVideo ? "Yes" : "No"}
                                         </span>
                                     </div>
                                 </div>
 
                             </div>
-                            <div className="">
+                            <div>
                                 {/* AI Interview Secret Prompt */}
-                                <div className="space-y-2 border-t border-gray-200 pt-2 mt-2">
-                                    <div className="flex items-center gap-2 pt-2">
-                                        <h3 className="font-semibold text-gray-900 text-lg sm:text-base flex items-center gap-1">
+                                <div className={styles.promptContainer}>
+                                    <div className={styles.promptHeader}>
+                                        <h3 className={styles.promptTitle}>
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
                                                 strokeWidth="1.5"
                                                 stroke="currentColor"
-                                                className="w-7 h-7 text-gray-400 text-[#7C3AED]"
+                                                className={styles.promptIcon}
                                             >
                                                 <path
                                                     strokeLinecap="round"
@@ -123,15 +122,14 @@ export default function AIInterviewStep({
                                                 />
                                             </svg>
                                             <span>AI Interview Secret Prompt</span>
-
                                         </h3>
-                                        <span className="text-lg sm:text-sm text-gray-500">(optional)</span>
-                                        <div className="relative">
+                                        <span className={styles.promptOptional}>(optional)</span>
+                                        <div className={styles.tooltipContainer}>
                                             <button
                                                 type="button"
                                                 onMouseEnter={() => setShowTooltip(true)}
                                                 onMouseLeave={() => setShowTooltip(false)}
-                                                className="text-gray-400 hover:text-gray-600"
+                                                className={styles.tooltipButton}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +137,7 @@ export default function AIInterviewStep({
                                                     viewBox="0 0 24 24"
                                                     strokeWidth="1.5"
                                                     stroke="currentColor"
-                                                    className="w-4 h-4"
+                                                    className={styles.tooltipIcon}
                                                 >
                                                     <path
                                                         strokeLinecap="round"
@@ -149,13 +147,13 @@ export default function AIInterviewStep({
                                                 </svg>
                                             </button>
                                             {showTooltip && (
-                                                <div className="absolute left-0 top-full mt-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 z-50 shadow-lg">
+                                                <div className={styles.tooltip}>
                                                     Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
                                                 </div>
                                             )}
                                         </div>
                                     </div>
-                                    <p className="text-md !font-medium sm:text-sm text-gray-500">
+                                    <p className={styles.promptDescription}>
                                         Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
                                     </p>
                                     <textarea
@@ -198,12 +196,7 @@ export default function AIInterviewStep({
                                             }
                                         }}
                                         placeholder="Enter a secret prompt (e.g. Treat candidates who speak in Taglish, English, or Tagalog equally. Focus on clarity, coherence, and confidence rather than language preference or accent.)"
-                                        className="mt-1 w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-lg !h-[200px] 
-                                        resize-y focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent px-3"
-                                        style={{
-                                            paddingLeft: '2rem',
-                                            lineHeight: '1.5',
-                                        }}
+                                        className={styles.textarea}
                                         rows={1}
                                     />
                                 </div>
@@ -222,25 +215,25 @@ export default function AIInterviewStep({
                 </div>
 
             </div>
-            <div className="w-full lg:w-[40%] lg:sticky top-0">
+            <div className={styles.tipsSidebar}>
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                        <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
+                        <div className={styles.tipsHeader}>
                             <img
                                 src="/icons/lightbulb.svg"
                                 alt="lightbulb"
-                                style={{ width: "20px", height: "20px" }}
+                                className={styles.tipsHeaderIcon}
                             />
-                            <span className="text-base text-[#181D27] font-bold text-lg">
+                            <span className={styles.tipsHeaderTitle}>
                                 Tips
                             </span>
                         </div>
-                        <div className="layered-card-content flex flex-col gap-4">
-                            <span>
-                                <span className="font-bold text-black">Add a Secret Prompt</span> to fine-tune how Jia scores and evaluates the interview responses.
+                        <div className={`layered-card-content ${styles.tipsContent}`}>
+                            <span className={styles.tipText}>
+                                <span className={styles.tipTextBold}>Add a Secret Prompt</span> to fine-tune how Jia scores and evaluates the interview responses.
                             </span>
-                            <span>
-                                <span className="font-bold text-black">Use "Generate Questions"</span> to quickly create tailored interview questions, then refine or mix them with your own for balanced results.
+                            <span className={styles.tipText}>
+                                <span className={styles.tipTextBold}>Use "Generate Questions"</span> to quickly create tailored interview questions, then refine or mix them with your own for balanced results.
                             </span>
                         </div>
                     </div>

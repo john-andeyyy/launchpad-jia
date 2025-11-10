@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import CustomDropdown from "@/lib/components/CareerComponents/CustomDropdown";
 import PreScreeningQuestions, { PreScreeningQuestion } from "../PreScreeningQuestions";
+import styles from "@/lib/styles/screens/cvReviewStep.module.scss";
 
 const screeningSettingList = [
     { name: "Good Fit and above", icon: "la la-check" },
@@ -44,31 +45,31 @@ export default function CVReviewStep({
     }, [secretPrompt]);
 
     return (
-        <div className="flex flex-col lg:flex-row justify-between w-full gap-4 items-start">
-            <div className="flex flex-col gap-4 w-full lg:w-auto">
+        <div className={styles.container}>
+            <div className={styles.mainContent}>
             <div className="layered-card-outer-career">
                 <div className="layered-card-middle">
-                    <div className="flex flex-row items-center gap-2">
-                        <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
+                    <div className={styles.headerRow}>
+                        <span className={styles.sectionTitle}>
                             {hideSectionNumbers ? "CV Review Settings" : "1. CV Review Settings"}
                         </span>
                     </div>
                     <div className="layered-card-content">
                         {/* CV Screening Section */}
-                        <div className="flex flex-col gap-2">
-                            <div className="flex flex-row gap-2">
-                                <i className="la la-id-badge text-[#414651] text-xl"></i>
-                                <span className="font-medium">CV Screening</span>
+                        <div className={styles.cvScreeningSection}>
+                            <div className={styles.cvScreeningHeader}>
+                                <i className={`la la-id-badge ${styles.cvScreeningIcon}`}></i>
+                                <span className={styles.cvScreeningLabel}>CV Screening</span>
                             </div>
-                            <span className="text-[#6B7280] text-sm">
+                            <span className={styles.cvScreeningDescription}>
                                 Jia automatically endorses candidates who meet the chosen criteria.
                             </span>
                             <div
-                                className="relative"
+                                className={styles.dropdownWrapper}
                                 onMouseEnter={() => setShowTooltip(true)}
                                 onMouseLeave={() => setShowTooltip(false)}
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <div className={styles.dropdownGrid}>
                                     <CustomDropdown
                                         onSelectSetting={setScreeningSetting}
                                         screeningSetting={screeningSetting}
@@ -80,39 +81,30 @@ export default function CVReviewStep({
                         </div>
 
                         {/* //! CV Secret Prompt (optional) Section */}
-                        <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#E9EAEB]">
-                            <div className="flex flex-row items-center gap-2 relative">
-                                <i className="la la-magic text-[#7C3AED] text-xl"></i>
-                                <span className="font-medium text-black">CV Secret Prompt <span className="text-[#6B7280]"> (optional)</span></span>
+                        <div className={styles.secretPromptSection}>
+                            <div className={styles.secretPromptHeader}>
+                                <i className={`la la-magic ${styles.magicIcon}`}></i>
+                                <span className={styles.secretPromptLabel}>CV Secret Prompt <span className={styles.optionalText}> (optional)</span></span>
                                 <div
-                                    className="relative"
+                                    className={styles.helpTooltipContainer}
                                     onMouseEnter={() => setShowHelpTooltip(true)}
                                     onMouseLeave={() => setShowHelpTooltip(false)}
                                 >
-                                    <i className="la la-question-circle text-[#6B7280] text-base ml-1  !text-2xl cursor-help"></i>
+                                    <i className={`la la-question-circle ${styles.helpIcon}`}></i>
                                     {showHelpTooltip && (
-                                        <div
-                                            className="absolute z-50 bg-[#181D27] text-white text-sm p-3 rounded-lg shadow-lg mt-2 left-0"
-                                            style={{
-                                                width: "300px",
-                                                maxWidth: "90vw",
-                                                transform: "translateX(-50%)"
-                                            }}
-                                        >
+                                        <div className={styles.tooltip}>
                                             These prompts remain hidden from candidates and the public job portal. Additionally, only Admins and the Job Owner can view the secret prompt.
                                         </div>
                                     )}
                                 </div>
                             </div>
-                            <p className="text-[#6B7280] text-md !font-medium pr-5">
+                            <p className={styles.secretPromptDescription}>
                                 Secret Prompts give you extra control over Jia's evaluation style, complementing her accurate assessment of requirements from the job description.
                             </p>
 
                             <textarea
                                 ref={textareaRef}
-                                className="!h-30 !text-base !p-2 !mt-2  w-full border border-[#E9EAEB] rounded-lg !px-10 mt-2
-                                focus:outline-none focus:ring-0 focus:border-[#7C3AED] 
-                                text-base font-medium text-[#181D27] placeholder:text-[#6B7280] placeholder:font-medium "
+                                className={styles.textarea}
                                 rows={4}
                                 placeholder="Enter a secret prompt (e.g. Give higher fit scores to candidates who participate in hackathons or competitions.)"
                                 value={secretPrompt}
@@ -216,30 +208,30 @@ export default function CVReviewStep({
                 </div>
             )}
             </div>
-            <div className="w-full lg:w-[40%] lg:sticky top-0">
+            <div className={styles.tipsSidebar}>
                 <div className="layered-card-outer-career">
                     <div className="layered-card-middle">
-                    <div className="flex flex-row items-center gap-2 pl-2 md:pl-5 pt-2">
+                    <div className={styles.tipsHeader}>
                             <img 
                                 src="/icons/lightbulb.svg" 
                                 alt="lightbulb" 
-                                style={{ width: "20px", height: "20px" }}
+                                className={styles.tipsHeaderIcon}
                             />
-                            <span className="text-base text-[#181D27] font-bold text-lg">
+                            <span className={styles.tipsHeaderTitle}>
                                 Tips
                             </span>
                         </div>
-                        <div className="layered-card-content flex flex-col gap-4">
+                        <div className={`layered-card-content ${styles.tipsContent}`}>
                             <span>
-                                <span className="font-bold text-black"> Use clear, standard job titles</span> for better
+                                <span className={styles.tipTextBold}> Use clear, standard job titles</span> for better
                                 searchability (e.g., "Software Engineer" instead of "Code Ninja" or "Tech Rockstar").
                             </span>
                             <span>
-                                <span className="font-bold text-black"> Avoid abbreviations</span> or internal role codes that applicants may not understand
+                                <span className={styles.tipTextBold}> Avoid abbreviations</span> or internal role codes that applicants may not understand
                                 (e.g., use "QA Engineer" instead of "QE II" or "QA-TL").
                             </span>
                             <span>
-                                <span className="font-bold text-black"> Keep it concise</span> — job titles should be no more than a few words
+                                <span className={styles.tipTextBold}> Keep it concise</span> — job titles should be no more than a few words
                                 (2–4 max), avoiding fluff or marketing terms.
                             </span>
                         </div>

@@ -5,6 +5,7 @@ import axios from "axios";
 import { useAppContext } from "@/lib/context/AppContext";
 import { errorToast } from "@/lib/Utils";
 import { assetConstants } from "@/lib/utils/constantsV2";
+import styles from "@/lib/styles/screens/teamAccess.module.scss";
 
 export type TeamMemberRole = "Job Owner" | "Contributor" | "Reviewer";
 
@@ -110,14 +111,14 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
         return (
             <div className="layered-card-outer-career">
                 <div className="layered-card-middle">
-                    <div className="flex flex-row items-center gap-2">
-                        <div className="w-8 h-8 bg-[#181D27] rounded-full flex items-center justify-center">
-                            <i className="la la-users text-white text-lg"></i>
+                    <div className={styles.header}>
+                        <div className={styles.loadingIconContainer}>
+                            <i className={`la la-users ${styles.loadingIcon}`}></i>
                         </div>
                         {/* <span className="text-base text-[#181D27] font-bold">3. Team Access</span> */}
                     </div>
                     <div className="layered-card-content">
-                        <p className="text-[#6B7280] text-sm">Loading user information...</p>
+                        <p className={styles.loadingText}>Loading user information...</p>
                     </div>
                 </div>
             </div>
@@ -138,73 +139,73 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
     return (
         <div className="layered-card-outer-career">
             <div className="layered-card-middle">
-                <div className="flex flex-row items-center gap-2">
-                    <span className="text-base text-[#181D27] font-bold text-lg pl-2 md:pl-4 pt-3">
+                <div className={styles.header}>
+                    <span className={styles.title}>
                         {hideSectionNumbers ? "Team Access" : "3. Team Access"}
                     </span>
                 </div>
                 <div className="layered-card-content">
-                    <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
-                        <div className="flex-1">
-                            <span className="text-base font-semibold text-[#181D27] block mb-1">Add more members</span>
-                            <p className="text-base text-[#6B7280] m-0">You can add other members to collaborate on this career.</p>
+                    <div className={styles.addMemberSection}>
+                        <div className={styles.addMemberInfo}>
+                            <span className={styles.addMemberTitle}>Add more members</span>
+                            <p className={styles.addMemberDescription}>You can add other members to collaborate on this career.</p>
                         </div>
-                        <div className="relative w-full md:w-auto" ref={dropdownRef}>
+                        <div className={styles.dropdownWrapper} ref={dropdownRef}>
                             <button
                                 type="button"
                                 onClick={() => setShowMemberDropdown(!showMemberDropdown)}
-                                className="px-4 py-2 border border-[#D5D7DA] rounded-lg text-base
-                                        text-[#181D27] bg-white cursor-pointer w-full md:min-w-[300px] text-left flex items-center justify-between
-                                        shadow-sm hover:shadow-md transition-shadow"
+                                className={styles.addMemberButton}
                             >
-                                <div className="flex items-center gap-2">
-                                    <i className="la la-user text-base text-gray-500 !text-2xl"></i>
-                                    <span className="text-base">Add member</span>
+                                <div className={styles.addMemberButtonContent}>
+                                    <i className={`la la-user ${styles.addMemberButtonIcon}`}></i>
+                                    <span>Add member</span>
                                 </div>
-                                <img src={assetConstants.chevron} alt="chevron" className="w-5 h-5"
-                                style={{ transform: showMemberDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                <img 
+                                    src={assetConstants.chevron} 
+                                    alt="chevron" 
+                                    className={styles.addMemberChevron}
+                                    style={{ transform: showMemberDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }} 
+                                />
                             </button>
 
                             {showMemberDropdown && (
-                                <div className={`absolute ${hideSectionNumbers ? (" top-full") : (" bottom-full")} right-0 mb-2 bg-white border border-[#E5E7EB] 
-                                rounded-lg shadow-lg w-full md:min-w-[500px] max-h-[300px] overflow-hidden flex flex-col z-[1000] `}>
-                                    <div className="p-3 border-b border-[#E5E7EB]">
+                                <div className={`${styles.memberDropdown} ${hideSectionNumbers ? styles.memberDropdownTop : styles.memberDropdownBottom}`}>
+                                    <div className={styles.memberSearchContainer}>
                                         <input
                                             type="text"
                                             placeholder="Search member"
                                             value={memberSearch}
                                             onChange={(e) => setMemberSearch(e.target.value)}
-                                            className="w-full px-3 py-2 border border-[#D5D7DA] rounded-md text-base"
+                                            className={styles.memberSearchInput}
                                         />
                                     </div>
-                                    <div className="max-h-[500px] overflow-y-auto">
+                                    <div className={styles.memberList}>
                                         {isLoadingMembers ? (
-                                            <div className="p-5 text-center text-[#6B7280]">Loading...</div>
+                                            <div className={styles.loadingState}>Loading...</div>
                                         ) : filteredAvailableMembers.length === 0 ? (
-                                            <div className="p-5 text-center text-[#6B7280]">No members found</div>
+                                            <div className={styles.emptyState}>No members found</div>
                                         ) : (
                                             filteredAvailableMembers.map((member) => (
                                                 <div
                                                     key={member.email}
                                                     onClick={() => addMember(member)}
-                                                    className="p-3 cursor-pointer border-b border-[#F3F4F6] 
-                                                    flex items-center gap-3 hover:bg-[#F9FAFB] "
+                                                    className={styles.memberItem}
                                                 >
                                                     <div
-                                                        className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold overflow-hidden"
+                                                        className={styles.memberAvatar}
                                                         style={{
                                                             background: member.image || `#${Math.floor(Math.random() * 16777215).toString(16)}`
                                                         }}
                                                     >
                                                         {member.image ? (
-                                                            <img src={member.image} alt={member.name} className="w-full h-full rounded-full object-cover" />
+                                                            <img src={member.image} alt={member.name} className={styles.memberAvatarImg} />
                                                         ) : (
                                                             member.name?.charAt(0).toUpperCase()
                                                         )}
                                                     </div>
-                                                    <div className="flex flex-row gap-1 justify-between w-full">
-                                                        <div className="text-base font-medium text-[#181D27]">{member.name}</div>
-                                                        <div className="text-sm text-[#6B7280]">{member.email}</div>
+                                                    <div className={styles.memberInfo}>
+                                                        <div className={styles.memberName}>{member.name}</div>
+                                                        <div className={styles.memberEmail}>{member.email}</div>
                                                     </div>
                                                 </div>
                                             ))
@@ -216,42 +217,42 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                     </div>
 
                     {errors.length > 0 && (
-                        <div className="p-3 bg-[#FEF2F2] border border-[#FECACA] rounded-lg mb-4 flex items-center gap-2">
-                            <i className="la la-exclamation-circle text-[#DC2626] text-lg"></i>
+                        <div className={styles.errorContainer}>
+                            <i className={`la la-exclamation-circle ${styles.errorIcon}`}></i>
                             <div>
                                 {errors.map((error, idx) => (
-                                    <div key={idx} className="text-[#DC2626] text-sm">{error}</div>
+                                    <div key={idx} className={styles.errorText}>{error}</div>
                                 ))}
                             </div>
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-3">
+                    <div className={styles.membersList}>
                         {allMembers.map((member) => (
                             <div
                                 key={member.email}
-                                className="p-3 border border-[#E5E7EB] rounded-lg flex flex-col md:flex-row items-start md:items-center gap-3 relative"
+                                className={styles.memberCard}
                             >
                                 <div
-                                    className="w-10 h-10 rounded-full flex items-center justify-center text-white text-base font-semibold flex-shrink-0 overflow-hidden"
+                                    className={styles.memberCardAvatar}
                                     style={{
                                         background: member.image || `#${Math.floor(Math.random() * 16777215).toString(16)}`
                                     }}
                                 >
                                     {member.image ? (
-                                        <img src={member.image} alt={member.name} className="w-full h-full rounded-full object-cover" />
+                                        <img src={member.image} alt={member.name} className={styles.memberCardAvatarImg} />
                                     ) : (
                                         member.name?.charAt(0).toUpperCase()
                                     )}
                                 </div>
-                                <div className="flex-1 min-w-0 w-full md:w-auto">
-                                    <div className="text-base font-medium text-[#181D27]">
+                                <div className={styles.memberCardInfo}>
+                                    <div className={styles.memberCardName}>
                                         {member.name} {member.email === user.email && "(You)"}
                                     </div>
-                                    <div className="text-sm text-[#6B7280] truncate">{member.email}</div>
+                                    <div className={styles.memberCardEmail}>{member.email}</div>
                                 </div>
                                 <div
-                                    className="relative w-full md:w-auto"
+                                    className={styles.roleDropdownWrapper}
                                     ref={(el) => {
                                         if (el) {
                                             roleDropdownRefs.current[member.email] = el;
@@ -261,18 +262,18 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                                     <button
                                         type="button"
                                         onClick={() => setOpenRoleDropdown(openRoleDropdown === member.email ? null : member.email)}
-                                        className="px-4 py-3 border border-[#D5D7DA] rounded-lg text-base
-                                        text-[#181D27] bg-white cursor-pointer w-full md:min-w-[300px] text-left flex items-center justify-between
-                                        shadow-sm hover:shadow-md transition-shadow"
+                                        className={styles.roleButton}
                                     >
-                                        <span className="font-medium text-base">{member.role}</span>
-                                        <img src={assetConstants.chevron} alt="chevron" className="w-5 h-5"
-                                        style={{ transform: openRoleDropdown === member.email ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-                                        </button>
+                                        <span className={styles.roleButtonText}>{member.role}</span>
+                                        <img 
+                                            src={assetConstants.chevron} 
+                                            alt="chevron" 
+                                            className={styles.roleButtonChevron}
+                                            style={{ transform: openRoleDropdown === member.email ? 'rotate(180deg)' : 'rotate(0deg)' }} 
+                                        />
+                                    </button>
                                     {openRoleDropdown === member.email && (
-                                        <div className={`absolute  ${hideSectionNumbers ? (" bottom-full  max-h-[200px] p-2 overflow-y-auto") : (" bottom-full")} z-50 right-0 mb-2 bg-white border 
-                                        rounded-lg shadow-lg w-full md:w-[400px] overflow-y-auto
-                                        `}>
+                                        <div className={`${styles.roleDropdown} ${hideSectionNumbers ? styles.roleDropdownWithScroll : ''}`}>
                                             {(Object.keys(roleDescriptions) as TeamMemberRole[]).map((role) => (
                                                 <div
                                                     key={role}
@@ -280,30 +281,17 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                                                         updateMemberRole(member.email, role);
                                                         setOpenRoleDropdown(null);
                                                     }}
-                                                    className={`px-4 py-2 cursor-pointer border-b border-[#F3F4F6] last:border-b-0 
-                                                        hover:bg-[#F9FAFB] ${member.role === role ? 'bg-[#F8F9FC]' : ''
-                                                        }`}
+                                                    className={`${styles.roleOption} ${member.role === role ? styles.roleOptionSelected : ''}`}
                                                 >
-                                                    <div className="flex items-start justify-between gap-3">
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center justify-between gap-2 mb-1">
-                                                                <span className={`text-base font-medium text-[#181D27] ${member.role === role ? 'font-bold' : ''
-                                                                    }`}>
-                                                                    {role}
-                                                                </span>
-                                                                {member.role === role && (
-                                                                    <i className="la la-check text-lg" style={{
-                                                                        background: "linear-gradient(180deg, #9FCAED 0%, #CEB6DA 33%, #EBACC9 66%, #FCCEC0 100%)",
-                                                                        WebkitBackgroundClip: "text",
-                                                                        WebkitTextFillColor: "transparent",
-                                                                        backgroundClip: "text",
-                                                                        color: "transparent"
-                                                                    }}></i>
-                                                                )}
-                                                            </div>
-                                                            <p className="text-sm text-[#6B7280] m-0">{roleDescriptions[role]}</p>
-                                                        </div>
+                                                    <div className={styles.roleOptionHeader}>
+                                                        <span className={`${styles.roleOptionTitle} ${member.role === role ? styles.roleOptionTitleBold : ''}`}>
+                                                            {role}
+                                                        </span>
+                                                        {member.role === role && (
+                                                            <i className={`la la-check ${styles.roleOptionCheck}`}></i>
+                                                        )}
                                                     </div>
+                                                    <p className={styles.roleOptionDescription}>{roleDescriptions[role]}</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -312,16 +300,15 @@ export default function TeamAccess({ teamMembers, setTeamMembers, errors = [], h
                                 <button
                                     type="button"
                                     onClick={() => removeMember(member.email)}
-                                    className="h-10 w-10 flex items-center justify-center !rounded-full !border border-gray-300 
-                                    bg-white hover:bg-gray-100 transition cursor-pointer"
+                                    className={styles.removeButton}
                                 >
-                                    <i className="la la-trash text-xl text-gray-600 !text-gray-500"></i>
+                                    <i className={`la la-trash ${styles.removeButtonIcon}`}></i>
                                 </button>
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-4 text-sm text-[#6B7280] italic">
+                    <div className={styles.footerNote}>
                         *Admins can view all careers regardless of specific access settings.
                     </div>
                 </div>
