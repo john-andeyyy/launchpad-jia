@@ -72,7 +72,7 @@ export default function CVReviewModal({ formData, setFormData, onClose }: CVRevi
 
     return (
         <CareerModal
-            title="Edit CV Review & Pre-Selecting Workflow"
+            title="Edit CV Review &  Pre-Screening Questions"
             onSave={handleSave}
             onClose={onClose}
             isSaving={isSaving}

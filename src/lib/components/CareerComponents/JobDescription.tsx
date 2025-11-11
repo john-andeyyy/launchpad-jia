@@ -189,7 +189,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
           {/* //! CV Review & Pre-Screening Questions Section */}
           <ReviewSection
             icon="la la-file-text"
-            title="CV Review & Pre-Selecting Workflow"
+            title="CV Review &  Pre-Screening Questions"
             isExpanded={expandedSections.cvReview}
             onToggle={() => toggleSection("cvReview")}
             onEdit={() => handleEditSection("cvReview")}
@@ -410,7 +410,7 @@ export default function JobDescription({ formData, setFormData, editModal, isEdi
                     const isCurrentUser = user?.email === member.email;
                     return (
                       <div key={member.email} className={styles.teamMemberItem}>
-                        <div 
+                        <div
                           className={styles.teamMemberAvatar}
                           onClick={(e) => {
                             const rect = e.currentTarget.getBoundingClientRect();

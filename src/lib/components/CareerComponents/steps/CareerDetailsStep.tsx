@@ -527,13 +527,14 @@ export default function CareerDetailsStep({
                     </div>
                 </div>
 
-                {!hideSectionNumbers && (
+                {/* {!hideSectionNumbers && ( */}
                     <TeamAccess
                         teamMembers={teamMembers}
                         setTeamMembers={setTeamMembers}
                         errors={teamAccessErrors}
+                        hideSectionNumbers={hideSectionNumbers}
                     />
-                )}
+                 {/* )} */}
             </div>
 
             <div className={styles.tipsSidebar}>

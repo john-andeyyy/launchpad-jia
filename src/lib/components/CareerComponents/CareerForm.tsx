@@ -882,7 +882,7 @@ export default function CareerForm({
                         requireVideo={requireVideo}
                         aiInterviewSecretPrompt={aiInterviewSecretPrompt}
                         questions={questions}
-                        onEditStep={goToStep}
+                        onEditStep={goToStep}   
                     />
                 );
             default:
